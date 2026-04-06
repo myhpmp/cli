@@ -81,6 +81,28 @@ describe('SyncEngine', () => {
     expect(remote?.totalExp).toBe(800);
   });
 
+  it('sync pulls from remote when local EXP is lower (data reset protection)', async () => {
+    const localReset: UserStats = {
+      totalExp: 0, level: 1, totalSessions: 0, streakDays: 0,
+      lastActiveDate: null, weeklyExpBonusClaimed: false,
+      updatedAt: '2026-04-06T12:00:00Z', // newer timestamp but lower EXP
+    };
+    const remoteHigher: UserStats = {
+      totalExp: 800, level: 9, totalSessions: 15, streakDays: 5,
+      lastActiveDate: '2026-04-05', weeklyExpBonusClaimed: false,
+      updatedAt: '2026-04-05T12:00:00Z',
+    };
+
+    await localStore.save(localReset);
+    await mockDb.saveUserStats('user1', remoteHigher);
+
+    const result = await engine.sync('user1');
+    expect(result.totalExp).toBe(800);
+
+    const local = await localStore.load();
+    expect(local.totalExp).toBe(800);
+  });
+
   it('sync pulls when remote is newer', async () => {
     const older: UserStats = {
       totalExp: 500, level: 6, totalSessions: 10, streakDays: 3,

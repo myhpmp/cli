@@ -36,6 +36,12 @@ export class SyncEngine {
       return remote;
     }
 
+    // Local EXP is lower than remote — always pull (protects against data reset)
+    if (local.totalExp < remote.totalExp) {
+      await this.local.save(remote);
+      return remote;
+    }
+
     // Both exist — compare timestamps, last-write-wins
     const localTime = new Date(local.updatedAt).getTime();
     const remoteTime = new Date(remote.updatedAt).getTime();
