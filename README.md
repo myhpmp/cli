@@ -1,5 +1,7 @@
 # claude-hp-mp
 
+[한국어](./README.ko.md) | English
+
 RPG-style gamified usage dashboard for [Claude Code](https://docs.anthropic.com/en/docs/claude-code).
 
 Turn your Claude Code usage into a game — track your level, HP (session limit), MP (weekly limit), EXP, streaks, and earn titles as you code.
