@@ -19,6 +19,7 @@ import { getLevelInfo, getTierForLevel, getStars } from './core/level-system.js'
 import { renderStatusLine } from './display/status-line.js';
 import { createI18n, detectLocale } from './i18n/index.js';
 import { AuthManager } from './auth/auth-manager.js';
+import { fetchClaudeUsage, utilizationToPercent, resetsAtToMinutes } from './data/claude-usage.js';
 import os from 'node:os';
 import path from 'node:path';
 
@@ -54,9 +55,27 @@ async function main() {
   }
 
   // Extract real-time data from Claude Code
-  const hpPercent = Math.max(0, Math.round(100 - (statusInput.rate_limits?.five_hour?.used_percentage ?? 0)));
-  const mpPercent = Math.max(0, Math.round(100 - (statusInput.rate_limits?.seven_day?.used_percentage ?? 0)));
   const ctxPercent = Math.round(statusInput.context_window?.used_percentage ?? 0);
+
+  // If stdin has rate_limits, use them; otherwise fallback to API
+  let hpPercent: number;
+  let mpPercent: number;
+  let resetMinutes = 0;
+
+  if (statusInput.rate_limits?.five_hour) {
+    hpPercent = Math.max(0, Math.round(100 - (statusInput.rate_limits.five_hour.used_percentage ?? 0)));
+    mpPercent = Math.max(0, Math.round(100 - (statusInput.rate_limits?.seven_day?.used_percentage ?? 0)));
+  } else {
+    const usage = await fetchClaudeUsage();
+    if (usage) {
+      hpPercent = utilizationToPercent(usage.fiveHour.utilization);
+      mpPercent = utilizationToPercent(usage.sevenDay.utilization);
+      resetMinutes = resetsAtToMinutes(usage.fiveHour.resetsAt);
+    } else {
+      hpPercent = 100;
+      mpPercent = 100;
+    }
+  }
 
   // Load EXP/level data from local store
   const authManager = new AuthManager(DATA_DIR);
@@ -85,7 +104,7 @@ async function main() {
     level: levelInfo.level,
     stars: getStars(levelInfo.level),
     hpPercent,
-    resetMinutes: 0, // not available in stdin JSON, omit from status line
+    resetMinutes,
     mpPercent,
     ctxPercent,
     streakDays: stats.streakDays,
