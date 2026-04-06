@@ -87,21 +87,21 @@ async function main() {
       matcher: '',
       hooks: [{
         type: 'command',
-        command: `node ${path.join(DIST_DIR, 'hooks', 'post-tool-use.js').replace(/\\/g, '/')}`,
+        command: `node "${path.join(DIST_DIR, 'hooks', 'post-tool-use.js').replace(/\\/g, '/')}"`,
       }],
     }],
     SessionStart: [{
       matcher: '',
       hooks: [{
         type: 'command',
-        command: `node ${path.join(DIST_DIR, 'hooks', 'session-start.js').replace(/\\/g, '/')}`,
+        command: `node "${path.join(DIST_DIR, 'hooks', 'session-start.js').replace(/\\/g, '/')}"`,
       }],
     }],
     Stop: [{
       matcher: '',
       hooks: [{
         type: 'command',
-        command: `node ${path.join(DIST_DIR, 'hooks', 'session-end.js').replace(/\\/g, '/')}`,
+        command: `node "${path.join(DIST_DIR, 'hooks', 'session-end.js').replace(/\\/g, '/')}"`,
       }],
     }],
   };
@@ -122,7 +122,7 @@ async function main() {
   // Add status line
   settings.statusLine = {
     type: 'command',
-    command: `node ${path.join(DIST_DIR, 'statusline.js').replace(/\\/g, '/')}`,
+    command: `node "${path.join(DIST_DIR, 'statusline.js').replace(/\\/g, '/')}"`,
   };
 
   await saveSettings(settings);
