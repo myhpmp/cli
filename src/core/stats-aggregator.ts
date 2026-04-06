@@ -18,7 +18,8 @@ export function computeStreak(currentStreak: number, lastActiveDate: string | nu
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const lastActive = new Date(lastActiveDate + 'T00:00:00');
+  const [y, m, d] = lastActiveDate.split('-').map(Number);
+  const lastActive = new Date(y, m - 1, d);
   const diffDays = Math.floor((today.getTime() - lastActive.getTime()) / (1000 * 60 * 60 * 24));
 
   if (diffDays === 0) return currentStreak;
