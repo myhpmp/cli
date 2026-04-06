@@ -14,10 +14,11 @@ export class SupabaseProvider implements DbProvider {
   }
 
   async setSession(accessToken: string, refreshToken: string): Promise<void> {
-    await this.client.auth.setSession({
+    const { error } = await this.client.auth.setSession({
       access_token: accessToken,
       refresh_token: refreshToken,
     });
+    if (error) throw new Error(`Failed to set session: ${error.message}`);
   }
 
   async loadUserStats(userId: string): Promise<UserStats | null> {
@@ -51,7 +52,7 @@ export class SupabaseProvider implements DbProvider {
         streak_days: stats.streakDays,
         last_active_date: stats.lastActiveDate,
         weekly_exp_bonus_claimed: stats.weeklyExpBonusClaimed,
-        updated_at: new Date().toISOString(),
+        updated_at: stats.updatedAt,
       });
 
     if (error) throw new Error(`Supabase save failed: ${error.message}`);
