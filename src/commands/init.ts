@@ -62,11 +62,21 @@ async function main() {
 
   if (choice.trim() === '1') {
     console.log('\n🌐 Opening GitHub auth page in browser...');
-    result = await signInWithOAuth(supabase, 'github');
+    try {
+      result = await signInWithOAuth(supabase, 'github');
+    } catch (err) {
+      rl.close();
+      throw err;
+    }
     provider = 'github';
   } else if (choice.trim() === '2') {
     console.log('\n🌐 Opening Google auth page in browser...');
-    result = await signInWithOAuth(supabase, 'google');
+    try {
+      result = await signInWithOAuth(supabase, 'google');
+    } catch (err) {
+      rl.close();
+      throw err;
+    }
     provider = 'google';
   } else {
     console.error('❌ Invalid selection.');
@@ -109,6 +119,6 @@ async function main() {
 }
 
 main().catch((err) => {
-  console.error('❌ Init failed:', err.message);
+  console.error('❌ Init failed:', err instanceof Error ? err.message : String(err));
   process.exit(1);
 });
