@@ -32,8 +32,8 @@ interface ClaudeStatusInput {
     remaining_percentage?: number;
   };
   rate_limits?: {
-    five_hour?: { used_percentage?: number };
-    seven_day?: { used_percentage?: number };
+    five_hour?: { used_percentage?: number; resets_at?: number };
+    seven_day?: { used_percentage?: number; resets_at?: number };
   };
   model?: {
     display_name?: string;
@@ -54,6 +54,7 @@ async function main() {
     // If no valid JSON, use defaults
   }
 
+
   // Extract real-time data from Claude Code
   const ctxPercent = Math.round(statusInput.context_window?.used_percentage ?? 0);
 
@@ -65,6 +66,12 @@ async function main() {
   if (statusInput.rate_limits?.five_hour) {
     hpPercent = Math.max(0, Math.round(100 - (statusInput.rate_limits.five_hour.used_percentage ?? 0)));
     mpPercent = Math.max(0, Math.round(100 - (statusInput.rate_limits?.seven_day?.used_percentage ?? 0)));
+    // resets_at comes as epoch seconds from stdin
+    const resetsAtEpoch = statusInput.rate_limits.five_hour.resets_at;
+    if (resetsAtEpoch) {
+      const diff = resetsAtEpoch * 1000 - Date.now();
+      resetMinutes = Math.max(0, Math.round(diff / 60_000));
+    }
   } else {
     const usage = await fetchClaudeUsage();
     if (usage) {
