@@ -33,7 +33,10 @@ export class AuthManager {
   async saveConfig(config: AuthConfig): Promise<void> {
     const dir = path.dirname(this.configPath);
     await fs.mkdir(dir, { recursive: true });
-    await fs.writeFile(this.configPath, JSON.stringify(config, null, 2), 'utf-8');
+    await fs.writeFile(this.configPath, JSON.stringify(config, null, 2), {
+      encoding: 'utf-8',
+      mode: 0o600,
+    });
   }
 
   async getUserId(): Promise<string> {

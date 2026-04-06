@@ -30,14 +30,23 @@ export class SupabaseProvider implements DbProvider {
 
     if (error || !data) return null;
 
+    const totalExp = Number(data.total_exp) || 0;
+    const level = Number(data.level) || 1;
+    const totalSessions = Number(data.total_sessions) || 0;
+    const streakDays = Number(data.streak_days) || 0;
+
+    if (totalExp < 0 || level < 1 || totalSessions < 0 || streakDays < 0) {
+      throw new Error('Invalid data from remote: negative values detected');
+    }
+
     return {
-      totalExp: data.total_exp,
-      level: data.level,
-      totalSessions: data.total_sessions,
-      streakDays: data.streak_days,
-      lastActiveDate: data.last_active_date,
-      weeklyExpBonusClaimed: data.weekly_exp_bonus_claimed,
-      updatedAt: data.updated_at,
+      totalExp,
+      level,
+      totalSessions,
+      streakDays,
+      lastActiveDate: data.last_active_date ? String(data.last_active_date) : null,
+      weeklyExpBonusClaimed: Boolean(data.weekly_exp_bonus_claimed),
+      updatedAt: data.updated_at ? String(data.updated_at) : new Date().toISOString(),
     };
   }
 
