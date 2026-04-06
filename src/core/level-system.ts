@@ -51,7 +51,7 @@ export function getLevelInfo(totalExp: number): LevelInfo {
     level,
     totalExp,
     currentLevelExp: remaining,
-    expForNextLevel: 12000,
+    expForNextLevel: TIERS[7].expPerLevel,
     tier: TIERS[7],
     stars: getStars(level),
   };
