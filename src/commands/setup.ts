@@ -5,6 +5,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
+import { execSync } from 'node:child_process';
 
 const CLAUDE_SETTINGS_PATH = path.join(os.homedir(), '.claude', 'settings.json');
 const DIST_DIR = path.join(os.homedir(), '.claude-hp-mp', 'dist');
@@ -61,6 +62,18 @@ async function main() {
   console.log('\n📦 Installing files to ~/.claude-hp-mp/dist/ ...');
   await copyDistFiles();
   console.log('   ✅ Done');
+
+  // Step 1.5: Install runtime dependencies
+  console.log('\n📦 Installing dependencies...');
+  const pkgJson = { name: 'claude-hp-mp-runtime', private: true, type: 'module', dependencies: { '@supabase/supabase-js': '^2' } };
+  const runtimeDir = path.join(os.homedir(), '.claude-hp-mp');
+  await fs.writeFile(path.join(runtimeDir, 'package.json'), JSON.stringify(pkgJson, null, 2), 'utf-8');
+  try {
+    execSync('npm install --production --silent', { cwd: runtimeDir, stdio: 'pipe' });
+    console.log('   ✅ Done');
+  } catch {
+    console.log('   ⚠️  Failed (sync features may not work)');
+  }
 
   // Step 2: Configure Claude Code settings
   console.log('\n⚙️  Configuring Claude Code settings...');

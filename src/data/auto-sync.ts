@@ -5,9 +5,7 @@
 import fs from 'node:fs/promises';
 import { LocalStore } from './local-store.js';
 import { SyncEngine } from './sync-engine.js';
-import { SupabaseProvider } from './providers/supabase.js';
 import { AuthManager } from '../auth/auth-manager.js';
-import { SUPABASE_URL, SUPABASE_ANON_KEY } from '../config.js';
 import os from 'node:os';
 import path from 'node:path';
 
@@ -40,6 +38,8 @@ export async function autoSync(): Promise<void> {
 
     const config = await authManager.loadConfig();
     const store = new LocalStore(DATA_DIR);
+    const { SUPABASE_URL, SUPABASE_ANON_KEY } = await import('../config.js');
+    const { SupabaseProvider } = await import('./providers/supabase.js');
     const provider = new SupabaseProvider(SUPABASE_URL, SUPABASE_ANON_KEY);
     await provider.setSession(config.accessToken, config.refreshToken);
     const engine = new SyncEngine(store, provider);

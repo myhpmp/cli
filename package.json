@@ -1,6 +1,6 @@
 {
   "name": "claude-hp-mp",
-  "version": "0.1.0",
+  "version": "0.1.4",
   "description": "RPG-style gamified usage dashboard for Claude Code — track your level, HP, MP, streaks, and more",
   "type": "module",
   "main": "dist/index.js",
@@ -15,6 +15,7 @@
   "scripts": {
     "build": "tsc",
     "build:publish": "tsc && node scripts/inject-config.js",
+    "prepublishOnly": "npm run build:publish",
     "test": "vitest run",
     "test:watch": "vitest"
   },

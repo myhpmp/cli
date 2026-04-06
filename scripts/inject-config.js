@@ -18,8 +18,8 @@ if (!url || !key) {
 }
 
 let content = fs.readFileSync(configPath, 'utf-8');
-content = content.replace('__INJECT_SUPABASE_URL__', url);
-content = content.replace('__INJECT_SUPABASE_ANON_KEY__', key);
+content = content.replaceAll('__INJECT_SUPABASE_URL__', url);
+content = content.replaceAll('__INJECT_SUPABASE_ANON_KEY__', key);
 fs.writeFileSync(configPath, content, 'utf-8');
 
 console.log('✅ Config injected into dist/config.js');
