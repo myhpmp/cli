@@ -1,0 +1,43 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node ~/.claude-hp-mp/dist/hooks/post-tool-use.js"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node ~/.claude-hp-mp/dist/hooks/session-start.js"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node ~/.claude-hp-mp/dist/hooks/session-end.js"
+          }
+        ]
+      }
+    ]
+  },
+  "customSlashCommands": {
+    "/hp": {
+      "description": "Show gamified usage dashboard",
+      "command": "node ~/.claude-hp-mp/dist/commands/usage.js"
+    }
+  }
+}

@@ -1,0 +1,144 @@
+# claude-hp-mp
+
+RPG-style gamified usage dashboard for [Claude Code](https://docs.anthropic.com/en/docs/claude-code).
+
+Turn your Claude Code usage into a game — track your level, HP (session limit), MP (weekly limit), EXP, streaks, and earn titles as you code.
+
+## Status Line
+
+Always visible at the bottom of Claude Code:
+
+```
+⚔️ Apprentice Warrior Lv.9 ★★★ | ❤️ 43% | 💙 76% | 🧠 25% | 🔥7d
+```
+
+## Detail View
+
+Run `claude-hp-mp usage` for the full dashboard:
+
+```
+🎮 ⚔️ Apprentice Warrior Lv.9 ★★★            🔥 Streak: 7d
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+❤️ HP  ████░░░░░░   43%  ⏱️ 2h30m
+💙 MP  ████████░░   76%
+🧠 CTX ███░░░░░░░   25%  (250K / 1.0M context)
+⭐ EXP ██████░░░░   62%  (186 / 300 → Lv.10)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📊 Total EXP: 2,886  |  Total Sessions: 47 sessions
+```
+
+## Stats
+
+| Stat | Description |
+|------|-------------|
+| **❤️ HP** | 5-hour session limit remaining (%) + reset timer |
+| **💙 MP** | 7-day weekly limit remaining (%) |
+| **🧠 CTX** | Current context window usage (%) |
+| **🔥 Streak** | Consecutive days of usage |
+| **⭐ EXP** | Experience points toward next level |
+
+## Level Tiers
+
+| Level | Title | EXP/Level | Cumulative |
+|-------|-------|-----------|------------|
+| 1-5 | 🌱 Novice Adventurer | 100 | 500 |
+| 6-10 | ⚔️ Apprentice Warrior | 300 | 2,000 |
+| 11-15 | 🛡️ Skilled Knight | 600 | 5,000 |
+| 16-20 | 🧙 Mage | 1,200 | 11,000 |
+| 21-30 | 🔮 Archmage | 3,500 | 46,000 |
+| 31-40 | 👑 Grand Archmage | 8,000 | 126,000 |
+| 41-50 | 🐉 Legendary Code Dragon | 15,000 | 276,000 |
+| 50+ | ⚡ Transcendent | 25,000 | ∞ |
+
+Early levels fly by. Late tiers require serious dedication — expect ~8 months of daily use to reach ⚡ Transcendent.
+
+## EXP Sources
+
+| Action | EXP |
+|--------|-----|
+| Token usage | 1 EXP per 1K tokens |
+| Session complete | 25 EXP |
+| Streak bonus | streak days × 5 EXP (cap: 30 days = 150 max) |
+| Weekly 70%+ usage | 100 EXP |
+
+## Quick Start
+
+```bash
+# Install and auto-configure Claude Code (hooks + status line)
+npx claude-hp-mp setup
+
+# Set your display language
+npx claude-hp-mp locale
+
+# Restart Claude Code to see the status line
+```
+
+That's it! The status line appears automatically, and EXP tracking starts via hooks.
+
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `npx claude-hp-mp setup` | Auto-configure Claude Code hooks & status line |
+| `npx claude-hp-mp usage` | Show detailed RPG dashboard |
+| `npx claude-hp-mp sync` | Manually sync stats to cloud |
+| `npx claude-hp-mp statusline` | Toggle status line on/off |
+| `npx claude-hp-mp statusline on` | Enable status line |
+| `npx claude-hp-mp statusline off` | Disable status line |
+| `npx claude-hp-mp locale` | Change display language (한국어/English) |
+| `npx claude-hp-mp init` | Set up authentication (cross-device sync) |
+
+## Cross-Device Sync
+
+Sync your stats (level, EXP, streaks) across multiple machines:
+
+```bash
+npx claude-hp-mp init
+```
+
+Supports **GitHub OAuth** and **Email magic link** authentication.
+
+### How sync works
+
+| Timing | Behavior |
+|--------|----------|
+| Session start | Pull latest from cloud → update local |
+| Every 5 minutes | Auto-sync during active use |
+| Session end | Push final stats to cloud |
+| `npx claude-hp-mp sync` | Manual sync on demand |
+
+Data is stored locally at `~/.claude-hp-mp/data.json` and works offline. Cloud sync is best-effort — if it fails, local data is preserved and synced on next opportunity.
+
+## Requirements
+
+- Node.js >= 18
+- Claude Code with an active subscription (Pro/Max)
+- OAuth login (reads `~/.claude/.credentials.json`)
+
+## Supported Platforms
+
+- **Windows**
+- **macOS**
+- **Linux**
+
+All platforms use the same credential path (`~/.claude/.credentials.json`).
+
+## i18n
+
+Supports Korean and English. Set your language with `npx claude-hp-mp locale`, or it auto-detects from your system locale.
+
+```
+KO: ⚔️ 견습 전사 Lv.9 ★★★ | ❤️ 43% | 💙 76% | 🧠 25% | 🔥7일
+EN: ⚔️ Apprentice Warrior Lv.9 ★★★ | ❤️ 43% | 💙 76% | 🧠 25% | 🔥7d
+```
+
+## How It Works
+
+1. **Status Line** — Claude Code pipes session JSON (rate limits, context usage) to the status line script, rendered as RPG HUD
+2. **Hooks** — `PostToolUse` tracks token usage → EXP. `SessionStart`/`Stop` track sessions and streaks
+3. **Local Store** — All data saved to `~/.claude-hp-mp/data.json` (works offline)
+4. **Cloud Sync** — Supabase integration with auto-sync every 5 minutes + session boundaries. Last-write-wins conflict resolution
+
+## License
+
+MIT

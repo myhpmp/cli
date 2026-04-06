@@ -1,0 +1,35 @@
+export default {
+  title: {
+    1: '🌱 Novice Adventurer',
+    6: '⚔️ Apprentice Warrior',
+    11: '🛡️ Skilled Knight',
+    16: '🧙 Mage',
+    21: '🔮 Archmage',
+    31: '👑 Grand Archmage',
+    41: '🐉 Legendary Code Dragon',
+    51: '⚡ Transcendent',
+  },
+  status: {
+    streak: 'Streak',
+    totalExp: 'Total EXP',
+    totalSessions: 'Total Sessions',
+    resetIn: 'resets in',
+    hp: 'HP',
+    mp: 'MP',
+    ctx: 'CTX',
+    exp: 'EXP',
+  },
+  unit: {
+    days: 'd',
+    hours: 'h',
+    minutes: 'm',
+    tokens: 'tokens',
+    sessions: 'sessions',
+  },
+  exp: {
+    tokenUsage: 'Token Usage',
+    sessionComplete: 'Session Complete',
+    streakBonus: 'Streak Bonus',
+    weeklyGoal: 'Weekly Goal Achieved',
+  },
+} as const;

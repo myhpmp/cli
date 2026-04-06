@@ -1,0 +1,35 @@
+export default {
+  title: {
+    1: '🌱 초보 모험가',
+    6: '⚔️ 견습 전사',
+    11: '🛡️ 숙련 기사',
+    16: '🧙 마법사',
+    21: '🔮 대마법사',
+    31: '👑 아크메이지',
+    41: '🐉 전설의 코드드래곤',
+    51: '⚡ 초월자',
+  },
+  status: {
+    streak: '연속',
+    totalExp: '총 누적 EXP',
+    totalSessions: '총 세션',
+    resetIn: '후 초기화',
+    hp: 'HP',
+    mp: 'MP',
+    ctx: 'CTX',
+    exp: 'EXP',
+  },
+  unit: {
+    days: '일',
+    hours: '시간',
+    minutes: '분',
+    tokens: '토큰',
+    sessions: '회',
+  },
+  exp: {
+    tokenUsage: '토큰 사용',
+    sessionComplete: '세션 완료',
+    streakBonus: '연속 사용 보너스',
+    weeklyGoal: '주간 목표 달성',
+  },
+} as const;

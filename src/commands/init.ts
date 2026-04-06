@@ -1,0 +1,114 @@
+import readline from 'node:readline';
+import os from 'node:os';
+import path from 'node:path';
+import { createClient } from '@supabase/supabase-js';
+import { AuthManager } from '../auth/auth-manager.js';
+import { signInWithOAuth } from '../auth/oauth.js';
+import { LocalStore } from '../data/local-store.js';
+import { SupabaseProvider } from '../data/providers/supabase.js';
+import { SyncEngine } from '../data/sync-engine.js';
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from '../config.js';
+
+const DATA_DIR = path.join(os.homedir(), '.claude-hp-mp');
+
+function ask(rl: readline.Interface, question: string): Promise<string> {
+  return new Promise((resolve) => rl.question(question, resolve));
+}
+
+async function main() {
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const authManager = new AuthManager(DATA_DIR);
+  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+
+  // Check if already authenticated
+  if (await authManager.isAuthenticated()) {
+    const config = await authManager.loadConfig();
+    const langName = config.locale === 'ko' ? '한국어' : 'English';
+    console.log(`✅ Already authenticated (${config.provider})`);
+    console.log(`   Language: ${langName}\n`);
+    console.log('  1) Re-authenticate with a different account');
+    console.log('  2) Change language');
+    console.log('  3) Exit\n');
+
+    const action = await ask(rl, '> ');
+    if (action.trim() === '3' || !['1', '2'].includes(action.trim())) {
+      rl.close();
+      process.exit(0);
+    }
+    if (action.trim() === '2') {
+      console.log('\n🌍 Select display language:\n');
+      console.log('  1) 한국어 (Korean)');
+      console.log('  2) English\n');
+      const langChoice = await ask(rl, '> ');
+      config.locale = langChoice.trim() === '1' ? 'ko' : 'en';
+      await authManager.saveConfig(config);
+      console.log(`\n✅ Language updated!`);
+      rl.close();
+      process.exit(0);
+    }
+    // action === '1' — fall through to re-auth
+  }
+
+  console.log('🎮 Claude HP/MP Setup');
+  console.log('━'.repeat(24));
+  console.log('Select login method:\n');
+  console.log('  1) GitHub');
+  console.log('  2) Google\n');
+
+  const choice = await ask(rl, '> ');
+
+  let result: { userId: string; accessToken: string; refreshToken: string };
+  let provider: 'github' | 'google';
+
+  if (choice.trim() === '1') {
+    console.log('\n🌐 Opening GitHub auth page in browser...');
+    result = await signInWithOAuth(supabase, 'github');
+    provider = 'github';
+  } else if (choice.trim() === '2') {
+    console.log('\n🌐 Opening Google auth page in browser...');
+    result = await signInWithOAuth(supabase, 'google');
+    provider = 'google';
+  } else {
+    console.error('❌ Invalid selection.');
+    rl.close();
+    process.exit(1);
+    return;
+  }
+
+  console.log('\n🌍 Select display language:\n');
+  console.log('  1) 한국어 (Korean)');
+  console.log('  2) English\n');
+  const langChoice = await ask(rl, '> ');
+  const locale = langChoice.trim() === '1' ? 'ko' : 'en';
+
+  await authManager.saveConfig({
+    userId: result.userId,
+    accessToken: result.accessToken,
+    refreshToken: result.refreshToken,
+    provider,
+    locale,
+  });
+
+  // Create initial user_stats row in Supabase + sync local data
+  console.log('\n📡 Syncing with cloud...');
+  try {
+    const store = new LocalStore(DATA_DIR);
+    const dbProvider = new SupabaseProvider(SUPABASE_URL, SUPABASE_ANON_KEY);
+    await dbProvider.setSession(result.accessToken, result.refreshToken);
+    const engine = new SyncEngine(store, dbProvider);
+    await engine.sync(result.userId);
+    console.log('   ✅ Synced');
+  } catch {
+    console.log('   ⚠️  Sync failed (will retry on next session)');
+  }
+
+  console.log(`\n✅ Authentication complete!`);
+  console.log(`📁 Config saved: ${DATA_DIR}/config.json`);
+  rl.close();
+  process.exit(0);
+}
+
+main().catch((err) => {
+  console.error('❌ Init failed:', err.message);
+  process.exit(1);
+});
