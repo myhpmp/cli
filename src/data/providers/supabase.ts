@@ -21,6 +21,15 @@ export class SupabaseProvider implements DbProvider {
     if (error) throw new Error(`Failed to set session: ${error.message}`);
   }
 
+  async refreshSession(refreshToken: string): Promise<{ accessToken: string; refreshToken: string } | null> {
+    const { data, error } = await this.client.auth.refreshSession({ refresh_token: refreshToken });
+    if (error || !data.session) return null;
+    return {
+      accessToken: data.session.access_token,
+      refreshToken: data.session.refresh_token,
+    };
+  }
+
   async loadUserStats(userId: string): Promise<UserStats | null> {
     const { data, error } = await this.client
       .from('user_stats')

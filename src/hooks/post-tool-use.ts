@@ -6,16 +6,18 @@ import os from 'node:os';
 import path from 'node:path';
 
 const DATA_DIR = path.join(os.homedir(), '.claude-hp-mp');
+const MAX_INPUT_SIZE = 1_000_000; // 1MB
 
 async function main() {
   let input = '';
   for await (const chunk of process.stdin) {
     input += chunk;
+    if (input.length > MAX_INPUT_SIZE) return;
   }
 
   const hookData = JSON.parse(input);
-  const tokensUsed = hookData?.usage?.total_tokens ?? 0;
-  if (tokensUsed === 0) return;
+  const tokensUsed = Number(hookData?.usage?.total_tokens ?? 0);
+  if (!Number.isFinite(tokensUsed) || tokensUsed <= 0) return;
 
   const store = new LocalStore(DATA_DIR);
   const stats = await store.load();

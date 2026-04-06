@@ -40,11 +40,14 @@ interface ClaudeStatusInput {
   };
 }
 
+const MAX_INPUT_SIZE = 1_000_000; // 1MB
+
 async function main() {
   // Read JSON from stdin (Claude Code pipes this)
   let input = '';
   for await (const chunk of process.stdin) {
     input += chunk;
+    if (input.length > MAX_INPUT_SIZE) break;
   }
 
   let statusInput: ClaudeStatusInput = {};
