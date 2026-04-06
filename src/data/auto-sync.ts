@@ -41,7 +41,23 @@ export async function autoSync(): Promise<void> {
     const { SUPABASE_URL, SUPABASE_ANON_KEY } = await import('../config.js');
     const { SupabaseProvider } = await import('./providers/supabase.js');
     const provider = new SupabaseProvider(SUPABASE_URL, SUPABASE_ANON_KEY);
-    await provider.setSession(config.accessToken, config.refreshToken);
+
+    try {
+      await provider.setSession(config.accessToken, config.refreshToken);
+    } catch {
+      // Token expired — attempt refresh
+      const refreshed = await provider.refreshSession(config.refreshToken);
+      if (refreshed) {
+        await authManager.saveConfig({
+          ...config,
+          accessToken: refreshed.accessToken,
+          refreshToken: refreshed.refreshToken,
+        });
+      } else {
+        return; // Cannot recover — skip sync silently
+      }
+    }
+
     const engine = new SyncEngine(store, provider);
 
     await engine.sync(config.userId);

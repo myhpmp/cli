@@ -1,4 +1,5 @@
 import http from 'node:http';
+import crypto from 'node:crypto';
 import open from 'open';
 import type { SupabaseClient, Provider } from '@supabase/supabase-js';
 
@@ -12,14 +13,17 @@ const CALLBACK_HTML = `<!DOCTYPE html>
   const accessToken = params.get('access_token') || queryParams.get('access_token');
   const refreshToken = params.get('refresh_token') || queryParams.get('refresh_token');
   const code = queryParams.get('code');
+  const state = params.get('state') || queryParams.get('state') || '';
 
   if (accessToken) {
     fetch('/complete?access_token=' + encodeURIComponent(accessToken) +
-      '&refresh_token=' + encodeURIComponent(refreshToken || ''))
+      '&refresh_token=' + encodeURIComponent(refreshToken || '') +
+      '&state=' + encodeURIComponent(state))
       .then(() => { document.body.innerHTML = '<h1>✅ Authentication complete! You can close this tab.</h1>'; })
       .catch(() => { document.body.innerHTML = '<h1>❌ Failed to complete auth</h1>'; });
   } else if (code) {
-    fetch('/complete?code=' + encodeURIComponent(code))
+    fetch('/complete?code=' + encodeURIComponent(code) +
+      '&state=' + encodeURIComponent(state))
       .then(() => { document.body.innerHTML = '<h1>✅ Authentication complete! You can close this tab.</h1>'; })
       .catch(() => { document.body.innerHTML = '<h1>❌ Failed to complete auth</h1>'; });
   } else {
@@ -47,8 +51,13 @@ export async function signInWithOAuth(supabase: SupabaseClient, provider: Provid
         const code = url.searchParams.get('code');
         const accessToken = url.searchParams.get('access_token');
         const refreshToken = url.searchParams.get('refresh_token');
+        const state = url.searchParams.get('state');
 
         try {
+          if (state !== oauthState) {
+            throw new Error('OAuth state mismatch — possible CSRF attack');
+          }
+
           if (code) {
             const { data, error } = await supabase.auth.exchangeCodeForSession(code);
             if (error || !data.session) {
@@ -91,6 +100,8 @@ export async function signInWithOAuth(supabase: SupabaseClient, provider: Provid
       }
     });
 
+    const oauthState = crypto.randomBytes(32).toString('hex');
+
     server.listen(0, async () => {
       const port = (server.address() as { port: number }).port;
       const redirectTo = `http://localhost:${port}/callback`;
@@ -100,6 +111,7 @@ export async function signInWithOAuth(supabase: SupabaseClient, provider: Provid
         options: {
           redirectTo,
           skipBrowserRedirect: false,
+          queryParams: { state: oauthState },
         },
       });
 
