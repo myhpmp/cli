@@ -28,6 +28,15 @@ export class LocalStore {
     this.filePath = path.join(dir, 'data.json');
   }
 
+  async exists(): Promise<boolean> {
+    try {
+      await fs.access(this.filePath);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
   async load(): Promise<UserStats> {
     try {
       const raw = await fs.readFile(this.filePath, 'utf-8');

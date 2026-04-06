@@ -20,14 +20,23 @@ export class SyncEngine {
   }
 
   async sync(userId: string): Promise<UserStats> {
+    const hasLocalData = await this.local.exists();
     const local = await this.local.load();
     const remote = await this.remote.loadUserStats(userId);
 
+    // No remote data — push local (or default) to remote
     if (!remote) {
       await this.remote.saveUserStats(userId, local);
       return local;
     }
 
+    // No local data file (fresh install) — always pull from remote
+    if (!hasLocalData) {
+      await this.local.save(remote);
+      return remote;
+    }
+
+    // Both exist — compare timestamps, last-write-wins
     const localTime = new Date(local.updatedAt).getTime();
     const remoteTime = new Date(remote.updatedAt).getTime();
 
