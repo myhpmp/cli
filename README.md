@@ -11,7 +11,7 @@ Turn your Claude Code usage into a game — track your level, HP (session limit)
 Always visible at the bottom of Claude Code:
 
 ```
-⚔️ Apprentice Warrior Lv.9 ★★★ | ❤️ 43% | 💙 76% | 🧠 25% | 🔥7d
+⚔️ Apprentice Warrior Lv.9 ★★★ | ❤️ 43% ⏱️2h30m | 💙 76% | 🧠 25% | 🔥7d
 ```
 
 ## Detail View
@@ -98,7 +98,7 @@ Sync your stats (level, EXP, streaks) across multiple machines:
 npx claude-hp-mp init
 ```
 
-Supports **GitHub OAuth** and **Email magic link** authentication.
+Supports **GitHub OAuth** and **Google OAuth** authentication.
 
 ### How sync works
 
@@ -109,7 +109,7 @@ Supports **GitHub OAuth** and **Email magic link** authentication.
 | Session end | Push final stats to cloud |
 | `npx claude-hp-mp sync` | Manual sync on demand |
 
-Data is stored locally at `~/.claude-hp-mp/data.json` and works offline. Cloud sync is best-effort — if it fails, local data is preserved and synced on next opportunity.
+Data is stored locally at `~/.claude-hp-mp/data.json` and works offline. Cloud sync is best-effort — if it fails, local data is preserved and synced on next opportunity. If local EXP is lower than remote (e.g. after reinstall), remote data is always preserved.
 
 ## Requirements
 
@@ -130,8 +130,8 @@ All platforms use the same credential path (`~/.claude/.credentials.json`).
 Supports Korean and English. Set your language with `npx claude-hp-mp locale`, or it auto-detects from your system locale.
 
 ```
-KO: ⚔️ 견습 전사 Lv.9 ★★★ | ❤️ 43% | 💙 76% | 🧠 25% | 🔥7일
-EN: ⚔️ Apprentice Warrior Lv.9 ★★★ | ❤️ 43% | 💙 76% | 🧠 25% | 🔥7d
+KO: ⚔️ 견습 전사 Lv.9 ★★★ | ❤️ 43% ⏱️2h30m | 💙 76% | 🧠 25% | 🔥7일
+EN: ⚔️ Apprentice Warrior Lv.9 ★★★ | ❤️ 43% ⏱️2h30m | 💙 76% | 🧠 25% | 🔥7d
 ```
 
 ## How It Works
@@ -139,7 +139,7 @@ EN: ⚔️ Apprentice Warrior Lv.9 ★★★ | ❤️ 43% | 💙 76% | 🧠 25% 
 1. **Status Line** — Claude Code pipes session JSON (rate limits, context usage) to the status line script, rendered as RPG HUD
 2. **Hooks** — `PostToolUse` tracks token usage → EXP. `SessionStart`/`Stop` track sessions and streaks
 3. **Local Store** — All data saved to `~/.claude-hp-mp/data.json` (works offline)
-4. **Cloud Sync** — Supabase integration with auto-sync every 5 minutes + session boundaries. Last-write-wins conflict resolution
+4. **Cloud Sync** — Supabase integration with auto-sync every 5 minutes + session boundaries. EXP-safe sync: if local EXP is lower than remote (e.g. after reinstall), always pulls from remote to protect progress
 
 ## License
 
