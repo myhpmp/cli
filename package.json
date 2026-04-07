@@ -36,9 +36,9 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/imironjin/my-hp-mp.git"
+    "url": "https://github.com/myhpmp/cli.git"
   },
-  "homepage": "https://github.com/imironjin/my-hp-mp",
+  "homepage": "https://github.com/myhpmp/cli",
   "engines": {
     "node": ">=18.0.0"
   },
