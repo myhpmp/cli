@@ -77,13 +77,18 @@ export class SupabaseProvider implements DbProvider {
   }
 
   async insertExpHistory(userId: string, entry: ExpHistoryEntry): Promise<void> {
+    const row: Record<string, unknown> = {
+      user_id: userId,
+      amount: entry.amount,
+      reason: entry.reason,
+    };
+    if (entry.metadata) {
+      row.metadata = entry.metadata;
+    }
+
     const { error } = await this.client
       .from('exp_history')
-      .insert({
-        user_id: userId,
-        amount: entry.amount,
-        reason: entry.reason,
-      });
+      .insert(row);
 
     if (error) throw new Error(`exp_history insert failed: ${error.message}`);
   }

@@ -3,6 +3,7 @@ import type { UserStats } from '../local-store.js';
 export interface ExpHistoryEntry {
   amount: number;
   reason: string;
+  metadata?: Record<string, unknown>;
 }
 
 export interface DbProvider {

@@ -39,7 +39,7 @@ async function main() {
   // Log EXP to history
   await logExp(sessionExp, 'session_complete');
   if (tokenExp > 0) {
-    await logExp(tokenExp, 'token_usage');
+    await logExp(tokenExp, 'token_usage', { tokens: totalTokens });
   }
 
   // Push to remote

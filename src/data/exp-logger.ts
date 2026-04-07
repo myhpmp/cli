@@ -9,7 +9,7 @@ import path from 'node:path';
 
 const DATA_DIR = path.join(os.homedir(), '.my-hp-mp');
 
-export async function logExp(amount: number, reason: string): Promise<void> {
+export async function logExp(amount: number, reason: string, metadata?: Record<string, unknown>): Promise<void> {
   if (amount <= 0) return;
 
   try {
@@ -36,7 +36,7 @@ export async function logExp(amount: number, reason: string): Promise<void> {
       });
     }
 
-    await provider.insertExpHistory(config.userId, { amount, reason });
+    await provider.insertExpHistory(config.userId, { amount, reason, metadata });
   } catch {
     // INSERT failed (network, rate limit, etc.) — queue for retry
     await enqueue({ amount, reason, timestamp: new Date().toISOString() }).catch(() => {});
