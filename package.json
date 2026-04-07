@@ -1,11 +1,11 @@
 {
-  "name": "claude-hp-mp",
+  "name": "my-hp-mp",
   "version": "0.1.4",
-  "description": "RPG-style gamified usage dashboard for Claude Code — track your level, HP, MP, streaks, and more",
+  "description": "RPG-style gamified usage dashboard for AI coding tools — track your level, HP, MP, streaks, and more",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
-    "claude-hp-mp": "dist/cli.js"
+    "my-hp-mp": "dist/cli.js"
   },
   "files": [
     "dist",
@@ -22,6 +22,8 @@
   "keywords": [
     "claude",
     "claude-code",
+    "codex",
+    "openai",
     "gamification",
     "rpg",
     "usage",
@@ -34,9 +36,9 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/imironjin/claude-hp-mp.git"
+    "url": "https://github.com/imironjin/my-hp-mp.git"
   },
-  "homepage": "https://github.com/imironjin/claude-hp-mp",
+  "homepage": "https://github.com/imironjin/my-hp-mp",
   "engines": {
     "node": ">=18.0.0"
   },

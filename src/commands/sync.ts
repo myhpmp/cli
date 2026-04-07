@@ -6,13 +6,13 @@ import { SupabaseProvider } from '../data/providers/supabase.js';
 import { SyncEngine } from '../data/sync-engine.js';
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from '../config.js';
 
-const DATA_DIR = path.join(os.homedir(), '.claude-hp-mp');
+const DATA_DIR = path.join(os.homedir(), '.my-hp-mp');
 
 async function main() {
   const authManager = new AuthManager(DATA_DIR);
 
   if (!(await authManager.isAuthenticated())) {
-    console.error('❌ Not authenticated. Run "claude-hp-mp init" first.');
+    console.error('❌ Not authenticated. Run "my-hp-mp init" first.');
     process.exit(1);
   }
 

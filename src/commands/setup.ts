@@ -1,6 +1,6 @@
 /**
  * Auto-configure hooks for supported AI coding tools.
- * Run: npx claude-hp-mp setup
+ * Run: npx my-hp-mp setup
  */
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -9,7 +9,7 @@ import readline from 'node:readline';
 import { execSync } from 'node:child_process';
 import { getProvider, listProviders } from '../adapter/index.js';
 
-const DIST_DIR = path.join(os.homedir(), '.claude-hp-mp', 'dist');
+const DIST_DIR = path.join(os.homedir(), '.my-hp-mp', 'dist');
 
 function ask(rl: readline.Interface, question: string): Promise<string> {
   return new Promise((resolve) => rl.question(question, resolve));
@@ -66,7 +66,7 @@ async function setupProvider(providerName: string): Promise<void> {
     if (!existing) {
       existingHooks[event] = hookConfig as unknown[];
     } else {
-      const alreadyHas = JSON.stringify(existing).includes('claude-hp-mp');
+      const alreadyHas = JSON.stringify(existing).includes('my-hp-mp');
       if (!alreadyHas) {
         existing.push(...(hookConfig as unknown[]));
       }
@@ -91,7 +91,7 @@ async function main() {
   const providers = listProviders();
   const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 
-  console.log('🎮 Claude HP/MP Setup');
+  console.log('🎮 My HP/MP Setup');
   console.log('━'.repeat(30));
 
   // Select provider(s)
@@ -116,14 +116,14 @@ async function main() {
   }
 
   // Step 1: Copy dist files
-  console.log('\n📦 Installing files to ~/.claude-hp-mp/dist/ ...');
+  console.log('\n📦 Installing files to ~/.my-hp-mp/dist/ ...');
   await copyDistFiles();
   console.log('   ✅ Done');
 
   // Step 2: Install runtime dependencies
   console.log('\n📦 Installing dependencies...');
-  const pkgJson = { name: 'claude-hp-mp-runtime', private: true, type: 'module', dependencies: { '@supabase/supabase-js': '^2' } };
-  const runtimeDir = path.join(os.homedir(), '.claude-hp-mp');
+  const pkgJson = { name: 'my-hp-mp-runtime', private: true, type: 'module', dependencies: { '@supabase/supabase-js': '^2' } };
+  const runtimeDir = path.join(os.homedir(), '.my-hp-mp');
   await fs.writeFile(path.join(runtimeDir, 'package.json'), JSON.stringify(pkgJson, null, 2), 'utf-8');
   try {
     execSync('npm install --production --silent', { cwd: runtimeDir, stdio: 'pipe' });
@@ -144,7 +144,7 @@ async function main() {
   if (selectedProviders.includes('codex')) {
     console.log('   Restart Codex CLI to start tracking.');
   }
-  console.log('   Run "claude-hp-mp usage" to see your stats.\n');
+  console.log('   Run "my-hp-mp usage" to see your stats.\n');
 }
 
 main().catch((err) => {

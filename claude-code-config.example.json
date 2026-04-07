@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node ~/.claude-hp-mp/dist/hooks/post-tool-use.js"
+            "command": "node ~/.my-hp-mp/dist/hooks/post-tool-use.js"
           }
         ]
       }
@@ -17,7 +17,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node ~/.claude-hp-mp/dist/hooks/session-start.js"
+            "command": "node ~/.my-hp-mp/dist/hooks/session-start.js"
           }
         ]
       }
@@ -28,7 +28,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node ~/.claude-hp-mp/dist/hooks/session-end.js"
+            "command": "node ~/.my-hp-mp/dist/hooks/session-end.js"
           }
         ]
       }
@@ -37,7 +37,7 @@
   "customSlashCommands": {
     "/hp": {
       "description": "Show gamified usage dashboard",
-      "command": "node ~/.claude-hp-mp/dist/commands/usage.js"
+      "command": "node ~/.my-hp-mp/dist/commands/usage.js"
     }
   }
 }

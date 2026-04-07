@@ -82,7 +82,7 @@ export async function fetchClaudeUsage(): Promise<ClaudeUsageData | null> {
         'Authorization': `Bearer ${token}`,
         'anthropic-beta': 'oauth-2025-04-20',
         'Content-Type': 'application/json',
-        'User-Agent': 'claude-hp-mp/1.0',
+        'User-Agent': 'my-hp-mp/1.0',
       },
     });
 

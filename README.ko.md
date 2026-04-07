@@ -1,4 +1,4 @@
-# claude-hp-mp
+# my-hp-mp
 
 한국어 | [English](./README.md)
 
@@ -16,7 +16,7 @@ Claude Code 하단에 항상 표시:
 
 ## 상세 보기
 
-`claude-hp-mp usage`로 전체 대시보드 확인:
+`my-hp-mp usage`로 전체 대시보드 확인:
 
 ```
 🎮 ⚔️ 견습 전사 Lv.9 ★★★                    🔥 연속: 7일
@@ -67,10 +67,10 @@ Claude Code 하단에 항상 표시:
 
 ```bash
 # Claude Code 자동 설정 (hooks + 상태 바)
-npx claude-hp-mp setup
+npx my-hp-mp setup
 
 # 표시 언어 설정
-npx claude-hp-mp locale
+npx my-hp-mp locale
 
 # Claude Code를 재시작하면 상태 바가 나타납니다
 ```
@@ -81,21 +81,21 @@ npx claude-hp-mp locale
 
 | 명령어 | 설명 |
 |--------|------|
-| `npx claude-hp-mp setup` | Claude Code hook과 상태 바 자동 설정 |
-| `npx claude-hp-mp usage` | RPG 대시보드 상세 보기 |
-| `npx claude-hp-mp sync` | 수동으로 클라우드 동기화 |
-| `npx claude-hp-mp statusline` | 상태 바 켜기/끄기 토글 |
-| `npx claude-hp-mp statusline on` | 상태 바 켜기 |
-| `npx claude-hp-mp statusline off` | 상태 바 끄기 |
-| `npx claude-hp-mp locale` | 표시 언어 변경 (한국어/English) |
-| `npx claude-hp-mp init` | 인증 설정 (크로스 디바이스 동기화) |
+| `npx my-hp-mp setup` | Claude Code hook과 상태 바 자동 설정 |
+| `npx my-hp-mp usage` | RPG 대시보드 상세 보기 |
+| `npx my-hp-mp sync` | 수동으로 클라우드 동기화 |
+| `npx my-hp-mp statusline` | 상태 바 켜기/끄기 토글 |
+| `npx my-hp-mp statusline on` | 상태 바 켜기 |
+| `npx my-hp-mp statusline off` | 상태 바 끄기 |
+| `npx my-hp-mp locale` | 표시 언어 변경 (한국어/English) |
+| `npx my-hp-mp init` | 인증 설정 (크로스 디바이스 동기화) |
 
 ## 크로스 디바이스 동기화
 
 여러 기기에서 스탯(레벨, EXP, 연속일수)을 동기화:
 
 ```bash
-npx claude-hp-mp init
+npx my-hp-mp init
 ```
 
 **GitHub OAuth**와 **Google OAuth** 인증을 지원합니다.
@@ -107,9 +107,9 @@ npx claude-hp-mp init
 | 세션 시작 | 클라우드에서 최신 데이터 가져오기 |
 | 5분마다 | 사용 중 자동 동기화 |
 | 세션 종료 | 최종 스탯 클라우드에 저장 |
-| `npx claude-hp-mp sync` | 수동 즉시 동기화 |
+| `npx my-hp-mp sync` | 수동 즉시 동기화 |
 
-데이터는 `~/.claude-hp-mp/data.json`에 로컬 저장되며 오프라인에서도 동작합니다. 클라우드 동기화에 실패하면 로컬 데이터가 보존되고, 다음 기회에 동기화됩니다. 로컬 EXP가 원격보다 낮으면(재설치 등) 항상 원격 데이터가 보존됩니다.
+데이터는 `~/.my-hp-mp/data.json`에 로컬 저장되며 오프라인에서도 동작합니다. 클라우드 동기화에 실패하면 로컬 데이터가 보존되고, 다음 기회에 동기화됩니다. 로컬 EXP가 원격보다 낮으면(재설치 등) 항상 원격 데이터가 보존됩니다.
 
 ## 요구 사항
 
@@ -127,7 +127,7 @@ npx claude-hp-mp init
 
 ## 다국어
 
-한국어와 영어를 지원합니다. `npx claude-hp-mp locale`로 언어를 설정하거나, 시스템 로캘에서 자동 감지합니다.
+한국어와 영어를 지원합니다. `npx my-hp-mp locale`로 언어를 설정하거나, 시스템 로캘에서 자동 감지합니다.
 
 ```
 KO: ⚔️ 견습 전사 Lv.9 ★★★ | ❤️ 43% ⏱️2h30m | 💙 76% | 🧠 25% | 🔥7일
@@ -138,7 +138,7 @@ EN: ⚔️ Apprentice Warrior Lv.9 ★★★ | ❤️ 43% ⏱️2h30m | 💙 76%
 
 1. **상태 바** — Claude Code가 세션 JSON(rate limit, 컨텍스트 사용량)을 상태 바 스크립트에 전달 → RPG HUD로 렌더링
 2. **Hook** — `PostToolUse`가 토큰 사용량 추적 → EXP 변환. `SessionStart`/`Stop`이 세션과 연속일수 추적
-3. **로컬 저장소** — 모든 데이터가 `~/.claude-hp-mp/data.json`에 저장 (오프라인 동작)
+3. **로컬 저장소** — 모든 데이터가 `~/.my-hp-mp/data.json`에 저장 (오프라인 동작)
 4. **클라우드 동기화** — Supabase 연동, 5분 간격 + 세션 경계에서 자동 동기화. EXP 보호: 로컬 EXP가 원격보다 낮으면(재설치 등) 항상 원격 데이터를 우선 적용
 
 ## 라이선스

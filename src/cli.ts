@@ -27,7 +27,7 @@ async function main() {
       await import('./commands/statusline-toggle.js');
       break;
     default:
-      console.log('🎮 Claude HP/MP - Gamified Usage Dashboard\n');
+      console.log('🎮 My HP/MP - Gamified Usage Dashboard\n');
       console.log('Commands:');
       console.log('  setup      — Configure Claude Code hooks & status line');
       console.log('  init       — Set up authentication (cross-device sync)');
@@ -36,9 +36,9 @@ async function main() {
       console.log('  statusline — Toggle status line (on/off)');
       console.log('  locale     — Change display language (한국어/English)');
       console.log('\nQuick start:');
-      console.log('  npx claude-hp-mp setup    # Auto-configure everything');
-      console.log('  npx claude-hp-mp locale   # Set language');
-      console.log('  npx claude-hp-mp init     # Optional: enable cross-device sync');
+      console.log('  npx my-hp-mp setup    # Auto-configure everything');
+      console.log('  npx my-hp-mp locale   # Set language');
+      console.log('  npx my-hp-mp init     # Optional: enable cross-device sync');
       break;
   }
 }

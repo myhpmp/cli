@@ -30,7 +30,7 @@ describe('SyncEngine', () => {
   let engine: SyncEngine;
 
   beforeEach(() => {
-    testDir = path.join(os.tmpdir(), `claude-hp-mp-sync-test-${Date.now()}`);
+    testDir = path.join(os.tmpdir(), `my-hp-mp-sync-test-${Date.now()}`);
     localStore = new LocalStore(testDir);
     mockDb = new MockDbProvider();
     engine = new SyncEngine(localStore, mockDb);

@@ -9,7 +9,7 @@ import { SupabaseProvider } from '../data/providers/supabase.js';
 import { SyncEngine } from '../data/sync-engine.js';
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from '../config.js';
 
-const DATA_DIR = path.join(os.homedir(), '.claude-hp-mp');
+const DATA_DIR = path.join(os.homedir(), '.my-hp-mp');
 
 function ask(rl: readline.Interface, question: string): Promise<string> {
   return new Promise((resolve) => rl.question(question, resolve));
@@ -49,7 +49,7 @@ async function main() {
     // action === '1' — fall through to re-auth
   }
 
-  console.log('🎮 Claude HP/MP Setup');
+  console.log('🎮 My HP/MP Setup');
   console.log('━'.repeat(24));
   console.log('Select login method:\n');
   console.log('  1) GitHub');

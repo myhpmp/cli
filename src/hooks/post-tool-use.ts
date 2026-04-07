@@ -6,7 +6,7 @@ import { logExp } from '../data/exp-logger.js';
 import os from 'node:os';
 import path from 'node:path';
 
-const DATA_DIR = path.join(os.homedir(), '.claude-hp-mp');
+const DATA_DIR = path.join(os.homedir(), '.my-hp-mp');
 const MAX_INPUT_SIZE = 1_000_000; // 1MB
 
 async function main() {

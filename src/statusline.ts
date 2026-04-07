@@ -10,7 +10,7 @@
  * {
  *   "statusLine": {
  *     "type": "command",
- *     "command": "node ~/.claude-hp-mp/dist/statusline.js"
+ *     "command": "node ~/.my-hp-mp/dist/statusline.js"
  *   }
  * }
  */
@@ -23,7 +23,7 @@ import { fetchClaudeUsage, utilizationToPercent, resetsAtToMinutes } from './dat
 import os from 'node:os';
 import path from 'node:path';
 
-const DATA_DIR = path.join(os.homedir(), '.claude-hp-mp');
+const DATA_DIR = path.join(os.homedir(), '.my-hp-mp');
 const TITLE_KEYS = [1, 6, 11, 16, 21, 31, 41, 51];
 
 interface ClaudeStatusInput {

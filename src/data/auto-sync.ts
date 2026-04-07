@@ -10,7 +10,7 @@ import { AuthManager } from '../auth/auth-manager.js';
 import os from 'node:os';
 import path from 'node:path';
 
-const DATA_DIR = path.join(os.homedir(), '.claude-hp-mp');
+const DATA_DIR = path.join(os.homedir(), '.my-hp-mp');
 const LAST_SYNC_PATH = path.join(DATA_DIR, 'last-sync.json');
 const SYNC_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
 

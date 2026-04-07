@@ -9,7 +9,7 @@ describe('LocalStore', () => {
   let testDir: string;
 
   beforeEach(() => {
-    testDir = path.join(os.tmpdir(), `claude-hp-mp-test-${Date.now()}`);
+    testDir = path.join(os.tmpdir(), `my-hp-mp-test-${Date.now()}`);
     store = new LocalStore(testDir);
   });
 
