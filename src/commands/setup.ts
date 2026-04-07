@@ -1,42 +1,23 @@
 /**
- * Auto-configure Claude Code hooks and status line.
+ * Auto-configure hooks for supported AI coding tools.
  * Run: npx claude-hp-mp setup
  */
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
+import readline from 'node:readline';
 import { execSync } from 'node:child_process';
+import { getProvider, listProviders } from '../adapter/index.js';
 
-const CLAUDE_SETTINGS_PATH = path.join(os.homedir(), '.claude', 'settings.json');
 const DIST_DIR = path.join(os.homedir(), '.claude-hp-mp', 'dist');
 
-interface ClaudeSettings {
-  hooks?: Record<string, unknown[]>;
-  statusLine?: unknown;
-  [key: string]: unknown;
-}
-
-async function loadSettings(): Promise<ClaudeSettings> {
-  try {
-    const raw = await fs.readFile(CLAUDE_SETTINGS_PATH, 'utf-8');
-    return JSON.parse(raw);
-  } catch {
-    return {};
-  }
-}
-
-async function saveSettings(settings: ClaudeSettings): Promise<void> {
-  const dir = path.dirname(CLAUDE_SETTINGS_PATH);
-  await fs.mkdir(dir, { recursive: true });
-  await fs.writeFile(CLAUDE_SETTINGS_PATH, JSON.stringify(settings, null, 2), 'utf-8');
+function ask(rl: readline.Interface, question: string): Promise<string> {
+  return new Promise((resolve) => rl.question(question, resolve));
 }
 
 async function copyDistFiles(): Promise<void> {
-  // Copy compiled dist files to ~/.claude-hp-mp/dist/
   const srcDist = path.resolve(import.meta.dirname, '..');
-  const targetDir = DIST_DIR;
-
-  await fs.mkdir(targetDir, { recursive: true });
+  await fs.mkdir(DIST_DIR, { recursive: true });
 
   async function copyRecursive(src: string, dest: string) {
     const stat = await fs.stat(src);
@@ -51,19 +32,95 @@ async function copyDistFiles(): Promise<void> {
     }
   }
 
-  await copyRecursive(srcDist, targetDir);
+  await copyRecursive(srcDist, DIST_DIR);
+}
+
+async function loadJsonFile(filePath: string): Promise<Record<string, unknown>> {
+  try {
+    const raw = await fs.readFile(filePath, 'utf-8');
+    return JSON.parse(raw);
+  } catch {
+    return {};
+  }
+}
+
+async function saveJsonFile(filePath: string, data: Record<string, unknown>): Promise<void> {
+  const dir = path.dirname(filePath);
+  await fs.mkdir(dir, { recursive: true });
+  await fs.writeFile(filePath, JSON.stringify(data, null, 2), 'utf-8');
+}
+
+async function setupProvider(providerName: string): Promise<void> {
+  const provider = getProvider(providerName);
+  const config = provider.generateHookConfig(DIST_DIR);
+
+  console.log(`\n⚙️  Configuring ${provider.name} hooks...`);
+  const settings = await loadJsonFile(config.settingsPath);
+
+  // Add hooks
+  if (!settings.hooks) settings.hooks = {};
+  const existingHooks = settings.hooks as Record<string, unknown[]>;
+
+  for (const [event, hookConfig] of Object.entries(config.hooks)) {
+    const existing = existingHooks[event] as unknown[] | undefined;
+    if (!existing) {
+      existingHooks[event] = hookConfig as unknown[];
+    } else {
+      const alreadyHas = JSON.stringify(existing).includes('claude-hp-mp');
+      if (!alreadyHas) {
+        existing.push(...(hookConfig as unknown[]));
+      }
+    }
+  }
+
+  // Add status line (if supported)
+  if (config.statusLine) {
+    settings.statusLine = config.statusLine;
+  }
+
+  await saveJsonFile(config.settingsPath, settings);
+
+  const hookNames = Object.keys(config.hooks).join(', ');
+  console.log(`   ✅ Hooks configured (${hookNames})`);
+  if (config.statusLine) {
+    console.log('   ✅ Status line configured');
+  }
 }
 
 async function main() {
+  const providers = listProviders();
+  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+
   console.log('🎮 Claude HP/MP Setup');
   console.log('━'.repeat(30));
+
+  // Select provider(s)
+  console.log('\nSelect AI coding tool to configure:\n');
+  providers.forEach((p, i) => console.log(`  ${i + 1}) ${p}`));
+  console.log(`  ${providers.length + 1}) All\n`);
+
+  const choice = await ask(rl, '> ');
+  rl.close();
+
+  const choiceNum = parseInt(choice.trim());
+  let selectedProviders: string[];
+
+  if (choiceNum === providers.length + 1) {
+    selectedProviders = providers;
+  } else if (choiceNum >= 1 && choiceNum <= providers.length) {
+    selectedProviders = [providers[choiceNum - 1]];
+  } else {
+    console.error('❌ Invalid selection.');
+    process.exit(1);
+    return;
+  }
 
   // Step 1: Copy dist files
   console.log('\n📦 Installing files to ~/.claude-hp-mp/dist/ ...');
   await copyDistFiles();
   console.log('   ✅ Done');
 
-  // Step 1.5: Install runtime dependencies
+  // Step 2: Install runtime dependencies
   console.log('\n📦 Installing dependencies...');
   const pkgJson = { name: 'claude-hp-mp-runtime', private: true, type: 'module', dependencies: { '@supabase/supabase-js': '^2' } };
   const runtimeDir = path.join(os.homedir(), '.claude-hp-mp');
@@ -75,61 +132,18 @@ async function main() {
     console.log('   ⚠️  Failed (sync features may not work)');
   }
 
-  // Step 2: Configure Claude Code settings
-  console.log('\n⚙️  Configuring Claude Code settings...');
-  const settings = await loadSettings();
-
-  // Add hooks
-  if (!settings.hooks) settings.hooks = {};
-
-  const hooksConfig: Record<string, { matcher: string; hooks: { type: string; command: string }[] }[]> = {
-    PostToolUse: [{
-      matcher: '',
-      hooks: [{
-        type: 'command',
-        command: `node "${path.join(DIST_DIR, 'hooks', 'post-tool-use.js').replace(/\\/g, '/')}"`,
-      }],
-    }],
-    SessionStart: [{
-      matcher: '',
-      hooks: [{
-        type: 'command',
-        command: `node "${path.join(DIST_DIR, 'hooks', 'session-start.js').replace(/\\/g, '/')}"`,
-      }],
-    }],
-    Stop: [{
-      matcher: '',
-      hooks: [{
-        type: 'command',
-        command: `node "${path.join(DIST_DIR, 'hooks', 'session-end.js').replace(/\\/g, '/')}"`,
-      }],
-    }],
-  };
-
-  for (const [event, config] of Object.entries(hooksConfig)) {
-    const existing = settings.hooks[event] as unknown[] | undefined;
-    if (!existing) {
-      settings.hooks[event] = config;
-    } else {
-      // Check if already configured
-      const alreadyHas = JSON.stringify(existing).includes('claude-hp-mp');
-      if (!alreadyHas) {
-        (settings.hooks[event] as unknown[]).push(...config);
-      }
-    }
+  // Step 3: Configure each selected provider
+  for (const providerName of selectedProviders) {
+    await setupProvider(providerName);
   }
 
-  // Add status line
-  settings.statusLine = {
-    type: 'command',
-    command: `node "${path.join(DIST_DIR, 'statusline.js').replace(/\\/g, '/')}"`,
-  };
-
-  await saveSettings(settings);
-  console.log('   ✅ Hooks configured (PostToolUse, SessionStart, Stop)');
-  console.log('   ✅ Status line configured');
-
-  console.log('\n🎉 Setup complete! Restart Claude Code to see the status line.');
+  console.log('\n🎉 Setup complete!');
+  if (selectedProviders.includes('claude')) {
+    console.log('   Restart Claude Code to see the status line.');
+  }
+  if (selectedProviders.includes('codex')) {
+    console.log('   Restart Codex CLI to start tracking.');
+  }
   console.log('   Run "claude-hp-mp usage" to see your stats.\n');
 }
 
