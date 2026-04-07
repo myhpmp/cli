@@ -3,6 +3,7 @@ import { computeStreak } from '../core/stats-aggregator.js';
 import { calcStreakBonus } from '../core/exp-calculator.js';
 import { getLevelInfo } from '../core/level-system.js';
 import { autoSync } from '../data/auto-sync.js';
+import { logExp } from '../data/exp-logger.js';
 import os from 'node:os';
 import path from 'node:path';
 
@@ -27,6 +28,10 @@ async function main() {
   stats.updatedAt = new Date().toISOString();
 
   await store.save(stats);
+
+  if (streakExp > 0) {
+    await logExp(streakExp, 'streak_bonus');
+  }
 
   // Push updated stats to remote
   await autoSync();

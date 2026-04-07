@@ -1,5 +1,7 @@
 import { LocalStore, UserStats } from './local-store.js';
+import { getLevelInfo } from '../core/level-system.js';
 import type { DbProvider } from './providers/db-interface.js';
+import { loadQueue, saveQueue } from './pending-exp.js';
 
 export class SyncEngine {
   constructor(
@@ -7,51 +9,63 @@ export class SyncEngine {
     private remote: DbProvider,
   ) {}
 
-  async push(userId: string): Promise<void> {
-    const stats = await this.local.load();
-    await this.remote.saveUserStats(userId, stats);
-  }
+  /** Flush pending exp queue to remote exp_history */
+  async flushPendingExp(userId: string): Promise<void> {
+    const queue = await loadQueue();
+    if (queue.length === 0) return;
 
-  async pull(userId: string): Promise<void> {
-    const stats = await this.remote.loadUserStats(userId);
-    if (stats) {
-      await this.local.save(stats);
+    for (const entry of queue) {
+      try {
+        await this.remote.insertExpHistory(userId, {
+          amount: entry.amount,
+          reason: entry.reason,
+        });
+      } catch {
+        // Rate limit or constraint violation — discard silently
+        // (duplicate streak_bonus, daily cap, etc.)
+      }
     }
+    await saveQueue([]);
   }
 
-  async sync(userId: string): Promise<UserStats> {
-    const hasLocalData = await this.local.exists();
+  /** Pull remote stats to local (server is always the source of truth) */
+  async pull(userId: string): Promise<UserStats | null> {
+    const remote = await this.remote.loadUserStats(userId);
+    if (remote) {
+      remote.level = getLevelInfo(remote.totalExp).level;
+      await this.local.save(remote);
+    }
+    return remote;
+  }
+
+  /** Push metadata only (streakDays, totalSessions, lastActiveDate) — NOT totalExp */
+  async pushMetadata(userId: string): Promise<void> {
     const local = await this.local.load();
     const remote = await this.remote.loadUserStats(userId);
+    if (!remote) return;
 
-    // No remote data — push local (or default) to remote
-    if (!remote) {
-      await this.remote.saveUserStats(userId, local);
-      return local;
-    }
+    // Only update metadata fields, preserve server-computed totalExp
+    await this.remote.saveUserStats(userId, {
+      ...remote,
+      streakDays: Math.max(local.streakDays, remote.streakDays),
+      totalSessions: Math.max(local.totalSessions, remote.totalSessions),
+      lastActiveDate: local.lastActiveDate && remote.lastActiveDate
+        ? local.lastActiveDate > remote.lastActiveDate ? local.lastActiveDate : remote.lastActiveDate
+        : local.lastActiveDate || remote.lastActiveDate,
+      weeklyExpBonusClaimed: local.weeklyExpBonusClaimed || remote.weeklyExpBonusClaimed,
+      updatedAt: new Date().toISOString(),
+    });
+  }
 
-    // No local data file (fresh install) — always pull from remote
-    if (!hasLocalData) {
-      await this.local.save(remote);
-      return remote;
-    }
+  /** Full sync: flush queue → push metadata → pull (server totalExp is truth) */
+  async sync(userId: string): Promise<UserStats> {
+    await this.flushPendingExp(userId);
+    await this.pushMetadata(userId);
 
-    // Local EXP is lower than remote — always pull (protects against data reset)
-    if (local.totalExp < remote.totalExp) {
-      await this.local.save(remote);
-      return remote;
-    }
+    const remote = await this.pull(userId);
+    if (remote) return remote;
 
-    // Both exist — compare timestamps, last-write-wins
-    const localTime = new Date(local.updatedAt).getTime();
-    const remoteTime = new Date(remote.updatedAt).getTime();
-
-    if (localTime >= remoteTime) {
-      await this.remote.saveUserStats(userId, local);
-      return local;
-    } else {
-      await this.local.save(remote);
-      return remote;
-    }
+    // No remote data — return local defaults
+    return this.local.load();
   }
 }
