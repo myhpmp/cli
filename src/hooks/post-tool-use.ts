@@ -2,6 +2,7 @@ import { LocalStore } from '../data/local-store.js';
 import { calcTokenExp } from '../core/exp-calculator.js';
 import { getLevelInfo } from '../core/level-system.js';
 import { autoSyncIfDue } from '../data/auto-sync.js';
+import { logExp } from '../data/exp-logger.js';
 import os from 'node:os';
 import path from 'node:path';
 
@@ -22,12 +23,16 @@ async function main() {
   const store = new LocalStore(DATA_DIR);
   const stats = await store.load();
 
-  const exp = calcTokenExp(tokensUsed);
+  const exp = Math.min(calcTokenExp(tokensUsed), 1000);
+  if (exp <= 0) return;
+
   stats.totalExp += exp;
   stats.level = getLevelInfo(stats.totalExp).level;
   stats.updatedAt = new Date().toISOString();
 
   await store.save(stats);
+
+  await logExp(exp, 'token_usage');
 
   // Sync every 5 minutes
   await autoSyncIfDue();

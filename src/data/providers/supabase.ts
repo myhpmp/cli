@@ -1,6 +1,6 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import type { UserStats } from '../local-store.js';
-import type { DbProvider } from './db-interface.js';
+import type { DbProvider, ExpHistoryEntry } from './db-interface.js';
 
 export class SupabaseProvider implements DbProvider {
   private client: SupabaseClient;
@@ -75,4 +75,17 @@ export class SupabaseProvider implements DbProvider {
 
     if (error) throw new Error(`Supabase save failed: ${error.message}`);
   }
+
+  async insertExpHistory(userId: string, entry: ExpHistoryEntry): Promise<void> {
+    const { error } = await this.client
+      .from('exp_history')
+      .insert({
+        user_id: userId,
+        amount: entry.amount,
+        reason: entry.reason,
+      });
+
+    if (error) throw new Error(`exp_history insert failed: ${error.message}`);
+  }
+
 }
