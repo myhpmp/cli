@@ -1,5 +1,6 @@
 /**
- * Auto-sync helper: pushes local stats to Supabase if user is authenticated.
+ * Auto-sync helper: flushes pending exp queue + pulls server state.
+ * Server is the source of truth for totalExp (computed by DB trigger).
  * Silent fail — sync is optional and should never break hooks.
  */
 import fs from 'node:fs/promises';

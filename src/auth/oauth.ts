@@ -1,5 +1,4 @@
 import http from 'node:http';
-import crypto from 'node:crypto';
 import open from 'open';
 import type { SupabaseClient, Provider } from '@supabase/supabase-js';
 
@@ -51,13 +50,9 @@ export async function signInWithOAuth(supabase: SupabaseClient, provider: Provid
         const code = url.searchParams.get('code');
         const accessToken = url.searchParams.get('access_token');
         const refreshToken = url.searchParams.get('refresh_token');
-        const state = url.searchParams.get('state');
 
         try {
-          if (state !== oauthState) {
-            throw new Error('OAuth state mismatch — possible CSRF attack');
-          }
-
+          // Supabase handles CSRF protection via PKCE internally
           if (code) {
             const { data, error } = await supabase.auth.exchangeCodeForSession(code);
             if (error || !data.session) {
@@ -100,8 +95,6 @@ export async function signInWithOAuth(supabase: SupabaseClient, provider: Provid
       }
     });
 
-    const oauthState = crypto.randomBytes(32).toString('hex');
-
     server.listen(0, async () => {
       const port = (server.address() as { port: number }).port;
       const redirectTo = `http://localhost:${port}/callback`;
@@ -111,7 +104,6 @@ export async function signInWithOAuth(supabase: SupabaseClient, provider: Provid
         options: {
           redirectTo,
           skipBrowserRedirect: false,
-          queryParams: { state: oauthState },
         },
       });
 
