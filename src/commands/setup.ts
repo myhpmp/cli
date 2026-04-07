@@ -144,7 +144,8 @@ async function main() {
   if (selectedProviders.includes('codex')) {
     console.log('   Restart Codex CLI to start tracking.');
   }
-  console.log('   Run "my-hp-mp usage" to see your stats.\n');
+  console.log('   Run "my-hp-mp usage" to see your stats.');
+  console.log('   Run "my-hp-mp init" to enable cloud sync & web dashboard (recommended)\n');
 }
 
 main().catch((err) => {
