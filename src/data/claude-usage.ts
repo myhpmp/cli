@@ -54,6 +54,7 @@ async function readCache(): Promise<ClaudeUsageData | null> {
   try {
     const raw = await fs.readFile(CACHE_PATH, 'utf-8');
     const cached: CachedUsage = JSON.parse(raw);
+    if (typeof cached.fetchedAt !== 'number' || !Number.isFinite(cached.fetchedAt)) return null;
     if (Date.now() - cached.fetchedAt < CACHE_TTL_MS) {
       return cached.data;
     }

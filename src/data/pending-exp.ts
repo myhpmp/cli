@@ -24,8 +24,13 @@ export async function loadQueue(): Promise<PendingExpEntry[]> {
   }
 }
 
+const MAX_QUEUE_SIZE = 1000;
+
 export async function enqueue(entry: PendingExpEntry): Promise<void> {
   const queue = await loadQueue();
+  if (queue.length >= MAX_QUEUE_SIZE) {
+    queue.shift(); // Drop oldest entry
+  }
   queue.push(entry);
   await fs.mkdir(DATA_DIR, { recursive: true });
   await fs.writeFile(QUEUE_PATH, JSON.stringify(queue), 'utf-8');

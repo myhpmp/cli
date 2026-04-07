@@ -27,7 +27,7 @@ export class CodexAdapter implements ProviderAdapter {
       let totalTokens = 0;
 
       const stream = createReadStream(sessionFile, 'utf-8');
-      const rl = readline.createInterface({ input: stream, crlfDelay: Infinity });
+      const rl = readline.createInterface({ input: stream });
 
       for await (const line of rl) {
         try {
@@ -51,17 +51,17 @@ export class CodexAdapter implements ProviderAdapter {
 
   private async findLatestSession(): Promise<string | null> {
     const sessionsDir = path.join(this.configDir, 'sessions');
+    const isDigits = (s: string, len: number) => new RegExp(`^\\d{${len}}$`).test(s);
     try {
-      // Walk year/month/day directories to find the latest session file
-      const years = await fs.readdir(sessionsDir);
+      const years = (await fs.readdir(sessionsDir)).filter(d => isDigits(d, 4));
       const latestYear = years.sort().pop();
       if (!latestYear) return null;
 
-      const months = await fs.readdir(path.join(sessionsDir, latestYear));
+      const months = (await fs.readdir(path.join(sessionsDir, latestYear))).filter(d => isDigits(d, 2));
       const latestMonth = months.sort().pop();
       if (!latestMonth) return null;
 
-      const days = await fs.readdir(path.join(sessionsDir, latestYear, latestMonth));
+      const days = (await fs.readdir(path.join(sessionsDir, latestYear, latestMonth))).filter(d => isDigits(d, 2));
       const latestDay = days.sort().pop();
       if (!latestDay) return null;
 
