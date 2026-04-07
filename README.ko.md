@@ -2,11 +2,16 @@
 
 한국어 | [English](./README.md)
 
-[Claude Code](https://docs.anthropic.com/en/docs/claude-code) 사용량을 RPG 게임처럼 보여주는 대시보드.
+AI 코딩 도구 사용량을 RPG 게임처럼 보여주는 대시보드.
 
-Claude Code 사용을 게임으로 만들어보세요 — 레벨, HP(세션 한도), MP(주간 한도), EXP, 연속 사용일수를 추적하고 칭호를 획득하세요.
+AI 코딩 도구 사용을 게임으로 만들어보세요 — 레벨, HP(세션 한도), MP(주간 한도), EXP, 연속 사용일수를 추적하고 칭호를 획득하세요.
 
-## 상태 바
+## 지원 도구
+
+- **Claude Code** — 전체 지원 (실시간 토큰 추적 + 상태 바)
+- **Codex CLI** — 전체 지원 (세션 종료 시 토큰 추적)
+
+## 상태 바 (Claude Code)
 
 Claude Code 하단에 항상 표시:
 
@@ -63,28 +68,30 @@ Claude Code 하단에 항상 표시:
 | 연속 사용 보너스 | 연속일수 × 5 EXP (최대 30일 = 150 EXP) |
 | 주간 70%+ 사용 | 100 EXP |
 
+모든 지원 도구의 EXP는 하나의 총합으로 합산됩니다. Claude와 Codex를 함께 사용해도 모두 누적됩니다.
+
 ## 빠른 시작
 
 ```bash
-# Claude Code 자동 설정 (hooks + 상태 바)
+# 자동 설정 (Claude Code, Codex, 또는 둘 다 선택)
 npx my-hp-mp setup
 
 # 표시 언어 설정
 npx my-hp-mp locale
 
-# Claude Code를 재시작하면 상태 바가 나타납니다
+# AI 코딩 도구를 재시작하면 추적이 시작됩니다
 ```
 
-끝! 상태 바가 자동으로 표시되고, hook을 통해 EXP가 쌓이기 시작합니다.
+끝! Hook을 통해 EXP가 쌓이기 시작합니다. 상태 바는 Claude Code에서 사용 가능합니다.
 
 ## 명령어
 
 | 명령어 | 설명 |
 |--------|------|
-| `npx my-hp-mp setup` | Claude Code hook과 상태 바 자동 설정 |
+| `npx my-hp-mp setup` | Hook 자동 설정 (Claude Code / Codex CLI) |
 | `npx my-hp-mp usage` | RPG 대시보드 상세 보기 |
 | `npx my-hp-mp sync` | 수동으로 클라우드 동기화 |
-| `npx my-hp-mp statusline` | 상태 바 켜기/끄기 토글 |
+| `npx my-hp-mp statusline` | 상태 바 켜기/끄기 토글 (Claude Code) |
 | `npx my-hp-mp statusline on` | 상태 바 켜기 |
 | `npx my-hp-mp statusline off` | 상태 바 끄기 |
 | `npx my-hp-mp locale` | 표시 언어 변경 (한국어/English) |
@@ -114,16 +121,15 @@ npx my-hp-mp init
 ## 요구 사항
 
 - Node.js >= 18
-- Claude Code 구독 (Pro/Max)
-- OAuth 로그인 (`~/.claude/.credentials.json` 사용)
+- 지원되는 AI 코딩 도구 중 하나 이상:
+  - Claude Code (Pro/Max 구독)
+  - Codex CLI (OpenAI API 키)
 
 ## 지원 플랫폼
 
 - **Windows**
 - **macOS**
 - **Linux**
-
-모든 플랫폼에서 동일한 크레덴셜 경로(`~/.claude/.credentials.json`)를 사용합니다.
 
 ## 다국어
 
@@ -136,10 +142,11 @@ EN: ⚔️ Apprentice Warrior Lv.9 ★★★ | ❤️ 43% ⏱️2h30m | 💙 76%
 
 ## 작동 방식
 
-1. **상태 바** — Claude Code가 세션 JSON(rate limit, 컨텍스트 사용량)을 상태 바 스크립트에 전달 → RPG HUD로 렌더링
-2. **Hook** — `PostToolUse`가 토큰 사용량 추적 → EXP 변환. `SessionStart`/`Stop`이 세션과 연속일수 추적
-3. **로컬 저장소** — 모든 데이터가 `~/.my-hp-mp/data.json`에 저장 (오프라인 동작)
-4. **클라우드 동기화** — Supabase 연동, 5분 간격 + 세션 경계에서 자동 동기화. EXP 보호: 로컬 EXP가 원격보다 낮으면(재설치 등) 항상 원격 데이터를 우선 적용
+1. **Hook** — 각 지원 도구의 hook 시스템으로 토큰 사용량, 세션, 연속일수 추적
+2. **어댑터 패턴** — Claude Code와 Codex CLI 각각의 어댑터가 도구별 데이터를 파싱
+3. **상태 바** — Claude Code가 세션 JSON을 상태 바 스크립트에 전달 → RPG HUD로 렌더링
+4. **로컬 저장소** — 모든 데이터가 `~/.my-hp-mp/data.json`에 저장 (오프라인 동작)
+5. **클라우드 동기화** — Supabase 연동, 자동 동기화. 서버사이드 EXP 검증으로 조작 방지
 
 ## 라이선스
 

@@ -2,11 +2,16 @@
 
 [한국어](./README.ko.md) | English
 
-RPG-style gamified usage dashboard for [Claude Code](https://docs.anthropic.com/en/docs/claude-code).
+RPG-style gamified usage dashboard for AI coding tools.
 
-Turn your Claude Code usage into a game — track your level, HP (session limit), MP (weekly limit), EXP, streaks, and earn titles as you code.
+Turn your AI coding tool usage into a game — track your level, HP (session limit), MP (weekly limit), EXP, streaks, and earn titles as you code.
 
-## Status Line
+## Supported Tools
+
+- **Claude Code** — full support (real-time token tracking + status line)
+- **Codex CLI** — full support (session-end token tracking)
+
+## Status Line (Claude Code)
 
 Always visible at the bottom of Claude Code:
 
@@ -63,28 +68,30 @@ Early levels fly by. Late tiers require serious dedication — expect ~8 months 
 | Streak bonus | streak days × 5 EXP (cap: 30 days = 150 max) |
 | Weekly 70%+ usage | 100 EXP |
 
+EXP from all supported tools is combined into a single total. Use Claude and Codex together — it all adds up.
+
 ## Quick Start
 
 ```bash
-# Install and auto-configure Claude Code (hooks + status line)
+# Install and auto-configure (select Claude Code, Codex, or both)
 npx my-hp-mp setup
 
 # Set your display language
 npx my-hp-mp locale
 
-# Restart Claude Code to see the status line
+# Restart your AI coding tool to start tracking
 ```
 
-That's it! The status line appears automatically, and EXP tracking starts via hooks.
+That's it! EXP tracking starts via hooks. Status line is available for Claude Code.
 
 ## Commands
 
 | Command | Description |
 |---------|-------------|
-| `npx my-hp-mp setup` | Auto-configure Claude Code hooks & status line |
+| `npx my-hp-mp setup` | Auto-configure hooks (Claude Code / Codex CLI) |
 | `npx my-hp-mp usage` | Show detailed RPG dashboard |
 | `npx my-hp-mp sync` | Manually sync stats to cloud |
-| `npx my-hp-mp statusline` | Toggle status line on/off |
+| `npx my-hp-mp statusline` | Toggle status line on/off (Claude Code) |
 | `npx my-hp-mp statusline on` | Enable status line |
 | `npx my-hp-mp statusline off` | Disable status line |
 | `npx my-hp-mp locale` | Change display language (한국어/English) |
@@ -114,16 +121,15 @@ Data is stored locally at `~/.my-hp-mp/data.json` and works offline. Cloud sync 
 ## Requirements
 
 - Node.js >= 18
-- Claude Code with an active subscription (Pro/Max)
-- OAuth login (reads `~/.claude/.credentials.json`)
+- One or more supported AI coding tools:
+  - Claude Code (Pro/Max subscription)
+  - Codex CLI (OpenAI API key)
 
 ## Supported Platforms
 
 - **Windows**
 - **macOS**
 - **Linux**
-
-All platforms use the same credential path (`~/.claude/.credentials.json`).
 
 ## i18n
 
@@ -136,10 +142,11 @@ EN: ⚔️ Apprentice Warrior Lv.9 ★★★ | ❤️ 43% ⏱️2h30m | 💙 76%
 
 ## How It Works
 
-1. **Status Line** — Claude Code pipes session JSON (rate limits, context usage) to the status line script, rendered as RPG HUD
-2. **Hooks** — `PostToolUse` tracks token usage → EXP. `SessionStart`/`Stop` track sessions and streaks
-3. **Local Store** — All data saved to `~/.my-hp-mp/data.json` (works offline)
-4. **Cloud Sync** — Supabase integration with auto-sync every 5 minutes + session boundaries. EXP-safe sync: if local EXP is lower than remote (e.g. after reinstall), always pulls from remote to protect progress
+1. **Hooks** — Each supported tool's hook system tracks token usage, sessions, and streaks
+2. **Adapter Pattern** — Claude Code and Codex CLI each have their own adapter for parsing tool-specific data
+3. **Status Line** — Claude Code pipes session JSON to the status line script, rendered as RPG HUD
+4. **Local Store** — All data saved to `~/.my-hp-mp/data.json` (works offline)
+5. **Cloud Sync** — Supabase integration with auto-sync. Server-side EXP validation prevents manipulation
 
 ## License
 
