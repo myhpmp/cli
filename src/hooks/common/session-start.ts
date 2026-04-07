@@ -1,9 +1,9 @@
-import { LocalStore } from '../data/local-store.js';
-import { computeStreak } from '../core/stats-aggregator.js';
-import { calcStreakBonus } from '../core/exp-calculator.js';
-import { getLevelInfo } from '../core/level-system.js';
-import { autoSync } from '../data/auto-sync.js';
-import { logExp } from '../data/exp-logger.js';
+import { LocalStore } from '../../data/local-store.js';
+import { computeStreak } from '../../core/stats-aggregator.js';
+import { calcStreakBonus } from '../../core/exp-calculator.js';
+import { getLevelInfo } from '../../core/level-system.js';
+import { autoSync } from '../../data/auto-sync.js';
+import { logExp } from '../../data/exp-logger.js';
 import os from 'node:os';
 import path from 'node:path';
 

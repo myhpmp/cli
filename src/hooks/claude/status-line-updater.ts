@@ -1,9 +1,9 @@
-import { LocalStore } from '../data/local-store.js';
-import { getLevelInfo, getTierForLevel, getStars } from '../core/level-system.js';
-import { renderStatusLine } from '../display/status-line.js';
-import { createI18n, detectLocale } from '../i18n/index.js';
-import { AuthManager } from '../auth/auth-manager.js';
-import { fetchClaudeUsage, utilizationToPercent, resetsAtToMinutes } from '../data/claude-usage.js';
+import { LocalStore } from '../../data/local-store.js';
+import { getLevelInfo, getTierForLevel, getStars } from '../../core/level-system.js';
+import { renderStatusLine } from '../../display/status-line.js';
+import { createI18n, detectLocale } from '../../i18n/index.js';
+import { AuthManager } from '../../auth/auth-manager.js';
+import { fetchClaudeUsage, utilizationToPercent, resetsAtToMinutes } from '../../data/claude-usage.js';
 import os from 'node:os';
 import path from 'node:path';
 

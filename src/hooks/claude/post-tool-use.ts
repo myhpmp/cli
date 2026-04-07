@@ -1,8 +1,8 @@
-import { LocalStore } from '../data/local-store.js';
-import { calcTokenExp } from '../core/exp-calculator.js';
-import { getLevelInfo } from '../core/level-system.js';
-import { autoSyncIfDue } from '../data/auto-sync.js';
-import { logExp } from '../data/exp-logger.js';
+import { LocalStore } from '../../data/local-store.js';
+import { calcTokenExp } from '../../core/exp-calculator.js';
+import { getLevelInfo } from '../../core/level-system.js';
+import { autoSyncIfDue } from '../../data/auto-sync.js';
+import { logExp } from '../../data/exp-logger.js';
 import os from 'node:os';
 import path from 'node:path';
 

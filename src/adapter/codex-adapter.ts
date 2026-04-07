@@ -82,8 +82,8 @@ export class CodexAdapter implements ProviderAdapter {
     return {
       settingsPath: path.join(this.configDir, 'hooks.json'),
       hooks: {
-        SessionStart: [{ matcher: '', hooks: [{ type: 'command', command: hook('session-start.js') }] }],
-        Stop: [{ matcher: '', hooks: [{ type: 'command', command: hook('codex-session-end.js') }] }],
+        SessionStart: [{ matcher: '', hooks: [{ type: 'command', command: hook('common/session-start.js') }] }],
+        Stop: [{ matcher: '', hooks: [{ type: 'command', command: hook('codex/session-end.js') }] }],
       },
     };
   }
