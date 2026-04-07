@@ -2,13 +2,13 @@
 
 ## Overview
 
-RPG-style web dashboard for claude-hp-mp. Displays user stats and daily activity heatmap from Supabase DB. Separate repo, deployed on Vercel.
+RPG-style web dashboard for my-hp-mp. Displays user stats and daily activity heatmap from Supabase DB. Separate repo, deployed on Vercel.
 
 ## Decisions
 
 | Item | Decision |
 |------|----------|
-| Repo | `claude-hp-mp-web` (separate from CLI) |
+| Repo | `my-hp-mp-web` (separate from CLI) |
 | Stack | Next.js (App Router) + Tailwind CSS + Vercel |
 | Design | Dark RPG theme (glow effects, progress bars) |
 | Convention | kebab-case, singular for all folders and files |
@@ -65,7 +65,7 @@ Simple landing page with project description and link to GitHub repo.
 - INSERT/UPDATE: only `auth.uid() = user_id`
 - DELETE: deny all
 
-## CLI Changes (claude-hp-mp)
+## CLI Changes (my-hp-mp)
 
 ### session-end hook
 
@@ -100,7 +100,7 @@ where user_id = current user, date = today
 ## Project Structure
 
 ```
-claude-hp-mp-web/
+my-hp-mp-web/
 ├── app/
 │   ├── layout.tsx
 │   ├── page.tsx                    # Landing page
