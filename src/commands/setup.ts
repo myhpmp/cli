@@ -122,7 +122,7 @@ async function main() {
 
   // Step 2: Install runtime dependencies
   console.log('\n📦 Installing dependencies...');
-  const pkgJson = { name: 'myhpmp-runtime', private: true, type: 'module', dependencies: { '@supabase/supabase-js': '^2' } };
+  const pkgJson = { name: 'myhpmp-runtime', private: true, type: 'module', dependencies: { '@myhpmp/core': '^1.0.0', '@supabase/supabase-js': '^2' } };
   const runtimeDir = path.join(os.homedir(), '.myhpmp');
   await fs.writeFile(path.join(runtimeDir, 'package.json'), JSON.stringify(pkgJson, null, 2), 'utf-8');
   try {
