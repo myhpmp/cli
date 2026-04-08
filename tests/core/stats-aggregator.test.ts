@@ -28,20 +28,27 @@ describe('computeCTX', () => {
 });
 
 describe('computeStreak', () => {
+  function toLocalDateStr(date: Date): string {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
+
   it('returns streak + 1 if last active was yesterday', () => {
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
-    expect(computeStreak(5, yesterday.toISOString().split('T')[0])).toBe(6);
+    expect(computeStreak(5, toLocalDateStr(yesterday))).toBe(6);
   });
 
   it('returns 1 if last active was 2+ days ago', () => {
     const twoDaysAgo = new Date();
     twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
-    expect(computeStreak(5, twoDaysAgo.toISOString().split('T')[0])).toBe(1);
+    expect(computeStreak(5, toLocalDateStr(twoDaysAgo))).toBe(1);
   });
 
   it('keeps streak if last active is today', () => {
-    const today = new Date().toISOString().split('T')[0];
+    const today = toLocalDateStr(new Date());
     expect(computeStreak(5, today)).toBe(5);
   });
 

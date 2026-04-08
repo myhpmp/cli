@@ -12,6 +12,7 @@ describe('renderStatusLine', () => {
     mpPercent: 80,
     ctxPercent: 6,
     streakDays: 2,
+    projectName: 'my-project',
   };
 
   it('renders Korean status line', () => {
@@ -22,6 +23,7 @@ describe('renderStatusLine', () => {
     expect(line).toContain('💙 80%');
     expect(line).toContain('🧠 6%');
     expect(line).toContain('🔥2일');
+    expect(line).toContain('📂 my-project');
   });
 
   it('renders English status line', () => {
