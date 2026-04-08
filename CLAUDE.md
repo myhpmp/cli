@@ -62,8 +62,10 @@ CLI re-exports them via `src/core/level-system.ts` and `src/core/exp-calculator.
 
 **main 브랜치는 보호됨 — direct push 금지. 반드시 PR을 통해서만 merge.**
 
+**PR 생성 전에 반드시 `/review` 를 실행하여 팀 리뷰를 통과해야 한다. 리뷰 없이 PR/merge/배포 금지.**
+
 ```
-feature branch → PR → CI 통과 → squash merge → (필요 시) v* 태그 → npm 배포
+feature branch → `/review` 팀 리뷰 통과 → PR → CI 통과 → squash merge → (필요 시) v* 태그 → npm 배포
 ```
 
 1. **Branch**: `feat/`, `fix/`, `refactor/`, `docs/`, `chore/` prefix로 생성
