@@ -6,33 +6,18 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
 import readline from 'node:readline';
-import { execSync } from 'node:child_process';
 import { getProvider, listProviders } from '../adapter/index.js';
 
-const DIST_DIR = path.join(os.homedir(), '.myhpmp', 'dist');
+// Point hooks directly to the global npm package, so `npm i -g` auto-updates
+const PKG_DIST_DIR = path.resolve(import.meta.dirname, '..');
+const RUNTIME_DIR = path.join(os.homedir(), '.myhpmp');
 
 function ask(rl: readline.Interface, question: string): Promise<string> {
   return new Promise((resolve) => rl.question(question, resolve));
 }
 
-async function copyDistFiles(): Promise<void> {
-  const srcDist = path.resolve(import.meta.dirname, '..');
-  await fs.mkdir(DIST_DIR, { recursive: true });
-
-  async function copyRecursive(src: string, dest: string) {
-    const stat = await fs.stat(src);
-    if (stat.isDirectory()) {
-      await fs.mkdir(dest, { recursive: true });
-      const entries = await fs.readdir(src);
-      for (const entry of entries) {
-        await copyRecursive(path.join(src, entry), path.join(dest, entry));
-      }
-    } else {
-      await fs.copyFile(src, dest);
-    }
-  }
-
-  await copyRecursive(srcDist, DIST_DIR);
+async function ensureRuntimeDir(): Promise<void> {
+  await fs.mkdir(RUNTIME_DIR, { recursive: true });
 }
 
 async function loadJsonFile(filePath: string): Promise<Record<string, unknown>> {
@@ -52,7 +37,7 @@ async function saveJsonFile(filePath: string, data: Record<string, unknown>): Pr
 
 async function setupProvider(providerName: string): Promise<void> {
   const provider = getProvider(providerName);
-  const config = provider.generateHookConfig(DIST_DIR);
+  const config = provider.generateHookConfig(PKG_DIST_DIR);
 
   console.log(`\n⚙️  Configuring ${provider.name} hooks...`);
   const settings = await loadJsonFile(config.settingsPath);
@@ -115,24 +100,10 @@ async function main() {
     return;
   }
 
-  // Step 1: Copy dist files
-  console.log('\n📦 Installing files to ~/.myhpmp/dist/ ...');
-  await copyDistFiles();
-  console.log('   ✅ Done');
+  // Step 1: Ensure runtime directory exists
+  await ensureRuntimeDir();
 
-  // Step 2: Install runtime dependencies
-  console.log('\n📦 Installing dependencies...');
-  const pkgJson = { name: 'myhpmp-runtime', private: true, type: 'module', dependencies: { '@myhpmp/core': '^1.0.0', '@supabase/supabase-js': '^2' } };
-  const runtimeDir = path.join(os.homedir(), '.myhpmp');
-  await fs.writeFile(path.join(runtimeDir, 'package.json'), JSON.stringify(pkgJson, null, 2), 'utf-8');
-  try {
-    execSync('npm install --production --silent', { cwd: runtimeDir, stdio: 'pipe' });
-    console.log('   ✅ Done');
-  } catch {
-    console.log('   ⚠️  Failed (sync features may not work)');
-  }
-
-  // Step 3: Configure each selected provider
+  // Step 2: Configure each selected provider (hooks point to global npm package)
   for (const providerName of selectedProviders) {
     await setupProvider(providerName);
   }
