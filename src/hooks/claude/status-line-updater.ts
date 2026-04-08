@@ -43,6 +43,7 @@ export async function getStatusLine(): Promise<string> {
     mpPercent,
     ctxPercent: 0,
     streakDays: stats.streakDays,
+    projectName: path.basename(process.cwd()),
   }, locale);
 }
 
