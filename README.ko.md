@@ -1,4 +1,4 @@
-# my-hp-mp
+# @myhpmp/cli
 
 한국어 | [English](./README.md)
 
@@ -21,7 +21,7 @@ Claude Code 하단에 항상 표시:
 
 ## 상세 보기
 
-`my-hp-mp usage`로 전체 대시보드 확인:
+`myhpmp usage`로 전체 대시보드 확인:
 
 ```
 🎮 ⚔️ 견습 전사 Lv.9 ★★★                    🔥 연속: 7일
@@ -73,11 +73,14 @@ Claude Code 하단에 항상 표시:
 ## 빠른 시작
 
 ```bash
+# 글로벌 설치
+npm install -g @myhpmp/cli
+
 # 자동 설정 (Claude Code, Codex, 또는 둘 다 선택)
-npx my-hp-mp setup
+myhpmp setup
 
 # 표시 언어 설정
-npx my-hp-mp locale
+myhpmp locale
 
 # AI 코딩 도구를 재시작하면 추적이 시작됩니다
 ```
@@ -88,21 +91,21 @@ npx my-hp-mp locale
 
 | 명령어 | 설명 |
 |--------|------|
-| `npx my-hp-mp setup` | Hook 자동 설정 (Claude Code / Codex CLI) |
-| `npx my-hp-mp usage` | RPG 대시보드 상세 보기 |
-| `npx my-hp-mp sync` | 수동으로 클라우드 동기화 |
-| `npx my-hp-mp statusline` | 상태 바 켜기/끄기 토글 (Claude Code) |
-| `npx my-hp-mp statusline on` | 상태 바 켜기 |
-| `npx my-hp-mp statusline off` | 상태 바 끄기 |
-| `npx my-hp-mp locale` | 표시 언어 변경 (한국어/English) |
-| `npx my-hp-mp init` | 인증 설정 (크로스 디바이스 동기화) |
+| `myhpmp setup` | Hook 자동 설정 (Claude Code / Codex CLI) |
+| `myhpmp usage` | RPG 대시보드 상세 보기 |
+| `myhpmp sync` | 수동으로 클라우드 동기화 |
+| `myhpmp statusline` | 상태 바 켜기/끄기 토글 (Claude Code) |
+| `myhpmp statusline on` | 상태 바 켜기 |
+| `myhpmp statusline off` | 상태 바 끄기 |
+| `myhpmp locale` | 표시 언어 변경 (한국어/English) |
+| `myhpmp init` | 인증 설정 (크로스 디바이스 동기화) |
 
 ## 크로스 디바이스 동기화
 
 여러 기기에서 스탯(레벨, EXP, 연속일수)을 동기화:
 
 ```bash
-npx my-hp-mp init
+myhpmp init
 ```
 
 **GitHub OAuth**와 **Google OAuth** 인증을 지원합니다.
@@ -114,9 +117,9 @@ npx my-hp-mp init
 | 세션 시작 | 클라우드에서 최신 데이터 가져오기 |
 | 5분마다 | 사용 중 자동 동기화 |
 | 세션 종료 | 최종 스탯 클라우드에 저장 |
-| `npx my-hp-mp sync` | 수동 즉시 동기화 |
+| `myhpmp sync` | 수동 즉시 동기화 |
 
-데이터는 `~/.my-hp-mp/data.json`에 로컬 저장되며 오프라인에서도 동작합니다. 클라우드 동기화에 실패하면 로컬 데이터가 보존되고, 다음 기회에 동기화됩니다. 로컬 EXP가 원격보다 낮으면(재설치 등) 항상 원격 데이터가 보존됩니다.
+데이터는 `~/.myhpmp/data.json`에 로컬 저장되며 오프라인에서도 동작합니다. 클라우드 동기화에 실패하면 로컬 데이터가 보존되고, 다음 기회에 동기화됩니다. 로컬 EXP가 원격보다 낮으면(재설치 등) 항상 원격 데이터가 보존됩니다.
 
 ## 요구 사항
 
@@ -133,7 +136,7 @@ npx my-hp-mp init
 
 ## 다국어
 
-한국어와 영어를 지원합니다. `npx my-hp-mp locale`로 언어를 설정하거나, 시스템 로캘에서 자동 감지합니다.
+한국어와 영어를 지원합니다. `myhpmp locale`로 언어를 설정하거나, 시스템 로캘에서 자동 감지합니다.
 
 ```
 KO: ⚔️ 견습 전사 Lv.9 ★★★ | ❤️ 43% ⏱️2h30m | 💙 76% | 🧠 25% | 🔥7일
@@ -145,7 +148,7 @@ EN: ⚔️ Apprentice Warrior Lv.9 ★★★ | ❤️ 43% ⏱️2h30m | 💙 76%
 1. **Hook** — 각 지원 도구의 hook 시스템으로 토큰 사용량, 세션, 연속일수 추적
 2. **어댑터 패턴** — Claude Code와 Codex CLI 각각의 어댑터가 도구별 데이터를 파싱
 3. **상태 바** — Claude Code가 세션 JSON을 상태 바 스크립트에 전달 → RPG HUD로 렌더링
-4. **로컬 저장소** — 모든 데이터가 `~/.my-hp-mp/data.json`에 저장 (오프라인 동작)
+4. **로컬 저장소** — 모든 데이터가 `~/.myhpmp/data.json`에 저장 (오프라인 동작)
 5. **클라우드 동기화** — Supabase 연동, 자동 동기화. 서버사이드 EXP 검증으로 조작 방지
 
 ## 라이선스

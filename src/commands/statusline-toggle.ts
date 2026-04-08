@@ -3,7 +3,7 @@ import path from 'node:path';
 import os from 'node:os';
 
 const SETTINGS_PATH = path.join(os.homedir(), '.claude', 'settings.json');
-const DIST_DIR = path.join(os.homedir(), '.my-hp-mp', 'dist');
+const DIST_DIR = path.join(os.homedir(), '.myhpmp', 'dist');
 
 interface ClaudeSettings {
   statusLine?: unknown;

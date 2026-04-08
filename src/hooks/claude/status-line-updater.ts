@@ -7,7 +7,7 @@ import { fetchClaudeUsage, utilizationToPercent, resetsAtToMinutes } from '../..
 import os from 'node:os';
 import path from 'node:path';
 
-const DATA_DIR = path.join(os.homedir(), '.my-hp-mp');
+const DATA_DIR = path.join(os.homedir(), '.myhpmp');
 
 export async function getStatusLine(): Promise<string> {
   const authManager = new AuthManager(DATA_DIR);

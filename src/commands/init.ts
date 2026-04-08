@@ -9,7 +9,7 @@ import { SupabaseProvider } from '../data/providers/supabase.js';
 import { SyncEngine } from '../data/sync-engine.js';
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from '../config.js';
 
-const DATA_DIR = path.join(os.homedir(), '.my-hp-mp');
+const DATA_DIR = path.join(os.homedir(), '.myhpmp');
 
 function ask(rl: readline.Interface, question: string): Promise<string> {
   return new Promise((resolve) => rl.question(question, resolve));

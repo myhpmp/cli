@@ -7,7 +7,7 @@ import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 
-const DATA_DIR = path.join(os.homedir(), '.my-hp-mp');
+const DATA_DIR = path.join(os.homedir(), '.myhpmp');
 const MAX_INPUT_SIZE = 1_000_000; // 1MB
 const LAST_TOKENS_PATH = path.join(DATA_DIR, 'last-tokens.json');
 

@@ -1,4 +1,4 @@
-# my-hp-mp
+# @myhpmp/cli
 
 [한국어](./README.ko.md) | English
 
@@ -21,7 +21,7 @@ Always visible at the bottom of Claude Code:
 
 ## Detail View
 
-Run `my-hp-mp usage` for the full dashboard:
+Run `myhpmp usage` for the full dashboard:
 
 ```
 🎮 ⚔️ Apprentice Warrior Lv.9 ★★★            🔥 Streak: 7d
@@ -73,11 +73,14 @@ EXP from all supported tools is combined into a single total. Use Claude and Cod
 ## Quick Start
 
 ```bash
-# Install and auto-configure (select Claude Code, Codex, or both)
-npx my-hp-mp setup
+# Install globally
+npm install -g @myhpmp/cli
+
+# Auto-configure (select Claude Code, Codex, or both)
+myhpmp setup
 
 # Set your display language
-npx my-hp-mp locale
+myhpmp locale
 
 # Restart your AI coding tool to start tracking
 ```
@@ -88,21 +91,21 @@ That's it! EXP tracking starts via hooks. Status line is available for Claude Co
 
 | Command | Description |
 |---------|-------------|
-| `npx my-hp-mp setup` | Auto-configure hooks (Claude Code / Codex CLI) |
-| `npx my-hp-mp usage` | Show detailed RPG dashboard |
-| `npx my-hp-mp sync` | Manually sync stats to cloud |
-| `npx my-hp-mp statusline` | Toggle status line on/off (Claude Code) |
-| `npx my-hp-mp statusline on` | Enable status line |
-| `npx my-hp-mp statusline off` | Disable status line |
-| `npx my-hp-mp locale` | Change display language (한국어/English) |
-| `npx my-hp-mp init` | Set up authentication (cross-device sync) |
+| `myhpmp setup` | Auto-configure hooks (Claude Code / Codex CLI) |
+| `myhpmp usage` | Show detailed RPG dashboard |
+| `myhpmp sync` | Manually sync stats to cloud |
+| `myhpmp statusline` | Toggle status line on/off (Claude Code) |
+| `myhpmp statusline on` | Enable status line |
+| `myhpmp statusline off` | Disable status line |
+| `myhpmp locale` | Change display language (한국어/English) |
+| `myhpmp init` | Set up authentication (cross-device sync) |
 
 ## Cross-Device Sync
 
 Sync your stats (level, EXP, streaks) across multiple machines:
 
 ```bash
-npx my-hp-mp init
+myhpmp init
 ```
 
 Supports **GitHub OAuth** and **Google OAuth** authentication.
@@ -114,9 +117,9 @@ Supports **GitHub OAuth** and **Google OAuth** authentication.
 | Session start | Pull latest from cloud → update local |
 | Every 5 minutes | Auto-sync during active use |
 | Session end | Push final stats to cloud |
-| `npx my-hp-mp sync` | Manual sync on demand |
+| `myhpmp sync` | Manual sync on demand |
 
-Data is stored locally at `~/.my-hp-mp/data.json` and works offline. Cloud sync is best-effort — if it fails, local data is preserved and synced on next opportunity. If local EXP is lower than remote (e.g. after reinstall), remote data is always preserved.
+Data is stored locally at `~/.myhpmp/data.json` and works offline. Cloud sync is best-effort — if it fails, local data is preserved and synced on next opportunity. If local EXP is lower than remote (e.g. after reinstall), remote data is always preserved.
 
 ## Requirements
 
@@ -133,7 +136,7 @@ Data is stored locally at `~/.my-hp-mp/data.json` and works offline. Cloud sync 
 
 ## i18n
 
-Supports Korean and English. Set your language with `npx my-hp-mp locale`, or it auto-detects from your system locale.
+Supports Korean and English. Set your language with `myhpmp locale`, or it auto-detects from your system locale.
 
 ```
 KO: ⚔️ 견습 전사 Lv.9 ★★★ | ❤️ 43% ⏱️2h30m | 💙 76% | 🧠 25% | 🔥7일
@@ -145,7 +148,7 @@ EN: ⚔️ Apprentice Warrior Lv.9 ★★★ | ❤️ 43% ⏱️2h30m | 💙 76%
 1. **Hooks** — Each supported tool's hook system tracks token usage, sessions, and streaks
 2. **Adapter Pattern** — Claude Code and Codex CLI each have their own adapter for parsing tool-specific data
 3. **Status Line** — Claude Code pipes session JSON to the status line script, rendered as RPG HUD
-4. **Local Store** — All data saved to `~/.my-hp-mp/data.json` (works offline)
+4. **Local Store** — All data saved to `~/.myhpmp/data.json` (works offline)
 5. **Cloud Sync** — Supabase integration with auto-sync. Server-side EXP validation prevents manipulation
 
 ## License

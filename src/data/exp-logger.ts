@@ -7,7 +7,7 @@ import { enqueue } from './pending-exp.js';
 import os from 'node:os';
 import path from 'node:path';
 
-const DATA_DIR = path.join(os.homedir(), '.my-hp-mp');
+const DATA_DIR = path.join(os.homedir(), '.myhpmp');
 
 export async function logExp(amount: number, reason: string, metadata?: Record<string, unknown>): Promise<void> {
   if (amount <= 0) return;

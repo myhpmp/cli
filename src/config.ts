@@ -1,13 +1,13 @@
 /**
  * Supabase configuration.
  * Values are injected at build time via scripts/inject-config.
- * Fallback: environment variables or ~/.my-hp-mp/config.json
+ * Fallback: environment variables or ~/.myhpmp/config.json
  */
 import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 
-const CONFIG_PATH = path.join(os.homedir(), '.my-hp-mp', 'config.json');
+const CONFIG_PATH = path.join(os.homedir(), '.myhpmp', 'config.json');
 
 // __INJECT_SUPABASE_URL__ and __INJECT_SUPABASE_ANON_KEY__ are replaced at build time
 const INJECTED_URL = '__INJECT_SUPABASE_URL__';

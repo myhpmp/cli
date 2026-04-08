@@ -37,9 +37,9 @@ async function main() {
       console.log('  statusline — Toggle status line on/off (Claude Code only)');
       console.log('  locale     — Change display language (한국어/English)');
       console.log('\nQuick start:');
-      console.log('  npx my-hp-mp setup    # Auto-configure everything');
-      console.log('  npx my-hp-mp locale   # Set language');
-      console.log('  npx my-hp-mp init     # Enable cloud sync & web dashboard (recommended)');
+      console.log('  myhpmp setup    # Auto-configure everything');
+      console.log('  myhpmp locale   # Set language');
+      console.log('  myhpmp init     # Enable cloud sync & web dashboard (recommended)');
       break;
   }
 }

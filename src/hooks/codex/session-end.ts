@@ -11,7 +11,7 @@ import { CodexAdapter } from '../../adapter/codex-adapter.js';
 import os from 'node:os';
 import path from 'node:path';
 
-const DATA_DIR = path.join(os.homedir(), '.my-hp-mp');
+const DATA_DIR = path.join(os.homedir(), '.myhpmp');
 
 async function main() {
   const store = new LocalStore(DATA_DIR);

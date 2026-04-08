@@ -3,7 +3,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { AuthManager } from '../auth/auth-manager.js';
 
-const DATA_DIR = path.join(os.homedir(), '.my-hp-mp');
+const DATA_DIR = path.join(os.homedir(), '.myhpmp');
 
 function ask(rl: readline.Interface, question: string): Promise<string> {
   return new Promise((resolve) => rl.question(question, resolve));

@@ -7,7 +7,7 @@ import { logExp } from '../../data/exp-logger.js';
 import os from 'node:os';
 import path from 'node:path';
 
-const DATA_DIR = path.join(os.homedir(), '.my-hp-mp');
+const DATA_DIR = path.join(os.homedir(), '.myhpmp');
 
 async function main() {
   // Pull latest from remote first (in case another device updated)

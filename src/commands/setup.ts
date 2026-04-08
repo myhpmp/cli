@@ -1,6 +1,6 @@
 /**
  * Auto-configure hooks for supported AI coding tools.
- * Run: npx my-hp-mp setup
+ * Run: myhpmp setup
  */
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -9,7 +9,7 @@ import readline from 'node:readline';
 import { execSync } from 'node:child_process';
 import { getProvider, listProviders } from '../adapter/index.js';
 
-const DIST_DIR = path.join(os.homedir(), '.my-hp-mp', 'dist');
+const DIST_DIR = path.join(os.homedir(), '.myhpmp', 'dist');
 
 function ask(rl: readline.Interface, question: string): Promise<string> {
   return new Promise((resolve) => rl.question(question, resolve));
@@ -66,7 +66,7 @@ async function setupProvider(providerName: string): Promise<void> {
     if (!existing) {
       existingHooks[event] = hookConfig as unknown[];
     } else {
-      const alreadyHas = JSON.stringify(existing).includes('my-hp-mp');
+      const alreadyHas = JSON.stringify(existing).includes('myhpmp');
       if (!alreadyHas) {
         existing.push(...(hookConfig as unknown[]));
       }
@@ -116,14 +116,14 @@ async function main() {
   }
 
   // Step 1: Copy dist files
-  console.log('\n📦 Installing files to ~/.my-hp-mp/dist/ ...');
+  console.log('\n📦 Installing files to ~/.myhpmp/dist/ ...');
   await copyDistFiles();
   console.log('   ✅ Done');
 
   // Step 2: Install runtime dependencies
   console.log('\n📦 Installing dependencies...');
-  const pkgJson = { name: 'my-hp-mp-runtime', private: true, type: 'module', dependencies: { '@supabase/supabase-js': '^2' } };
-  const runtimeDir = path.join(os.homedir(), '.my-hp-mp');
+  const pkgJson = { name: 'myhpmp-runtime', private: true, type: 'module', dependencies: { '@supabase/supabase-js': '^2' } };
+  const runtimeDir = path.join(os.homedir(), '.myhpmp');
   await fs.writeFile(path.join(runtimeDir, 'package.json'), JSON.stringify(pkgJson, null, 2), 'utf-8');
   try {
     execSync('npm install --production --silent', { cwd: runtimeDir, stdio: 'pipe' });
@@ -144,8 +144,8 @@ async function main() {
   if (selectedProviders.includes('codex')) {
     console.log('   Restart Codex CLI to start tracking.');
   }
-  console.log('   Run "my-hp-mp usage" to see your stats.');
-  console.log('   Run "my-hp-mp init" to enable cloud sync & web dashboard (recommended)\n');
+  console.log('   Run "myhpmp usage" to see your stats.');
+  console.log('   Run "myhpmp init" to enable cloud sync & web dashboard (recommended)\n');
 }
 
 main().catch((err) => {
