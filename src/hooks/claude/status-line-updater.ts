@@ -1,14 +1,13 @@
 import { LocalStore } from '../../data/local-store.js';
-import { getLevelInfo, getTierForLevel, getStars } from '../../core/level-system.js';
+import { getLevelInfo, getTierForLevel, getStars, getTierEmoji, getTierTitle } from '../../core/level-system.js';
 import { renderStatusLine } from '../../display/status-line.js';
-import { createI18n, detectLocale } from '../../i18n/index.js';
+import { detectLocale } from '../../i18n/index.js';
 import { AuthManager } from '../../auth/auth-manager.js';
 import { fetchClaudeUsage, utilizationToPercent, resetsAtToMinutes } from '../../data/claude-usage.js';
 import os from 'node:os';
 import path from 'node:path';
 
 const DATA_DIR = path.join(os.homedir(), '.my-hp-mp');
-const TITLE_KEYS = [1, 6, 11, 16, 21, 31, 41, 51];
 
 export async function getStatusLine(): Promise<string> {
   const authManager = new AuthManager(DATA_DIR);
@@ -23,13 +22,10 @@ export async function getStatusLine(): Promise<string> {
     locale = detectLocale();
   }
 
-  const i18n = createI18n(locale);
   const levelInfo = getLevelInfo(stats.totalExp);
   const tier = getTierForLevel(levelInfo.level);
-  const titleKey = TITLE_KEYS[tier.tierIndex];
-  const titleFull = i18n.t(`title.${titleKey}`);
-  const titleEmoji = titleFull.split(' ')[0];
-  const titleName = titleFull.split(' ').slice(1).join(' ');
+  const titleEmoji = getTierEmoji(tier.tierIndex);
+  const titleName = getTierTitle(tier.tierIndex, locale);
 
   // Fetch real Claude usage data
   const usage = await fetchClaudeUsage();
@@ -47,7 +43,7 @@ export async function getStatusLine(): Promise<string> {
     mpPercent,
     ctxPercent: 0,
     streakDays: stats.streakDays,
-  }, i18n);
+  }, locale);
 }
 
 async function main() {

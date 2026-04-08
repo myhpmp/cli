@@ -1,22 +1,22 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { createI18n } from '../../src/i18n/index.js';
+import { getTierTitle, getTierEmoji } from '../../src/core/level-system.js';
 
 describe('i18n', () => {
-  it('returns Korean title for ko locale', () => {
-    const i18n = createI18n('ko');
-    expect(i18n.t('title.1')).toBe('🌱 초보 모험가');
+  it('returns Korean tier title from core', () => {
+    expect(getTierTitle(0, 'ko')).toBe('초보 모험가');
+    expect(getTierEmoji(0)).toBe('🌱');
   });
 
-  it('returns English title for en locale', () => {
-    const i18n = createI18n('en');
-    expect(i18n.t('title.1')).toBe('🌱 Novice Adventurer');
+  it('returns English tier title from core', () => {
+    expect(getTierTitle(0, 'en')).toBe('Novice Adventurer');
   });
 
   it('returns all 8 tier titles', () => {
-    const i18n = createI18n('ko');
-    const tierKeys = [1, 6, 11, 16, 21, 31, 41, 51];
-    for (const key of tierKeys) {
-      expect(i18n.t(`title.${key}`)).toBeTruthy();
+    for (let i = 0; i < 8; i++) {
+      expect(getTierTitle(i, 'ko')).toBeTruthy();
+      expect(getTierTitle(i, 'en')).toBeTruthy();
+      expect(getTierEmoji(i)).toBeTruthy();
     }
   });
 
@@ -32,7 +32,7 @@ describe('i18n', () => {
 
   it('falls back to en for unknown locale', () => {
     const i18n = createI18n('fr');
-    expect(i18n.t('title.1')).toBe('🌱 Novice Adventurer');
+    expect(i18n.t('unit.days')).toBe('d');
   });
 
   it('formats day unit by locale', () => {

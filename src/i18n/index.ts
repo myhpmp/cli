@@ -2,7 +2,6 @@ import ko from './ko.js';
 import en from './en.js';
 
 interface Messages {
-  title: Record<number, string>;
   status: Record<string, string>;
   unit: Record<string, string>;
   exp: Record<string, string>;

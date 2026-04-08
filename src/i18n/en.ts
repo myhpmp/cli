@@ -1,14 +1,4 @@
 export default {
-  title: {
-    1: '🌱 Novice Adventurer',
-    6: '⚔️ Apprentice Warrior',
-    11: '🛡️ Skilled Knight',
-    16: '🧙 Mage',
-    21: '🔮 Archmage',
-    31: '👑 Grand Archmage',
-    41: '🐉 Legendary Code Dragon',
-    51: '⚡ Transcendent',
-  },
   status: {
     streak: 'Streak',
     totalExp: 'Total EXP',

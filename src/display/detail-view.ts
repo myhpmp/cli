@@ -38,16 +38,17 @@ function formatTokens(n: number): string {
 
 export function renderDetailView(
   data: DetailViewData,
-  i18n: { t(key: string): string },
+  locale: string,
 ): string {
+  const ko = locale === 'ko';
   const starsStr = '★'.repeat(data.stars);
   const time = formatTime(data.resetMinutes);
-  const dayUnit = i18n.t('unit.days');
-  const sessionsUnit = i18n.t('unit.sessions');
+  const dayUnit = ko ? '일' : 'd';
+  const sessionsUnit = ko ? '회' : 'sessions';
   const sep = '━'.repeat(43);
 
   const header = `🎮 ${data.titleEmoji} ${data.titleName} Lv.${data.level} ${starsStr}`;
-  const streakLabel = `🔥 ${i18n.t('status.streak')}: ${data.streakDays}${dayUnit}`;
+  const streakLabel = `🔥 ${ko ? '연속' : 'Streak'}: ${data.streakDays}${dayUnit}`;
 
   const lines = [
     `${header}                    ${streakLabel}`,
@@ -57,7 +58,7 @@ export function renderDetailView(
     `🧠 CTX ${progressBar(data.ctxPercent)}  ${String(data.ctxPercent).padStart(3)}%  (${formatTokens(data.ctxUsed)} / ${formatTokens(data.ctxTotal)} context)`,
     `⭐ EXP ${progressBar(Math.round((data.expCurrent / data.expNeeded) * 100))}  ${String(Math.round((data.expCurrent / data.expNeeded) * 100)).padStart(3)}%  (${data.expCurrent} / ${data.expNeeded} → Lv.${data.nextLevel})`,
     sep,
-    `📊 ${i18n.t('status.totalExp')}: ${data.totalExp.toLocaleString()}  |  ${i18n.t('status.totalSessions')}: ${data.totalSessions} ${sessionsUnit}`,
+    `📊 ${ko ? '총 누적 EXP' : 'Total EXP'}: ${data.totalExp.toLocaleString()}  |  ${ko ? '총 세션' : 'Total Sessions'}: ${data.totalSessions} ${sessionsUnit}`,
   ];
 
   return lines.join('\n');

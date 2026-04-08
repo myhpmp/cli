@@ -14,11 +14,11 @@ export interface StatusLineData {
 
 export function renderStatusLine(
   data: StatusLineData,
-  i18n: { t(key: string): string },
+  locale: string,
 ): string {
   const starsStr = '★'.repeat(data.stars);
   const time = formatTime(data.resetMinutes);
-  const dayUnit = i18n.t('unit.days');
+  const dayUnit = locale === 'ko' ? '일' : 'd';
 
   const hpPart = data.resetMinutes > 0
     ? `❤️ ${data.hpPercent}% ⏱️${time}`

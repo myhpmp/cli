@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
 import { renderDetailView } from '../../src/display/detail-view.js';
-import { createI18n } from '../../src/i18n/index.js';
 
 describe('renderDetailView', () => {
   const baseData = {
@@ -27,8 +26,7 @@ describe('renderDetailView', () => {
   };
 
   it('renders detail view with progress bars', () => {
-    const i18n = createI18n('ko');
-    const view = renderDetailView(baseData, i18n);
+    const view = renderDetailView(baseData, 'ko');
     expect(view).toContain('⚔️ 견습 전사 Lv.9 ★★★');
     expect(view).toContain('❤️ HP');
     expect(view).toContain('💙 MP');
@@ -39,8 +37,7 @@ describe('renderDetailView', () => {
   });
 
   it('contains progress bar characters', () => {
-    const i18n = createI18n('ko');
-    const view = renderDetailView(baseData, i18n);
+    const view = renderDetailView(baseData, 'ko');
     expect(view).toContain('█');
     expect(view).toContain('░');
   });
