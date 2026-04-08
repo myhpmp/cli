@@ -28,17 +28,18 @@ async function main() {
       break;
     default:
       console.log('🎮 My HP/MP - Gamified Usage Dashboard\n');
+      console.log('Supported: Claude Code, Codex CLI\n');
       console.log('Commands:');
-      console.log('  setup      — Configure Claude Code hooks & status line');
+      console.log('  setup      — Configure hooks (Claude Code / Codex CLI)');
       console.log('  init       — Set up authentication (cross-device sync)');
       console.log('  usage      — Show detailed usage stats');
       console.log('  sync       — Manually sync stats to cloud');
-      console.log('  statusline — Toggle status line (on/off)');
+      console.log('  statusline — Toggle status line on/off (Claude Code only)');
       console.log('  locale     — Change display language (한국어/English)');
       console.log('\nQuick start:');
       console.log('  npx my-hp-mp setup    # Auto-configure everything');
       console.log('  npx my-hp-mp locale   # Set language');
-      console.log('  npx my-hp-mp init     # Optional: enable cross-device sync');
+      console.log('  npx my-hp-mp init     # Enable cloud sync & web dashboard (recommended)');
       break;
   }
 }

@@ -37,9 +37,9 @@ async function main() {
   await store.save(stats);
 
   // Log EXP to history
-  await logExp(sessionExp, 'session_complete');
+  await logExp(sessionExp, 'session_complete', { provider: 'codex' });
   if (tokenExp > 0) {
-    await logExp(tokenExp, 'token_usage', { tokens: totalTokens });
+    await logExp(tokenExp, 'token_usage', { tokens: totalTokens, provider: 'codex' });
   }
 
   // Push to remote

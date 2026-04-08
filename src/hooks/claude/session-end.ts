@@ -20,7 +20,7 @@ async function main() {
 
   await store.save(stats);
 
-  await logExp(sessionExp, 'session_complete');
+  await logExp(sessionExp, 'session_complete', { provider: 'claude' });
 
   // Push final session stats to remote
   await autoSync();

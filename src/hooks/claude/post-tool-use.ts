@@ -32,7 +32,7 @@ async function main() {
 
   await store.save(stats);
 
-  await logExp(exp, 'token_usage', { tokens: tokensUsed });
+  await logExp(exp, 'token_usage', { tokens: tokensUsed, provider: 'claude' });
 
   // Sync every 5 minutes
   await autoSyncIfDue();
