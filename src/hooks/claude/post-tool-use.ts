@@ -35,23 +35,21 @@ async function main() {
   const transcriptPath = hookData?.transcript_path;
   if (!transcriptPath) return;
 
-  // Read the last line of transcript to get current total tokens
+  // Sum all usage entries in transcript to get cumulative session tokens
   let currentTotal = 0;
   try {
     const content = await fs.readFile(transcriptPath, 'utf-8');
     const lines = content.trimEnd().split('\n');
-    // Search from end for last usage entry
-    for (let i = lines.length - 1; i >= 0; i--) {
+    for (const line of lines) {
       try {
-        const entry = JSON.parse(lines[i]);
+        const entry = JSON.parse(line);
         const usage = entry?.message?.usage ?? entry?.usage;
-        if (usage?.input_tokens !== undefined) {
-          currentTotal =
+        if (usage?.input_tokens !== undefined && usage?.output_tokens !== undefined) {
+          currentTotal +=
             (usage.input_tokens || 0) +
             (usage.cache_creation_input_tokens || 0) +
             (usage.cache_read_input_tokens || 0) +
             (usage.output_tokens || 0);
-          break;
         }
       } catch {
         // Skip malformed lines
