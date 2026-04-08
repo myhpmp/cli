@@ -114,6 +114,7 @@ async function main() {
     mpPercent,
     ctxPercent,
     streakDays: stats.streakDays,
+    projectName: path.basename(process.cwd()),
   }, locale);
 
   process.stdout.write(line);

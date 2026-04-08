@@ -10,6 +10,7 @@ export interface StatusLineData {
   mpPercent: number;
   ctxPercent: number;
   streakDays: number;
+  projectName: string;
 }
 
 export function renderStatusLine(
@@ -30,5 +31,6 @@ export function renderStatusLine(
     `💙 ${data.mpPercent}%`,
     `🧠 ${data.ctxPercent}%`,
     `🔥${data.streakDays}${dayUnit}`,
+    `📂 ${data.projectName}`,
   ].join(' | ');
 }
