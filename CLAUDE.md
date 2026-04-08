@@ -77,13 +77,23 @@ feature branch → `/review` 팀 리뷰 통과 → PR → CI 통과 → squash m
    - `chore:` build, CI, config
    - `ci:` CI/CD changes
 3. **PR**: CI(test) 통과 필수 → squash merge
-4. **Deploy**: merge 후 `v*` 태그 push → CI가 build + test + npm publish
-5. **Branches**: merge 후 자동 삭제
+4. **Tag & Deploy**: 태그 기준에 따라 `v*` 태그 push → CI가 build + test + npm publish
+5. **Branches**: merge 후 삭제
+
+### 태그(배포) 기준
+
+| 태그 | 언제 | 예시 |
+|------|------|------|
+| **patch** (v1.2.X) | 버그 수정, 사용자에게 영향 있는 fix | `fix:` 커밋 |
+| **minor** (v1.X.0) | 새 기능, 동작 변경, 구조 변경 | `feat:`, `refactor:` 커밋 |
+| **major** (vX.0.0) | breaking change (기존 사용자 설정/명령 호환 깨짐) | 드물게 |
+| **태그 안 함** | 코드 변경 없음 (docs, chore, config, 프로세스 문서) | `docs:`, `chore:` 커밋 |
 
 **절대 하지 말 것:**
 - main에 직접 push
 - CI 통과 전 merge
 - 태그 없이 npm publish
+- 코드 변경 없는 커밋에 태그 달기
 
 ## Testing
 
