@@ -44,9 +44,13 @@ async function main() {
     for (let i = lines.length - 1; i >= 0; i--) {
       try {
         const entry = JSON.parse(lines[i]);
-        const usage = entry?.usage;
+        const usage = entry?.message?.usage ?? entry?.usage;
         if (usage?.input_tokens !== undefined) {
-          currentTotal = (usage.input_tokens || 0) + (usage.output_tokens || 0);
+          currentTotal =
+            (usage.input_tokens || 0) +
+            (usage.cache_creation_input_tokens || 0) +
+            (usage.cache_read_input_tokens || 0) +
+            (usage.output_tokens || 0);
           break;
         }
       } catch {
