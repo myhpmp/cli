@@ -47,8 +47,6 @@ async function main() {
         if (usage?.input_tokens !== undefined && usage?.output_tokens !== undefined) {
           currentTotal +=
             (usage.input_tokens || 0) +
-            (usage.cache_creation_input_tokens || 0) +
-            (usage.cache_read_input_tokens || 0) +
             (usage.output_tokens || 0);
         }
       } catch {
