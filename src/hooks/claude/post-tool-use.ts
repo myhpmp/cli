@@ -11,17 +11,26 @@ const DATA_DIR = path.join(os.homedir(), '.myhpmp');
 const MAX_INPUT_SIZE = 1_000_000; // 1MB
 const LAST_TOKENS_PATH = path.join(DATA_DIR, 'last-tokens.json');
 
-async function getLastTokenCount(): Promise<number> {
+interface TokenState {
+  tokens: number;
+  pendingTokens: number;
+}
+
+async function getTokenState(): Promise<TokenState> {
   try {
     const raw = await fs.readFile(LAST_TOKENS_PATH, 'utf-8');
-    return Number(JSON.parse(raw).tokens) || 0;
+    const data = JSON.parse(raw);
+    return {
+      tokens: Number(data.tokens) || 0,
+      pendingTokens: Number(data.pendingTokens) || 0,
+    };
   } catch {
-    return 0;
+    return { tokens: 0, pendingTokens: 0 };
   }
 }
 
-async function saveLastTokenCount(tokens: number): Promise<void> {
-  await fs.writeFile(LAST_TOKENS_PATH, JSON.stringify({ tokens }), 'utf-8');
+async function saveTokenState(state: TokenState): Promise<void> {
+  await fs.writeFile(LAST_TOKENS_PATH, JSON.stringify(state), 'utf-8');
 }
 
 async function main() {
@@ -59,17 +68,32 @@ async function main() {
 
   if (currentTotal <= 0) return;
 
-  const previousTotal = await getLastTokenCount();
-  await saveLastTokenCount(currentTotal);
+  const state = await getTokenState();
+  const previousTotal = state.tokens;
 
-  // First call in session — no delta to calculate
-  if (previousTotal === 0) return;
+  // First call in session — set baseline only
+  if (previousTotal === 0) {
+    await saveTokenState({ tokens: currentTotal, pendingTokens: 0 });
+    return;
+  }
 
   const deltaTokens = currentTotal - previousTotal;
-  if (deltaTokens <= 0) return;
+  if (deltaTokens <= 0) {
+    await saveTokenState({ tokens: currentTotal, pendingTokens: state.pendingTokens });
+    return;
+  }
 
-  const exp = Math.min(calcTokenExp(deltaTokens), 1000);
-  if (exp <= 0) return;
+  // Accumulate small deltas until they reach the EXP threshold
+  const accumulated = state.pendingTokens + deltaTokens;
+  const exp = Math.min(calcTokenExp(accumulated), 1000);
+
+  if (exp <= 0) {
+    await saveTokenState({ tokens: currentTotal, pendingTokens: accumulated });
+    return;
+  }
+
+  // Flush: log EXP and reset pending
+  await saveTokenState({ tokens: currentTotal, pendingTokens: 0 });
 
   const store = new LocalStore(DATA_DIR);
   const stats = await store.load();
@@ -80,7 +104,7 @@ async function main() {
 
   await store.save(stats);
 
-  await logExp(exp, 'token_usage', { tokens: deltaTokens, provider: 'claude' });
+  await logExp(exp, 'token_usage', { tokens: accumulated, provider: 'claude' });
 
   // Sync every 5 minutes
   await autoSyncIfDue();
