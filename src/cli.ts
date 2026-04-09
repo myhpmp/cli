@@ -26,6 +26,9 @@ async function main() {
     case 'statusline':
       await import('./commands/statusline-toggle.js');
       break;
+    case 'uninstall':
+      await import('./commands/uninstall.js');
+      break;
     default:
       console.log('🎮 My HP/MP - Gamified Usage Dashboard\n');
       console.log('Supported: Claude Code, Codex CLI\n');
@@ -36,6 +39,7 @@ async function main() {
       console.log('  sync       — Manually sync stats to cloud');
       console.log('  statusline — Toggle status line on/off (Claude Code only)');
       console.log('  locale     — Change display language (한국어/English)');
+      console.log('  uninstall  — Remove all hooks and settings');
       console.log('\nQuick start:');
       console.log('  myhpmp setup    # Auto-configure everything');
       console.log('  myhpmp locale   # Set language');
