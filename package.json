@@ -1,6 +1,6 @@
 {
   "name": "@myhpmp/cli",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "description": "RPG-style gamified usage dashboard for AI coding tools (Claude Code full support, Codex CLI EXP/level only)",
   "type": "module",
   "main": "dist/index.js",
