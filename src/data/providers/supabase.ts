@@ -55,6 +55,8 @@ export class SupabaseProvider implements DbProvider {
       streakDays,
       lastActiveDate: data.last_active_date ? String(data.last_active_date) : null,
       weeklyExpBonusClaimed: Boolean(data.weekly_exp_bonus_claimed),
+      dailySessionCount: 0,
+      dailySessionDate: null,
       updatedAt: data.updated_at ? String(data.updated_at) : new Date().toISOString(),
     };
   }
