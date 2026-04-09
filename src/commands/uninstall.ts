@@ -79,6 +79,7 @@ async function removeProviderConfig(providerName: string): Promise<boolean> {
 
 async function main() {
   const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+  rl.on('SIGINT', () => { console.log('\n❌ Cancelled.'); process.exit(130); });
 
   console.log('🗑️  My HP/MP Uninstall');
   console.log('━'.repeat(30));

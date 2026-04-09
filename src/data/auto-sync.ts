@@ -18,7 +18,11 @@ async function shouldSync(): Promise<boolean> {
   try {
     const raw = await fs.readFile(LAST_SYNC_PATH, 'utf-8');
     const { timestamp } = JSON.parse(raw);
-    return Date.now() - timestamp >= SYNC_INTERVAL_MS;
+    if (typeof timestamp !== 'number' || !Number.isFinite(timestamp)) return true;
+    const elapsed = Date.now() - timestamp;
+    // If elapsed is negative (clock went backward), force sync
+    if (elapsed < 0) return true;
+    return elapsed >= SYNC_INTERVAL_MS;
   } catch {
     return true; // No record = should sync
   }

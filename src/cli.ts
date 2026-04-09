@@ -1,10 +1,23 @@
 #!/usr/bin/env node
 
-// For now, a simple arg-based router without commander dependency
+import { createRequire } from 'node:module';
+
 const args = process.argv.slice(2);
 const command = args[0];
 
 async function main() {
+  if (command === '--version' || command === '-v') {
+    const require = createRequire(import.meta.url);
+    const pkg = require('../package.json');
+    console.log(`v${pkg.version}`);
+    return;
+  }
+
+  if (command === '--help' || command === '-h') {
+    showHelp();
+    return;
+  }
+
   switch (command) {
     case 'init':
       await import('./commands/init.js');
@@ -30,22 +43,26 @@ async function main() {
       await import('./commands/uninstall.js');
       break;
     default:
-      console.log('🎮 My HP/MP - Gamified Usage Dashboard\n');
-      console.log('Supported: Claude Code, Codex CLI\n');
-      console.log('Commands:');
-      console.log('  setup      — Configure hooks (Claude Code / Codex CLI)');
-      console.log('  init       — Set up authentication (cross-device sync)');
-      console.log('  usage      — Show detailed usage stats');
-      console.log('  sync       — Manually sync stats to cloud');
-      console.log('  statusline — Toggle status line on/off (Claude Code only)');
-      console.log('  locale     — Change display language (한국어/English)');
-      console.log('  uninstall  — Remove all hooks and settings');
-      console.log('\nQuick start:');
-      console.log('  myhpmp setup    # Auto-configure everything');
-      console.log('  myhpmp locale   # Set language');
-      console.log('  myhpmp init     # Enable cloud sync & web dashboard (recommended)');
+      showHelp();
       break;
   }
+}
+
+function showHelp() {
+  console.log('🎮 My HP/MP - Gamified Usage Dashboard\n');
+  console.log('Supported: Claude Code, Codex CLI\n');
+  console.log('Commands:');
+  console.log('  setup      — Configure hooks (Claude Code / Codex CLI)');
+  console.log('  init       — Set up authentication (cross-device sync)');
+  console.log('  usage      — Show detailed usage stats');
+  console.log('  sync       — Manually sync stats to cloud');
+  console.log('  statusline — Toggle status line on/off (Claude Code only)');
+  console.log('  locale     — Change display language (한국어/English)');
+  console.log('  uninstall  — Remove all hooks and settings');
+  console.log('\nQuick start:');
+  console.log('  myhpmp setup    # Auto-configure everything');
+  console.log('  myhpmp locale   # Set language');
+  console.log('  myhpmp init     # Enable cloud sync & web dashboard (recommended)');
 }
 
 main().catch(console.error);

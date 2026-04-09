@@ -12,6 +12,7 @@ function ask(rl: readline.Interface, question: string): Promise<string> {
 async function main() {
   const authManager = new AuthManager(DATA_DIR);
   const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+  rl.on('SIGINT', () => { console.log('\n❌ Cancelled.'); process.exit(130); });
 
   console.log('🌍 Select display language:\n');
   console.log('  1) 한국어 (Korean)');

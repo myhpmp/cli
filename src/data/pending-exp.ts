@@ -29,7 +29,10 @@ const MAX_QUEUE_SIZE = 1000;
 export async function enqueue(entry: PendingExpEntry): Promise<void> {
   const queue = await loadQueue();
   if (queue.length >= MAX_QUEUE_SIZE) {
-    queue.shift(); // Drop oldest entry
+    queue.shift();
+    if (process.env.DEBUG?.includes('myhpmp')) {
+      console.error(`[myhpmp] Pending EXP queue full (${MAX_QUEUE_SIZE}). Oldest entry dropped.`);
+    }
   }
   queue.push(entry);
   await fs.mkdir(DATA_DIR, { recursive: true });

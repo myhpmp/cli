@@ -75,6 +75,7 @@ async function setupProvider(providerName: string): Promise<void> {
 async function main() {
   const providers = listProviders();
   const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+  rl.on('SIGINT', () => { console.log('\n❌ Cancelled.'); process.exit(130); });
 
   console.log('🎮 My HP/MP Setup');
   console.log('━'.repeat(30));
@@ -121,5 +122,6 @@ async function main() {
 
 main().catch((err) => {
   console.error('❌ Setup failed:', err.message);
+  console.error('   Check that your .claude or .codex directory exists and is writable.');
   process.exit(1);
 });
