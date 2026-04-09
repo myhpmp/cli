@@ -8,8 +8,17 @@ Turn your AI coding tool usage into a game — track your level, HP (session lim
 
 ## Supported Tools
 
-- **Claude Code** — full support (real-time token tracking + status line)
-- **Codex CLI** — full support (session-end token tracking)
+| Feature | Claude Code | Codex CLI |
+|---------|-------------|-----------|
+| Status line (real-time HUD) | O | X |
+| HP / MP (rate limit tracking) | O | X |
+| Context window tracking | O | X |
+| Real-time token tracking | O | X |
+| Session-end token tracking | O | O |
+| EXP / Level / Streak | O | O |
+| Cross-device sync | O | O |
+
+Claude Code provides the full experience. Codex CLI supports EXP tracking and leveling, but real-time status display is not available due to Codex CLI hook limitations.
 
 ## Status Line (Claude Code)
 
