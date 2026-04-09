@@ -8,6 +8,8 @@ export interface UserStats {
   streakDays: number;
   lastActiveDate: string | null;
   weeklyExpBonusClaimed: boolean;
+  dailySessionCount: number;
+  dailySessionDate: string | null;
   updatedAt: string;
 }
 
@@ -18,6 +20,8 @@ const DEFAULT_STATS: UserStats = {
   streakDays: 0,
   lastActiveDate: null,
   weeklyExpBonusClaimed: false,
+  dailySessionCount: 0,
+  dailySessionDate: null,
   updatedAt: new Date().toISOString(),
 };
 

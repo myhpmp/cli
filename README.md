@@ -25,7 +25,7 @@ Claude Code provides the full experience. Codex CLI supports EXP tracking and le
 Always visible at the bottom of Claude Code:
 
 ```
-⚔️ Apprentice Warrior Lv.9 ★★★ | ❤️ 43% ⏱️2h30m | 💙 76% | 🧠 25% | 🔥7d | 📂 ~/…/code/my-project
+⚔️ Token Explorer Lv.9 ★★★ | ❤️ 43% ⏱️2h30m | 💙 76% | 🧠 25% | 🔥7d | 📂 ~/…/code/my-project
 ```
 
 ## Detail View
@@ -33,7 +33,7 @@ Always visible at the bottom of Claude Code:
 Run `myhpmp usage` for the full dashboard:
 
 ```
-🎮 ⚔️ Apprentice Warrior Lv.9 ★★★            🔥 Streak: 7d
+🎮 ⚔️ Token Explorer Lv.9 ★★★            🔥 Streak: 7d
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ❤️ HP  ████░░░░░░   43%  ⏱️ 2h30m
 💙 MP  ████████░░   76%
@@ -57,14 +57,14 @@ Run `myhpmp usage` for the full dashboard:
 
 | Level | Title | EXP/Level | Cumulative |
 |-------|-------|-----------|------------|
-| 1-5 | 🌱 Novice Adventurer | 100 | 500 |
-| 6-10 | ⚔️ Apprentice Warrior | 300 | 2,000 |
-| 11-15 | 🛡️ Skilled Knight | 600 | 5,000 |
-| 16-20 | 🧙 Mage | 1,200 | 11,000 |
-| 21-30 | 🔮 Archmage | 3,500 | 46,000 |
-| 31-40 | 👑 Grand Archmage | 8,000 | 126,000 |
-| 41-50 | 🐉 Legendary Code Dragon | 15,000 | 276,000 |
-| 50+ | ⚡ Transcendent | 25,000 | ∞ |
+| 1-5 | 🌱 Prompt Newbie | 100 | 500 |
+| 6-10 | ⚔️ Token Explorer | 300 | 2,000 |
+| 11-15 | 🛠️ Prompt Engineer | 600 | 5,000 |
+| 16-20 | 🏗️ Context Architect | 1,200 | 11,000 |
+| 21-30 | 🔮 Prompt Sorcerer | 3,500 | 46,000 |
+| 31-40 | 👑 Model Master | 8,000 | 126,000 |
+| 41-50 | 🐉 Context Overlord | 15,000 | 276,000 |
+| 50+ | ⚡ Synthetic Mind | 25,000 | ∞ |
 
 Early levels fly by. Late tiers require serious dedication — expect ~8 months of daily use to reach ⚡ Transcendent.
 
@@ -148,8 +148,8 @@ Data is stored locally at `~/.myhpmp/data.json` and works offline. Cloud sync is
 Supports Korean and English. Set your language with `myhpmp locale`, or it auto-detects from your system locale.
 
 ```
-KO: ⚔️ 견습 전사 Lv.9 ★★★ | ❤️ 43% ⏱️2h30m | 💙 76% | 🧠 25% | 🔥7일 | 📂 ~/…/code/my-project
-EN: ⚔️ Apprentice Warrior Lv.9 ★★★ | ❤️ 43% ⏱️2h30m | 💙 76% | 🧠 25% | 🔥7d | 📂 ~/…/code/my-project
+KO: ⚔️ 토큰 익스플로러 Lv.9 ★★★ | ❤️ 43% ⏱️2h30m | 💙 76% | 🧠 25% | 🔥7일 | 📂 ~/…/code/my-project
+EN: ⚔️ Token Explorer Lv.9 ★★★ | ❤️ 43% ⏱️2h30m | 💙 76% | 🧠 25% | 🔥7d | 📂 ~/…/code/my-project
 ```
 
 ## How It Works

@@ -4,12 +4,12 @@ import { getTierTitle, getTierEmoji } from '../../src/core/level-system.js';
 
 describe('i18n', () => {
   it('returns Korean tier title from core', () => {
-    expect(getTierTitle(0, 'ko')).toBe('초보 모험가');
+    expect(getTierTitle(0, 'ko')).toBe('프롬프트 뉴비');
     expect(getTierEmoji(0)).toBe('🌱');
   });
 
   it('returns English tier title from core', () => {
-    expect(getTierTitle(0, 'en')).toBe('Novice Adventurer');
+    expect(getTierTitle(0, 'en')).toBe('Prompt Newbie');
   });
 
   it('returns all 8 tier titles', () => {

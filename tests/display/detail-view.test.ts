@@ -4,7 +4,7 @@ import { renderDetailView } from '../../src/display/detail-view.js';
 describe('renderDetailView', () => {
   const baseData = {
     titleEmoji: '⚔️',
-    titleName: '견습 전사',
+    titleName: '토큰 익스플로러',
     level: 9,
     stars: 3,
     hpPercent: 89,
@@ -28,7 +28,7 @@ describe('renderDetailView', () => {
 
   it('renders detail view with progress bars', () => {
     const view = renderDetailView(baseData, 'ko');
-    expect(view).toContain('⚔️ 견습 전사 Lv.9 ★★★');
+    expect(view).toContain('⚔️ 토큰 익스플로러 Lv.9 ★★★');
     expect(view).toContain('❤️ HP');
     expect(view).toContain('💙 MP');
     expect(view).toContain('🧠 CTX');
