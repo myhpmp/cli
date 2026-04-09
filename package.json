@@ -1,7 +1,7 @@
 {
   "name": "@myhpmp/cli",
   "version": "0.1.4",
-  "description": "RPG-style gamified usage dashboard for AI coding tools — track your level, HP, MP, streaks, and more",
+  "description": "RPG-style gamified usage dashboard for AI coding tools (Claude Code full support, Codex CLI EXP/level only)",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
