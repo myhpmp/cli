@@ -95,7 +95,7 @@ export async function signInWithOAuth(supabase: SupabaseClient, provider: Provid
       }
     });
 
-    server.listen(0, async () => {
+    server.listen(0, '127.0.0.1', async () => {
       const port = (server.address() as { port: number }).port;
       const redirectTo = `http://localhost:${port}/callback`;
 

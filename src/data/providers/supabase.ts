@@ -44,8 +44,12 @@ export class SupabaseProvider implements DbProvider {
     const totalSessions = Number(data.total_sessions) || 0;
     const streakDays = Number(data.streak_days) || 0;
 
-    if (totalExp < 0 || level < 1 || totalSessions < 0 || streakDays < 0) {
-      throw new Error('Invalid data from remote: negative values detected');
+    if (
+      !Number.isFinite(totalExp) || !Number.isFinite(level) ||
+      !Number.isFinite(totalSessions) || !Number.isFinite(streakDays) ||
+      totalExp < 0 || level < 1 || totalSessions < 0 || streakDays < 0
+    ) {
+      throw new Error('Invalid data from remote: out of bounds values detected');
     }
 
     return {

@@ -10,7 +10,7 @@ import path from 'node:path';
 const DATA_DIR = path.join(os.homedir(), '.myhpmp');
 
 export async function logExp(amount: number, reason: string, metadata?: Record<string, unknown>): Promise<void> {
-  if (amount <= 0) return;
+  if (!Number.isFinite(amount) || amount <= 0) return;
 
   try {
     const authManager = new AuthManager(DATA_DIR);

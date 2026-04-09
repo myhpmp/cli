@@ -16,8 +16,7 @@ async function main() {
   const store = new LocalStore(DATA_DIR);
   const stats = await store.load();
 
-  const now = new Date();
-  const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+  const today = new Date().toISOString().slice(0, 10);
   const newStreak = computeStreak(stats.streakDays, stats.lastActiveDate);
   const streakExp = calcStreakBonus(newStreak);
 

@@ -43,7 +43,7 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "@myhpmp/core": "^1.1.0",
+    "@myhpmp/core": "^1.1.1",
     "@supabase/supabase-js": "^2.49.0",
     "open": "^10.1.0"
   },
