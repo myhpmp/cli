@@ -25,7 +25,7 @@ Claude Code provides the full experience. Codex CLI supports EXP tracking and le
 Always visible at the bottom of Claude Code:
 
 ```
-⚔️ Apprentice Warrior Lv.9 ★★★ | ❤️ 43% ⏱️2h30m | 💙 76% | 🧠 25% | 🔥7d
+⚔️ Apprentice Warrior Lv.9 ★★★ | ❤️ 43% ⏱️2h30m | 💙 76% | 🧠 25% | 🔥7d | 📂 my-project
 ```
 
 ## Detail View
@@ -148,8 +148,8 @@ Data is stored locally at `~/.myhpmp/data.json` and works offline. Cloud sync is
 Supports Korean and English. Set your language with `myhpmp locale`, or it auto-detects from your system locale.
 
 ```
-KO: ⚔️ 견습 전사 Lv.9 ★★★ | ❤️ 43% ⏱️2h30m | 💙 76% | 🧠 25% | 🔥7일
-EN: ⚔️ Apprentice Warrior Lv.9 ★★★ | ❤️ 43% ⏱️2h30m | 💙 76% | 🧠 25% | 🔥7d
+KO: ⚔️ 견습 전사 Lv.9 ★★★ | ❤️ 43% ⏱️2h30m | 💙 76% | 🧠 25% | 🔥7일 | 📂 my-project
+EN: ⚔️ Apprentice Warrior Lv.9 ★★★ | ❤️ 43% ⏱️2h30m | 💙 76% | 🧠 25% | 🔥7d | 📂 my-project
 ```
 
 ## How It Works
