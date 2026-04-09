@@ -85,6 +85,7 @@ export async function fetchClaudeUsage(): Promise<ClaudeUsageData | null> {
         'Content-Type': 'application/json',
         'User-Agent': 'myhpmp/1.0',
       },
+      signal: AbortSignal.timeout(10_000),
     });
 
     if (!res.ok) return null;

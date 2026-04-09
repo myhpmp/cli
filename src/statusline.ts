@@ -46,7 +46,10 @@ async function main() {
   let input = '';
   for await (const chunk of process.stdin) {
     input += chunk;
-    if (input.length > MAX_INPUT_SIZE) break;
+    if (input.length > MAX_INPUT_SIZE) {
+      process.stdout.write('🎮 ...');
+      return;
+    }
   }
 
   let statusInput: ClaudeStatusInput = {};
