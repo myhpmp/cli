@@ -122,5 +122,6 @@ async function main() {
 
 main().catch((err) => {
   console.error('❌ Setup failed:', err.message);
+  console.error('   Check that your .claude or .codex directory exists and is writable.');
   process.exit(1);
 });

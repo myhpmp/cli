@@ -64,6 +64,11 @@ async function main() {
 }
 
 main().catch((err) => {
-  console.error('❌ Failed:', err.message);
+  const msg = err instanceof Error ? err.message : String(err);
+  if (msg.includes('ENOENT')) {
+    console.error('❌ Claude settings not found. Run "myhpmp setup" first.');
+  } else {
+    console.error('❌ Failed:', msg);
+  }
   process.exit(1);
 });
