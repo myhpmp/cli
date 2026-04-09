@@ -113,7 +113,11 @@ export async function signInWithOAuth(supabase: SupabaseClient, provider: Provid
         return;
       }
 
-      await open(data.url);
+      try {
+        await open(data.url);
+      } catch {
+        console.log(`\n🔗 Open this URL in your browser:\n   ${data.url}\n`);
+      }
     });
 
     setTimeout(() => {

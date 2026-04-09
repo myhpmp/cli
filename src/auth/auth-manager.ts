@@ -27,7 +27,11 @@ export class AuthManager {
 
   async loadConfig(): Promise<AuthConfig> {
     const raw = await fs.readFile(this.configPath, 'utf-8');
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== 'object' || !parsed.userId) {
+      throw new Error('Invalid config.json format');
+    }
+    return parsed as AuthConfig;
   }
 
   async saveConfig(config: AuthConfig): Promise<void> {

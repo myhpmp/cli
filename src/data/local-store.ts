@@ -53,6 +53,8 @@ export class LocalStore {
   async save(stats: UserStats): Promise<void> {
     const dir = path.dirname(this.filePath);
     await fs.mkdir(dir, { recursive: true });
-    await fs.writeFile(this.filePath, JSON.stringify(stats, null, 2), 'utf-8');
+    const tmpPath = `${this.filePath}.tmp`;
+    await fs.writeFile(tmpPath, JSON.stringify(stats, null, 2), 'utf-8');
+    await fs.rename(tmpPath, this.filePath);
   }
 }

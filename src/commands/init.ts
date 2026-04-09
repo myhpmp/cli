@@ -19,6 +19,7 @@ async function main() {
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   const authManager = new AuthManager(DATA_DIR);
   const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+  rl.on('SIGINT', () => { console.log('\n❌ Cancelled.'); process.exit(130); });
 
   // Check if already authenticated
   if (await authManager.isAuthenticated()) {
