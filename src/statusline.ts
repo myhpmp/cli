@@ -16,7 +16,7 @@
  */
 import { LocalStore } from './data/local-store.js';
 import { getLevelInfo, getTierForLevel, getStars, getTierEmoji, getTierTitle } from './core/level-system.js';
-import { renderStatusLine } from './display/status-line.js';
+import { renderStatusLine, formatProjectPath } from './display/status-line.js';
 import { detectLocale } from './i18n/index.js';
 import { AuthManager } from './auth/auth-manager.js';
 import { fetchClaudeUsage, utilizationToPercent, resetsAtToMinutes } from './data/claude-usage.js';
@@ -114,7 +114,7 @@ async function main() {
     mpPercent,
     ctxPercent,
     streakDays: stats.streakDays,
-    projectName: path.basename(process.cwd()),
+    projectName: formatProjectPath(process.cwd(), os.homedir()),
   }, locale);
 
   process.stdout.write(line);

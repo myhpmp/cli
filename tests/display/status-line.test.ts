@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { renderStatusLine } from '../../src/display/status-line.js';
+import { renderStatusLine, formatProjectPath } from '../../src/display/status-line.js';
 
 describe('renderStatusLine', () => {
   const baseData = {
@@ -31,5 +31,37 @@ describe('renderStatusLine', () => {
     const line = renderStatusLine(data, 'en');
     expect(line).toContain('⚔️ Apprentice Warrior Lv.9 ★★★');
     expect(line).toContain('🔥2d');
+  });
+});
+
+describe('formatProjectPath', () => {
+  const home = '/home/user';
+
+  it('shows ~ for home directory', () => {
+    expect(formatProjectPath('/home/user', home)).toBe('~');
+  });
+
+  it('shows ~/folder for 1 level deep', () => {
+    expect(formatProjectPath('/home/user/projects', home)).toBe('~/projects');
+  });
+
+  it('shows ~/parent/folder for 2 levels deep', () => {
+    expect(formatProjectPath('/home/user/code/my-app', home)).toBe('~/code/my-app');
+  });
+
+  it('shows ~/…/parent/folder for 3+ levels deep', () => {
+    expect(formatProjectPath('/home/user/code/repos/my-app', home)).toBe('~/…/repos/my-app');
+  });
+
+  it('shows ~/…/parent/folder for deeply nested paths', () => {
+    expect(formatProjectPath('/home/user/a/b/c/d/project', home)).toBe('~/…/d/project');
+  });
+
+  it('shows basename for paths outside home', () => {
+    expect(formatProjectPath('/opt/projects/my-app', home)).toBe('my-app');
+  });
+
+  it('normalizes Windows backslashes', () => {
+    expect(formatProjectPath('C:\\Users\\Me\\code\\app', 'C:\\Users\\Me')).toBe('~/code/app');
   });
 });
