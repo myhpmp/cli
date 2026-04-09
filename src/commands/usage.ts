@@ -33,6 +33,8 @@ async function main() {
   const mpPercent = usage ? utilizationToPercent(usage.sevenDay.utilization) : 100;
   const resetMinutes = usage ? resetsAtToMinutes(usage.fiveHour.resetsAt) : 0;
 
+  const syncActive = await authManager.isAuthenticated();
+
   const output = renderDetailView({
     titleEmoji,
     titleName,
@@ -54,6 +56,7 @@ async function main() {
     totalExp: stats.totalExp,
     totalSessions: stats.totalSessions,
     streakDays: stats.streakDays,
+    syncActive,
   }, locale);
 
   console.log(output);

@@ -21,6 +21,7 @@ export interface DetailViewData {
   totalExp: number;
   totalSessions: number;
   streakDays: number;
+  syncActive: boolean;
 }
 
 function progressBar(percent: number, width: number = 10): string {
@@ -59,6 +60,9 @@ export function renderDetailView(
     `⭐ EXP ${progressBar(Math.round((data.expCurrent / data.expNeeded) * 100))}  ${String(Math.round((data.expCurrent / data.expNeeded) * 100)).padStart(3)}%  (${data.expCurrent} / ${data.expNeeded} → Lv.${data.nextLevel})`,
     sep,
     `📊 ${ko ? '총 누적 EXP' : 'Total EXP'}: ${data.totalExp.toLocaleString()}  |  ${ko ? '총 세션' : 'Total Sessions'}: ${data.totalSessions} ${sessionsUnit}`,
+    data.syncActive
+      ? `☁️ ${ko ? '동기화: 활성' : 'Sync: active'}`
+      : `⚠️ ${ko ? '동기화: 꺼짐 ("myhpmp init"으로 활성화)' : 'Sync: offline (run "myhpmp init" to enable)'}`,
   ];
 
   return lines.join('\n');

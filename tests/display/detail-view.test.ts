@@ -23,6 +23,7 @@ describe('renderDetailView', () => {
     totalExp: 2886,
     totalSessions: 47,
     streakDays: 2,
+    syncActive: true,
   };
 
   it('renders detail view with progress bars', () => {
@@ -40,5 +41,20 @@ describe('renderDetailView', () => {
     const view = renderDetailView(baseData, 'ko');
     expect(view).toContain('█');
     expect(view).toContain('░');
+  });
+
+  it('shows sync active when authenticated', () => {
+    const view = renderDetailView(baseData, 'en');
+    expect(view).toContain('☁️ Sync: active');
+  });
+
+  it('shows sync offline when not authenticated', () => {
+    const view = renderDetailView({ ...baseData, syncActive: false }, 'en');
+    expect(view).toContain('⚠️ Sync: offline (run "myhpmp init" to enable)');
+  });
+
+  it('shows sync status in Korean', () => {
+    const view = renderDetailView({ ...baseData, syncActive: false }, 'ko');
+    expect(view).toContain('⚠️ 동기화: 꺼짐');
   });
 });
