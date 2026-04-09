@@ -108,6 +108,7 @@ That's it! EXP tracking starts via hooks. Status line is available for Claude Co
 | `myhpmp statusline off` | Disable status line |
 | `myhpmp locale` | Change display language (한국어/English) |
 | `myhpmp init` | Set up authentication (cross-device sync) |
+| `myhpmp uninstall` | Remove all hooks, status line, and optionally local data |
 
 ## Cross-Device Sync
 

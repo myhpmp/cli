@@ -108,6 +108,7 @@ myhpmp locale
 | `myhpmp statusline off` | 상태 바 끄기 |
 | `myhpmp locale` | 표시 언어 변경 (한국어/English) |
 | `myhpmp init` | 인증 설정 (크로스 디바이스 동기화) |
+| `myhpmp uninstall` | 모든 Hook, 상태 바 제거 및 로컬 데이터 삭제 (선택) |
 
 ## 크로스 디바이스 동기화
 
