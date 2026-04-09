@@ -17,8 +17,16 @@ async function main() {
   const store = new LocalStore(DATA_DIR);
   const stats = await store.load();
 
+  // Reset daily session count if date changed
+  const today = new Date().toISOString().slice(0, 10);
+  if (stats.dailySessionDate !== today) {
+    stats.dailySessionCount = 0;
+    stats.dailySessionDate = today;
+  }
+
   // Session EXP
-  const sessionExp = calcSessionExp();
+  const sessionExp = calcSessionExp(stats.dailySessionCount);
+  stats.dailySessionCount += 1;
   stats.totalSessions += 1;
   stats.totalExp += sessionExp;
 

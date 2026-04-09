@@ -4,7 +4,7 @@ import { renderStatusLine, formatProjectPath } from '../../src/display/status-li
 describe('renderStatusLine', () => {
   const baseData = {
     titleEmoji: '⚔️',
-    titleName: '견습 전사',
+    titleName: '토큰 익스플로러',
     level: 9,
     stars: 3,
     hpPercent: 89,
@@ -17,7 +17,7 @@ describe('renderStatusLine', () => {
 
   it('renders Korean status line', () => {
     const line = renderStatusLine(baseData, 'ko');
-    expect(line).toContain('⚔️ 견습 전사 Lv.9 ★★★');
+    expect(line).toContain('⚔️ 토큰 익스플로러 Lv.9 ★★★');
     expect(line).toContain('❤️ 89%');
     expect(line).toContain('⏱️3h30m');
     expect(line).toContain('💙 80%');
@@ -27,9 +27,9 @@ describe('renderStatusLine', () => {
   });
 
   it('renders English status line', () => {
-    const data = { ...baseData, titleName: 'Apprentice Warrior' };
+    const data = { ...baseData, titleName: 'Token Explorer' };
     const line = renderStatusLine(data, 'en');
-    expect(line).toContain('⚔️ Apprentice Warrior Lv.9 ★★★');
+    expect(line).toContain('⚔️ Token Explorer Lv.9 ★★★');
     expect(line).toContain('🔥2d');
   });
 });
