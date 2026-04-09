@@ -25,7 +25,7 @@ Claude Code에서 모든 기능을 사용할 수 있습니다. Codex CLI는 EXP 
 Claude Code 하단에 항상 표시:
 
 ```
-⚔️ 견습 전사 Lv.9 ★★★ | ❤️ 43% ⏱️2h30m | 💙 76% | 🧠 25% | 🔥7일 | 📂 my-project
+⚔️ 견습 전사 Lv.9 ★★★ | ❤️ 43% ⏱️2h30m | 💙 76% | 🧠 25% | 🔥7일 | 📂 ~/…/code/my-project
 ```
 
 ## 상세 보기
@@ -148,8 +148,8 @@ myhpmp init
 한국어와 영어를 지원합니다. `myhpmp locale`로 언어를 설정하거나, 시스템 로캘에서 자동 감지합니다.
 
 ```
-KO: ⚔️ 견습 전사 Lv.9 ★★★ | ❤️ 43% ⏱️2h30m | 💙 76% | 🧠 25% | 🔥7일 | 📂 my-project
-EN: ⚔️ Apprentice Warrior Lv.9 ★★★ | ❤️ 43% ⏱️2h30m | 💙 76% | 🧠 25% | 🔥7d | 📂 my-project
+KO: ⚔️ 견습 전사 Lv.9 ★★★ | ❤️ 43% ⏱️2h30m | 💙 76% | 🧠 25% | 🔥7일 | 📂 ~/…/code/my-project
+EN: ⚔️ Apprentice Warrior Lv.9 ★★★ | ❤️ 43% ⏱️2h30m | 💙 76% | 🧠 25% | 🔥7d | 📂 ~/…/code/my-project
 ```
 
 ## 작동 방식
