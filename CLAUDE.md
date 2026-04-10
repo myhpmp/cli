@@ -1,6 +1,6 @@
 # @myhpmp/cli
 
-RPG-style gamified usage dashboard for AI coding tools (Claude Code, Codex CLI).
+RPG-style gamified usage dashboard for Claude Code.
 
 ## Project Overview
 
@@ -23,10 +23,9 @@ RPG-style gamified usage dashboard for AI coding tools (Claude Code, Codex CLI).
 
 ```
 src/
-├── adapter/           # Provider adapters (Claude, Codex)
+├── adapter/           # Provider adapters (Claude)
 │   ├── provider.ts    # ProviderAdapter interface
 │   ├── claude-adapter.ts
-│   ├── codex-adapter.ts
 │   └── index.ts       # Factory + registry
 ├── auth/              # OAuth + token management
 ├── commands/          # CLI commands (setup, init, usage, sync, etc.)
@@ -36,8 +35,7 @@ src/
 ├── display/           # Status line + detail view rendering
 ├── hooks/             # Hook entry points
 │   ├── common/        # Shared hooks (session-start)
-│   ├── claude/        # Claude-specific (post-tool-use, session-end)
-│   └── codex/         # Codex-specific (session-end with JSONL parsing)
+│   └── claude/        # Claude-specific (post-tool-use, session-end)
 ├── i18n/              # CLI-only translations (status labels, units)
 ├── cli.ts             # CLI entry point
 ├── config.ts          # Supabase config loader
@@ -115,7 +113,7 @@ feature branch → `/review` 팀 리뷰 통과 → PR → CI 통과 → squash m
 ## Commands Reference
 
 ```
-myhpmp setup      — Configure hooks (Claude Code / Codex CLI)
+myhpmp setup      — Configure hooks (Claude Code)
 myhpmp init       — Set up authentication (cross-device sync)
 myhpmp usage      — Show detailed usage stats
 myhpmp sync       — Manually sync stats to cloud

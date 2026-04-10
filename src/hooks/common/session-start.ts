@@ -28,11 +28,8 @@ async function main() {
 
   await store.save(stats);
 
-  // Detect provider from parent process or config dir
-  const provider = process.env.CODEX_HOME || process.env.CODEX_CONFIG_DIR ? 'codex' : 'claude';
-
   if (streakExp > 0) {
-    await logExp(streakExp, 'streak_bonus', { provider });
+    await logExp(streakExp, 'streak_bonus', { provider: 'claude' });
   }
 
   // Push updated stats to remote

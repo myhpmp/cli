@@ -20,6 +20,7 @@ import { renderStatusLine, formatProjectPath } from './display/status-line.js';
 import { detectLocale } from './i18n/index.js';
 import { AuthManager } from './auth/auth-manager.js';
 import { fetchClaudeUsage, utilizationToPercent, resetsAtToMinutes } from './data/claude-usage.js';
+import { execSync } from 'node:child_process';
 import os from 'node:os';
 import path from 'node:path';
 
@@ -67,6 +68,7 @@ async function main() {
   let hpPercent: number;
   let mpPercent: number;
   let resetMinutes = 0;
+  let weeklyResetDays = 0;
 
   if (statusInput.rate_limits?.five_hour) {
     hpPercent = Math.max(0, Math.round(100 - (statusInput.rate_limits.five_hour.used_percentage ?? 0)));
@@ -77,12 +79,19 @@ async function main() {
       const diff = resetsAtEpoch * 1000 - Date.now();
       resetMinutes = Math.max(0, Math.round(diff / 60_000));
     }
+    const weeklyResetsAt = statusInput.rate_limits.seven_day?.resets_at;
+    if (weeklyResetsAt) {
+      const diff = weeklyResetsAt * 1000 - Date.now();
+      weeklyResetDays = Math.max(0, Math.ceil(diff / (24 * 60 * 60_000)));
+    }
   } else {
     const usage = await fetchClaudeUsage();
     if (usage) {
       hpPercent = utilizationToPercent(usage.fiveHour.utilization);
       mpPercent = utilizationToPercent(usage.sevenDay.utilization);
       resetMinutes = resetsAtToMinutes(usage.fiveHour.resetsAt);
+      const diff = new Date(usage.sevenDay.resetsAt).getTime() - Date.now();
+      weeklyResetDays = Math.max(0, Math.ceil(diff / (24 * 60 * 60_000)));
     } else {
       hpPercent = 100;
       mpPercent = 100;
@@ -95,9 +104,11 @@ async function main() {
   const stats = await store.load();
 
   let locale: string;
+  let statusLineOrder: import('./auth/auth-manager.js').StatusLineSegment[] | undefined;
   try {
     const config = await authManager.loadConfig();
     locale = config.locale ?? detectLocale();
+    statusLineOrder = config.statusLineOrder;
   } catch {
     locale = detectLocale();
   }
@@ -107,6 +118,24 @@ async function main() {
   const titleEmoji = getTierEmoji(tier.tierIndex);
   const titleName = getTierTitle(tier.tierIndex, locale);
 
+  // Git branch + dirty status
+  let gitBranch: string | null = null;
+  try {
+    const branch = execSync('git rev-parse --abbrev-ref HEAD', {
+      encoding: 'utf-8',
+      stdio: ['pipe', 'pipe', 'pipe'],
+      timeout: 3000,
+    }).trim();
+    const dirty = execSync('git status --porcelain', {
+      encoding: 'utf-8',
+      stdio: ['pipe', 'pipe', 'pipe'],
+      timeout: 3000,
+    }).trim();
+    gitBranch = branch + (dirty.length > 0 ? '*' : '');
+  } catch {
+    // Not a git repo or git not available
+  }
+
   const line = renderStatusLine({
     titleEmoji,
     titleName,
@@ -115,10 +144,12 @@ async function main() {
     hpPercent,
     resetMinutes,
     mpPercent,
+    weeklyResetDays,
     ctxPercent,
     streakDays: stats.streakDays,
     projectName: formatProjectPath(process.cwd(), os.homedir()),
-  }, locale);
+    gitBranch,
+  }, locale, statusLineOrder);
 
   process.stdout.write(line);
 }

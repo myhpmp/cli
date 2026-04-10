@@ -1,13 +1,13 @@
 /**
  * Provider adapter interface.
- * Each AI coding tool (Claude Code, Codex, etc.) implements this.
+ * Each AI coding tool (Claude Code, etc.) implements this.
  */
 
 export interface ProviderAdapter {
   /** Provider name */
   readonly name: string;
 
-  /** Provider config directory (e.g. ~/.claude, ~/.codex) */
+  /** Provider config directory (e.g. ~/.claude) */
   readonly configDir: string;
 
   /** Whether this provider supports a status line */
