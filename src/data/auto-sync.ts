@@ -34,7 +34,7 @@ async function markSynced(): Promise<void> {
 }
 
 /**
- * Sync unconditionally (used by session-start, session-end, manual sync).
+ * Sync unconditionally (used by session-start, manual sync).
  */
 export async function autoSync(): Promise<void> {
   try {

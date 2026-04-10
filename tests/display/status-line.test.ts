@@ -6,10 +6,8 @@ const stripAnsi = (s: string) => s.replace(/\x1b\[[0-9;]*m/g, '');
 
 describe('renderStatusLine', () => {
   const baseData = {
-    titleEmoji: '⚔️',
-    titleName: '토큰 익스플로러',
+    username: 'Swift-Coder42' as string | null,
     level: 9,
-    stars: 3,
     hpPercent: 89,
     resetMinutes: 210,
     mpPercent: 80,
@@ -24,7 +22,7 @@ describe('renderStatusLine', () => {
     const line = renderStatusLine(baseData, 'ko');
     const [first, second] = line.split('\n');
     expect(stripAnsi(first)).toBe('📂 my-project (main*)');
-    expect(second).toContain('⚔️ 토큰 익스플로러 Lv.9 ★★★');
+    expect(second).toContain('LV.9 Swift-Coder42');
     expect(second).toContain('❤️ 89%');
     expect(second).toContain('⏱️3h30m');
     expect(second).toContain('💙 80% ⏱️3일');
@@ -33,9 +31,8 @@ describe('renderStatusLine', () => {
   });
 
   it('renders English status line', () => {
-    const data = { ...baseData, titleName: 'Token Explorer' };
-    const line = renderStatusLine(data, 'en');
-    expect(line).toContain('⚔️ Token Explorer Lv.9 ★★★');
+    const line = renderStatusLine(baseData, 'en');
+    expect(line).toContain('LV.9 Swift-Coder42');
     expect(line).toContain('💙 80% ⏱️3d');
     expect(line).toContain('🔥2d');
   });

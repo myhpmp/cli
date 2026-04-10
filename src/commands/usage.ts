@@ -1,5 +1,5 @@
 import { LocalStore } from '../data/local-store.js';
-import { getLevelInfo, getTierForLevel, getStars, getTierEmoji, getTierTitle } from '../core/level-system.js';
+import { getLevelInfo } from '../core/level-system.js';
 import { renderDetailView } from '../display/detail-view.js';
 import { detectLocale } from '../i18n/index.js';
 import { AuthManager } from '../auth/auth-manager.js';
@@ -23,9 +23,6 @@ async function main() {
   }
 
   const levelInfo = getLevelInfo(stats.totalExp);
-  const tier = getTierForLevel(levelInfo.level);
-  const titleEmoji = getTierEmoji(tier.tierIndex);
-  const titleName = getTierTitle(tier.tierIndex, locale);
 
   // Fetch real Claude usage data
   const usage = await fetchClaudeUsage();
@@ -44,10 +41,8 @@ async function main() {
   const syncActive = await authManager.isAuthenticated();
 
   const output = renderDetailView({
-    titleEmoji,
-    titleName,
+    username: stats.username,
     level: levelInfo.level,
-    stars: getStars(levelInfo.level),
     hpPercent,
     hpUsed: hpPercent,
     hpTotal: 100,

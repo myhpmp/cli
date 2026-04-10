@@ -15,7 +15,7 @@
  * }
  */
 import { LocalStore } from './data/local-store.js';
-import { getLevelInfo, getTierForLevel, getStars, getTierEmoji, getTierTitle } from './core/level-system.js';
+import { getLevelInfo } from './core/level-system.js';
 import { renderStatusLine, formatProjectPath } from './display/status-line.js';
 import { detectLocale } from './i18n/index.js';
 import { AuthManager } from './auth/auth-manager.js';
@@ -114,9 +114,6 @@ async function main() {
   }
 
   const levelInfo = getLevelInfo(stats.totalExp);
-  const tier = getTierForLevel(levelInfo.level);
-  const titleEmoji = getTierEmoji(tier.tierIndex);
-  const titleName = getTierTitle(tier.tierIndex, locale);
 
   // Git branch + dirty status
   let gitBranch: string | null = null;
@@ -137,10 +134,8 @@ async function main() {
   }
 
   const line = renderStatusLine({
-    titleEmoji,
-    titleName,
+    username: stats.username,
     level: levelInfo.level,
-    stars: getStars(levelInfo.level),
     hpPercent,
     resetMinutes,
     mpPercent,

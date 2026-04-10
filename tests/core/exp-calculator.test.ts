@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { calcTokenExp, calcSessionExp, calcStreakBonus, calcWeeklyBonus } from '../../src/core/exp-calculator.js';
+import { calcTokenExp, calcStreakBonus } from '../../src/core/exp-calculator.js';
 
 describe('calcTokenExp', () => {
   it('returns 0 for 0 tokens', () => {
@@ -20,12 +20,6 @@ describe('calcTokenExp', () => {
   });
 });
 
-describe('calcSessionExp', () => {
-  it('returns 25', () => {
-    expect(calcSessionExp()).toBe(25);
-  });
-});
-
 describe('calcStreakBonus', () => {
   it('returns streakDays * 5 up to cap', () => {
     expect(calcStreakBonus(0)).toBe(0);
@@ -40,14 +34,3 @@ describe('calcStreakBonus', () => {
   });
 });
 
-describe('calcWeeklyBonus', () => {
-  it('returns 100 when usage >= 70%', () => {
-    expect(calcWeeklyBonus(70)).toBe(100);
-    expect(calcWeeklyBonus(100)).toBe(100);
-  });
-
-  it('returns 0 when usage < 70%', () => {
-    expect(calcWeeklyBonus(69)).toBe(0);
-    expect(calcWeeklyBonus(0)).toBe(0);
-  });
-});

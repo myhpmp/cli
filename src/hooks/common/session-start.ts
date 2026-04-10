@@ -17,11 +17,13 @@ async function main() {
   const stats = await store.load();
 
   const today = new Date().toISOString().slice(0, 10);
+  const isNewDay = stats.lastActiveDate !== today;
   const newStreak = computeStreak(stats.streakDays, stats.lastActiveDate);
-  const streakExp = calcStreakBonus(newStreak);
+  const streakExp = isNewDay ? calcStreakBonus(newStreak) : 0;
 
   stats.streakDays = newStreak;
   stats.lastActiveDate = today;
+  stats.totalSessions += 1;
   stats.totalExp += streakExp;
   stats.level = getLevelInfo(stats.totalExp).level;
   stats.updatedAt = new Date().toISOString();

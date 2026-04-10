@@ -24,7 +24,7 @@ async function main() {
 
   console.log('📡 Syncing...');
   const result = await engine.sync(config.userId);
-  console.log(`✅ Synced — Lv.${result.level} | EXP: ${result.totalExp} | Streak: ${result.streakDays}d`);
+  console.log(`✅ Synced — LV.${result.level} | EXP: ${result.totalExp} | Streak: ${result.streakDays}d`);
   process.exit(0);
 }
 

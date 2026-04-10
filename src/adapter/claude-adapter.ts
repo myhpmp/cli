@@ -29,7 +29,6 @@ export class ClaudeAdapter implements ProviderAdapter {
       hooks: {
         PostToolUse: [{ matcher: '', hooks: [{ type: 'command', command: hook('claude/post-tool-use.js') }] }],
         SessionStart: [{ matcher: '', hooks: [{ type: 'command', command: hook('common/session-start.js') }] }],
-        Stop: [{ matcher: '', hooks: [{ type: 'command', command: hook('claude/session-end.js') }] }],
       },
       statusLine: {
         type: 'command',

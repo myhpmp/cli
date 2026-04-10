@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getLevelInfo, getTierForLevel, getStars } from '../../src/core/level-system.js';
+import { getLevelInfo } from '../../src/core/level-system.js';
 
 describe('getLevelInfo', () => {
   it('returns level 1 for 0 exp', () => {
@@ -33,41 +33,5 @@ describe('getLevelInfo', () => {
   it('returns level 50+ for very high exp', () => {
     const info = getLevelInfo(300000);
     expect(info.level).toBeGreaterThanOrEqual(51);
-  });
-});
-
-describe('getTierForLevel', () => {
-  it('returns tier 0 for level 1-5', () => {
-    expect(getTierForLevel(1).tierIndex).toBe(0);
-    expect(getTierForLevel(5).tierIndex).toBe(0);
-  });
-
-  it('returns tier 1 for level 6-10', () => {
-    expect(getTierForLevel(6).tierIndex).toBe(1);
-    expect(getTierForLevel(10).tierIndex).toBe(1);
-  });
-
-  it('returns tier 7 for level 51+', () => {
-    expect(getTierForLevel(51).tierIndex).toBe(7);
-    expect(getTierForLevel(99).tierIndex).toBe(7);
-  });
-});
-
-describe('getStars', () => {
-  it('returns 1 star for first level in 5-level tier', () => {
-    expect(getStars(1)).toBe(1);
-    expect(getStars(6)).toBe(1);
-  });
-
-  it('returns 5 stars for last level in 5-level tier', () => {
-    expect(getStars(5)).toBe(5);
-    expect(getStars(10)).toBe(5);
-  });
-
-  it('returns stars for 10-level tier (2 levels per star)', () => {
-    expect(getStars(21)).toBe(1);
-    expect(getStars(22)).toBe(1);
-    expect(getStars(23)).toBe(2);
-    expect(getStars(30)).toBe(5);
   });
 });
