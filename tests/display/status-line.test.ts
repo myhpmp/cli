@@ -1,6 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import { renderStatusLine, formatProjectPath } from '../../src/display/status-line.js';
 
+// eslint-disable-next-line no-control-regex
+const stripAnsi = (s: string) => s.replace(/\x1b\[[0-9;]*m/g, '');
+
 describe('renderStatusLine', () => {
   const baseData = {
     titleEmoji: '⚔️',
@@ -20,7 +23,7 @@ describe('renderStatusLine', () => {
   it('renders Korean status line with project on first line', () => {
     const line = renderStatusLine(baseData, 'ko');
     const [first, second] = line.split('\n');
-    expect(first).toBe('📂 my-project (main*)');
+    expect(stripAnsi(first)).toBe('📂 my-project (main*)');
     expect(second).toContain('⚔️ 토큰 익스플로러 Lv.9 ★★★');
     expect(second).toContain('❤️ 89%');
     expect(second).toContain('⏱️3h30m');
@@ -47,13 +50,21 @@ describe('renderStatusLine', () => {
   it('hides git branch when null', () => {
     const data = { ...baseData, gitBranch: null };
     const line = renderStatusLine(data, 'ko');
-    expect(line).toContain('📂 my-project');
-    expect(line).not.toContain('(');
+    expect(stripAnsi(line)).toContain('📂 my-project');
+    expect(stripAnsi(line)).not.toContain('(');
   });
 
   it('respects custom segment order', () => {
     const line = renderStatusLine(baseData, 'ko', ['project', 'hp']);
-    expect(line).toBe('📂 my-project (main*)\n❤️ 89% ⏱️3h30m');
+    expect(stripAnsi(line)).toBe('📂 my-project (main*)\n❤️ 89% ⏱️3h30m');
+  });
+
+  it('applies ANSI colors to project and branch', () => {
+    const line = renderStatusLine(baseData, 'ko');
+    const [first] = line.split('\n');
+    expect(first).toContain('\x1b[1;96m');  // bold bright cyan for project
+    expect(first).toContain('\x1b[1;93m');  // bold bright yellow for branch
+    expect(first).toContain('\x1b[0m');     // reset
   });
 
   it('filters invalid segment keys', () => {

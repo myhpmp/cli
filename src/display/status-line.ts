@@ -55,8 +55,8 @@ export function renderStatusLine(
     ctx: `🧠 ${data.ctxPercent}%`,
     streak: `🔥${data.streakDays}${dayUnit}`,
     project: data.gitBranch
-      ? `📂 ${data.projectName} (${data.gitBranch})`
-      : `📂 ${data.projectName}`,
+      ? `📂 \x1b[1;96m${data.projectName}\x1b[0m (\x1b[1;93m${data.gitBranch}\x1b[0m)`
+      : `📂 \x1b[1;96m${data.projectName}\x1b[0m`,
   };
 
   const keys = order ?? DEFAULT_STATUSLINE_ORDER;
