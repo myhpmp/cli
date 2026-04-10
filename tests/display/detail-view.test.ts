@@ -3,10 +3,8 @@ import { renderDetailView } from '../../src/display/detail-view.js';
 
 describe('renderDetailView', () => {
   const baseData = {
-    titleEmoji: '⚔️',
-    titleName: '토큰 익스플로러',
+    username: 'Swift-Coder42' as string | null,
     level: 9,
-    stars: 3,
     hpPercent: 89,
     hpUsed: 82341,
     hpTotal: 92500,
@@ -28,7 +26,7 @@ describe('renderDetailView', () => {
 
   it('renders detail view with progress bars', () => {
     const view = renderDetailView(baseData, 'ko');
-    expect(view).toContain('⚔️ 토큰 익스플로러 Lv.9 ★★★');
+    expect(view).toContain('LV.9 Swift-Coder42');
     expect(view).toContain('❤️ HP');
     expect(view).toContain('💙 MP');
     expect(view).toContain('🧠 CTX');

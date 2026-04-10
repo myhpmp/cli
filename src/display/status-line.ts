@@ -21,10 +21,8 @@ export function formatProjectPath(cwd: string, homedir: string): string {
 }
 
 export interface StatusLineData {
-  titleEmoji: string;
-  titleName: string;
+  username: string | null;
   level: number;
-  stars: number;
   hpPercent: number;
   resetMinutes: number;
   mpPercent: number;
@@ -40,12 +38,12 @@ export function renderStatusLine(
   locale: string,
   order?: StatusLineSegment[],
 ): string {
-  const starsStr = '★'.repeat(data.stars);
   const time = formatTime(data.resetMinutes);
   const dayUnit = locale === 'ko' ? '일' : 'd';
+  const titleStr = data.username ? `LV.${data.level} ${data.username}` : `LV.${data.level}`;
 
   const segments: Record<StatusLineSegment, string> = {
-    title: `${data.titleEmoji} ${data.titleName} Lv.${data.level} ${starsStr}`,
+    title: titleStr,
     hp: data.resetMinutes > 0
       ? `❤️ ${data.hpPercent}% ⏱️${time}`
       : `❤️ ${data.hpPercent}%`,

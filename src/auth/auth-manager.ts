@@ -11,7 +11,7 @@ export interface AuthConfig {
   userId: string;
   accessToken: string;
   refreshToken: string;
-  provider: 'github' | 'google';
+  provider: 'github';
   locale: string;
   statusLineOrder?: StatusLineSegment[];
 }

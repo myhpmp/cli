@@ -31,11 +31,14 @@ const CALLBACK_HTML = `<!DOCTYPE html>
 </script>
 </body></html>`;
 
-export async function signInWithOAuth(supabase: SupabaseClient, provider: Provider): Promise<{
+export interface OAuthResult {
   userId: string;
   accessToken: string;
   refreshToken: string;
-}> {
+  username: string | null;
+}
+
+export async function signInWithOAuth(supabase: SupabaseClient, provider: Provider): Promise<OAuthResult> {
   return new Promise((resolve, reject) => {
     const server = http.createServer(async (req, res) => {
       const url = new URL(req.url!, `http://localhost`);
@@ -65,6 +68,7 @@ export async function signInWithOAuth(supabase: SupabaseClient, provider: Provid
               userId: data.session.user.id,
               accessToken: data.session.access_token,
               refreshToken: data.session.refresh_token,
+              username: (data.session.user.user_metadata?.user_name as string) ?? null,
             });
           } else if (accessToken) {
             const { data, error } = await supabase.auth.setSession({
@@ -81,6 +85,7 @@ export async function signInWithOAuth(supabase: SupabaseClient, provider: Provid
               userId: data.session.user.id,
               accessToken: data.session.access_token,
               refreshToken: data.session.refresh_token,
+              username: (data.session.user.user_metadata?.user_name as string) ?? null,
             });
           } else {
             throw new Error('No auth data');

@@ -59,8 +59,7 @@ export class SupabaseProvider implements DbProvider {
       streakDays,
       lastActiveDate: data.last_active_date ? String(data.last_active_date) : null,
       weeklyExpBonusClaimed: Boolean(data.weekly_exp_bonus_claimed),
-      dailySessionCount: 0,
-      dailySessionDate: null,
+      username: data.username ? String(data.username) : null,
       updatedAt: data.updated_at ? String(data.updated_at) : new Date().toISOString(),
     };
   }
@@ -80,6 +79,19 @@ export class SupabaseProvider implements DbProvider {
       });
 
     if (error) throw new Error(`Supabase save failed: ${error.message}`);
+  }
+
+  async setUsername(userId: string, username: string): Promise<boolean> {
+    const { error } = await this.client
+      .from('user_stats')
+      .update({ username })
+      .eq('user_id', userId);
+
+    if (error) {
+      if (error.code === '23505') return false; // unique constraint violation
+      throw new Error(`Failed to set username: ${error.message}`);
+    }
+    return true;
   }
 
   async insertExpHistory(userId: string, entry: ExpHistoryEntry): Promise<void> {

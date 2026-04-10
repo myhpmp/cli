@@ -1,10 +1,8 @@
 import { formatTime } from '../core/stats-aggregator.js';
 
 export interface DetailViewData {
-  titleEmoji: string;
-  titleName: string;
+  username: string | null;
   level: number;
-  stars: number;
   hpPercent: number;
   hpUsed: number;
   hpTotal: number;
@@ -42,13 +40,12 @@ export function renderDetailView(
   locale: string,
 ): string {
   const ko = locale === 'ko';
-  const starsStr = '★'.repeat(data.stars);
   const time = formatTime(data.resetMinutes);
   const dayUnit = ko ? '일' : 'd';
   const sessionsUnit = ko ? '회' : 'sessions';
   const sep = '━'.repeat(43);
 
-  const header = `🎮 ${data.titleEmoji} ${data.titleName} Lv.${data.level} ${starsStr}`;
+  const header = data.username ? `LV.${data.level} ${data.username}` : `LV.${data.level}`;
   const streakLabel = `🔥 ${ko ? '연속' : 'Streak'}: ${data.streakDays}${dayUnit}`;
 
   const lines = [
@@ -57,7 +54,7 @@ export function renderDetailView(
     `❤️ HP  ${progressBar(data.hpPercent)}  ${String(data.hpPercent).padStart(3)}%  ⏱️ ${time}`,
     `💙 MP  ${progressBar(data.mpPercent)}  ${String(data.mpPercent).padStart(3)}%`,
     `🧠 CTX ${progressBar(data.ctxPercent)}  ${String(data.ctxPercent).padStart(3)}%  (${formatTokens(data.ctxUsed)} / ${formatTokens(data.ctxTotal)} context)`,
-    `⭐ EXP ${progressBar(Math.round((data.expCurrent / data.expNeeded) * 100))}  ${String(Math.round((data.expCurrent / data.expNeeded) * 100)).padStart(3)}%  (${data.expCurrent} / ${data.expNeeded} → Lv.${data.nextLevel})`,
+    `⭐ EXP ${progressBar(Math.round((data.expCurrent / data.expNeeded) * 100))}  ${String(Math.round((data.expCurrent / data.expNeeded) * 100)).padStart(3)}%  (${data.expCurrent} / ${data.expNeeded} → LV.${data.nextLevel})`,
     sep,
     `📊 ${ko ? '총 누적 EXP' : 'Total EXP'}: ${data.totalExp.toLocaleString()}  |  ${ko ? '총 세션' : 'Total Sessions'}: ${data.totalSessions} ${sessionsUnit}`,
     data.syncActive

@@ -1,6 +1,6 @@
 {
   "name": "@myhpmp/cli",
-  "version": "1.10.0",
+  "version": "1.0.0",
   "description": "RPG-style gamified usage dashboard for Claude Code",
   "type": "module",
   "main": "dist/index.js",
@@ -41,7 +41,7 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "@myhpmp/core": "^1.1.1",
+    "@myhpmp/core": "^1.0.0",
     "@supabase/supabase-js": "^2.49.0",
     "open": "^10.1.0"
   },

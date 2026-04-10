@@ -3,7 +3,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { createClient } from '@supabase/supabase-js';
 import { AuthManager } from '../auth/auth-manager.js';
-import { signInWithOAuth } from '../auth/oauth.js';
+import { signInWithOAuth, type OAuthResult } from '../auth/oauth.js';
 import { LocalStore } from '../data/local-store.js';
 import { SupabaseProvider } from '../data/providers/supabase.js';
 import { SyncEngine } from '../data/sync-engine.js';
@@ -52,39 +52,16 @@ async function main() {
 
   console.log('🎮 My HP/MP Setup');
   console.log('━'.repeat(24));
-  console.log('Select login method:\n');
-  console.log('  1) GitHub');
-  console.log('  2) Google\n');
+  console.log('🌐 Opening GitHub auth page in browser...\n');
 
-  const choice = await ask(rl, '> ');
-
-  let result: { userId: string; accessToken: string; refreshToken: string };
-  let provider: 'github' | 'google';
-
-  if (choice.trim() === '1') {
-    console.log('\n🌐 Opening GitHub auth page in browser...');
-    try {
-      result = await signInWithOAuth(supabase, 'github');
-    } catch (err) {
-      rl.close();
-      throw err;
-    }
-    provider = 'github';
-  } else if (choice.trim() === '2') {
-    console.log('\n🌐 Opening Google auth page in browser...');
-    try {
-      result = await signInWithOAuth(supabase, 'google');
-    } catch (err) {
-      rl.close();
-      throw err;
-    }
-    provider = 'google';
-  } else {
-    console.error('❌ Invalid selection.');
+  let result: OAuthResult;
+  try {
+    result = await signInWithOAuth(supabase, 'github');
+  } catch (err) {
     rl.close();
-    process.exit(1);
-    return;
+    throw err;
   }
+  const provider = 'github';
 
   console.log('\n🌍 Select display language:\n');
   console.log('  1) 한국어 (Korean)');
@@ -108,6 +85,17 @@ async function main() {
     await dbProvider.setSession(result.accessToken, result.refreshToken);
     const engine = new SyncEngine(store, dbProvider);
     await engine.sync(result.userId);
+
+    // Set GitHub username if not already set
+    const stats = await store.load();
+    if (!stats.username && result.username) {
+      const ok = await dbProvider.setUsername(result.userId, result.username);
+      if (ok) {
+        stats.username = result.username;
+        await store.save(stats);
+      }
+    }
+
     console.log('   ✅ Synced');
   } catch {
     console.log('   ⚠️  Sync failed (will retry on next session)');
