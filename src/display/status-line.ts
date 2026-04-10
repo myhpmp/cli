@@ -60,8 +60,16 @@ export function renderStatusLine(
   };
 
   const keys = order ?? DEFAULT_STATUSLINE_ORDER;
-  return keys
-    .filter(key => key in segments)
-    .map(key => segments[key])
-    .join(' | ');
+  const validKeys = keys.filter(key => key in segments);
+
+  // project goes on its own line (top)
+  const projectIdx = validKeys.indexOf('project');
+  if (projectIdx !== -1) {
+    const rest = validKeys.filter(k => k !== 'project');
+    const projectLine = segments.project;
+    const mainLine = rest.map(key => segments[key]).join(' | ');
+    return `${projectLine}\n${mainLine}`;
+  }
+
+  return validKeys.map(key => segments[key]).join(' | ');
 }

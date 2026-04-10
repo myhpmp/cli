@@ -17,15 +17,16 @@ describe('renderStatusLine', () => {
     gitBranch: 'main*' as string | null,
   };
 
-  it('renders Korean status line', () => {
+  it('renders Korean status line with project on first line', () => {
     const line = renderStatusLine(baseData, 'ko');
-    expect(line).toContain('⚔️ 토큰 익스플로러 Lv.9 ★★★');
-    expect(line).toContain('❤️ 89%');
-    expect(line).toContain('⏱️3h30m');
-    expect(line).toContain('💙 80% ⏱️3일');
-    expect(line).toContain('🧠 6%');
-    expect(line).toContain('🔥2일');
-    expect(line).toContain('📂 my-project (main*)');
+    const [first, second] = line.split('\n');
+    expect(first).toBe('📂 my-project (main*)');
+    expect(second).toContain('⚔️ 토큰 익스플로러 Lv.9 ★★★');
+    expect(second).toContain('❤️ 89%');
+    expect(second).toContain('⏱️3h30m');
+    expect(second).toContain('💙 80% ⏱️3일');
+    expect(second).toContain('🧠 6%');
+    expect(second).toContain('🔥2일');
   });
 
   it('renders English status line', () => {
@@ -52,7 +53,7 @@ describe('renderStatusLine', () => {
 
   it('respects custom segment order', () => {
     const line = renderStatusLine(baseData, 'ko', ['project', 'hp']);
-    expect(line).toBe('📂 my-project (main*) | ❤️ 89% ⏱️3h30m');
+    expect(line).toBe('📂 my-project (main*)\n❤️ 89% ⏱️3h30m');
   });
 
   it('filters invalid segment keys', () => {

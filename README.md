@@ -134,8 +134,11 @@ Available segments: `title`, `hp`, `mp`, `ctx`, `streak`, `project`
 ### i18n
 
 ```
-KO: 🔮 프롬프트 소서러 Lv.21 ★ | ❤️ 80% ⏱️4h34m | 💙 64% ⏱️5일 | 🧠 2% | 🔥5일 | 📂 ~/…/myhpmp-cli (main*)
-EN: 🔮 Prompt Sorcerer Lv.21 ★ | ❤️ 80% ⏱️4h34m | 💙 64% ⏱️5d | 🧠 2% | 🔥5d | 📂 ~/…/myhpmp-cli (main*)
+📂 ~/…/myhpmp-cli (main*)
+KO: 🔮 프롬프트 소서러 Lv.21 ★ | ❤️ 80% ⏱️4h34m | 💙 64% ⏱️5일 | 🧠 2% | 🔥5일
+
+📂 ~/…/myhpmp-cli (main*)
+EN: 🔮 Prompt Sorcerer Lv.21 ★ | ❤️ 80% ⏱️4h34m | 💙 64% ⏱️5d | 🧠 2% | 🔥5d
 ```
 
 ## Requirements
