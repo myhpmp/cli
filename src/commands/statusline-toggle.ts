@@ -3,7 +3,8 @@ import path from 'node:path';
 import os from 'node:os';
 
 const SETTINGS_PATH = path.join(os.homedir(), '.claude', 'settings.json');
-const DIST_DIR = path.join(os.homedir(), '.myhpmp', 'dist');
+// Use the npm package dist dir (same as setup.ts), so `npm i -g` auto-updates
+const DIST_DIR = path.resolve(import.meta.dirname, '..');
 
 interface ClaudeSettings {
   statusLine?: unknown;

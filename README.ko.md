@@ -4,37 +4,60 @@
 
 Claude Code 사용량을 RPG 게임처럼 보여주는 대시보드.
 
-Claude Code 사용을 게임으로 만들어보세요 — 레벨, HP(세션 한도), MP(주간 한도), EXP, 연속 사용일수를 추적하고 칭호를 획득하세요.
+레벨, HP, MP, EXP, 연속 사용일수를 추적하고 칭호를 획득하세요.
 
-## 상태 바 (Claude Code)
+<p align="center">
+  <img src="./assets/statusline-preview.svg" alt="상태 바 미리보기" width="100%"/>
+</p>
 
-Claude Code 하단에 항상 표시:
+## 빠른 시작
 
+```bash
+npm install -g @myhpmp/cli
 ```
-⚔️ 토큰 익스플로러 Lv.9 ★★★ | ❤️ 43% ⏱️2h30m | 💙 76% | 🧠 25% | 🔥7일 | 📂 ~/…/code/my-project
+
+### 1. Hook 설치
+
+```bash
+myhpmp setup
 ```
 
-## 상세 보기
+Claude Code Hook이 설치되어 사용량이 자동으로 추적됩니다. 실시간 상태 바가 Claude Code 하단에 표시됩니다.
 
-`myhpmp usage`로 전체 대시보드 확인:
+### 2. 언어 설정
 
+```bash
+myhpmp locale
 ```
-🎮 ⚔️ 토큰 익스플로러 Lv.9 ★★★                    🔥 연속: 7일
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-❤️ HP  ████░░░░░░   43%  ⏱️ 2h30m
-💙 MP  ████████░░   76%
-🧠 CTX ███░░░░░░░   25%  (250K / 1.0M context)
-⭐ EXP ██████░░░░   62%  (186 / 300 → Lv.10)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📊 총 누적 EXP: 2,886  |  총 세션: 47 회
+
+한국어와 영어를 지원합니다. 건너뛰면 시스템 로캘에서 자동 감지합니다.
+
+### 3. Claude Code 재시작
+
+끝! 다음 세션부터 EXP가 자동으로 쌓입니다.
+
+### 4. (선택) 클라우드 동기화
+
+```bash
+myhpmp init
 ```
+
+GitHub 또는 Google OAuth로 여러 기기에서 스탯을 동기화할 수 있습니다.
+
+## 대시보드
+
+`myhpmp usage`로 전체 RPG 대시보드를 확인하세요:
+
+<p align="center">
+  <img src="./assets/usage-preview.svg" alt="대시보드 미리보기" width="640"/>
+</p>
 
 ## 스탯
 
 | 스탯 | 설명 |
 |------|------|
-| **❤️ HP** | 5시간 세션 한도 잔여량 (%) + 리셋 시간 |
-| **💙 MP** | 7일 주간 한도 잔여량 (%) |
+| **❤️ HP** | 5시간 사용량 잔여 (%) + 리셋 타이머 |
+| **💙 MP** | 7일 주간 한도 잔여 (%) + 리셋 타이머 |
 | **🧠 CTX** | 현재 컨텍스트 윈도우 사용률 (%) |
 | **🔥 연속** | 연속 사용일수 |
 | **⭐ EXP** | 다음 레벨까지 경험치 |
@@ -52,7 +75,7 @@ Claude Code 하단에 항상 표시:
 | 41-50 | 🐉 컨텍스트 오버로드 | 15,000 | 276,000 |
 | 50+ | ⚡ 신서틱 마인드 | 25,000 | ∞ |
 
-초반 레벨은 빠르게 올라갑니다. 후반 티어는 꾸준한 사용이 필요합니다 — ⚡ 초월자까지 약 8개월 소요.
+초반 레벨은 빠르게 올라갑니다. 후반 티어는 꾸준한 사용이 필요합니다.
 
 ## EXP 획득 방식
 
@@ -63,25 +86,6 @@ Claude Code 하단에 항상 표시:
 | 연속 사용 보너스 | 연속일수 × 5 EXP (최대 30일 = 150 EXP) |
 | 주간 70%+ 사용 | 100 EXP |
 
-모든 세션의 EXP는 하나의 총합으로 합산됩니다.
-
-## 빠른 시작
-
-```bash
-# 글로벌 설치
-npm install -g @myhpmp/cli
-
-# Claude Code Hook 자동 설정
-myhpmp setup
-
-# 표시 언어 설정
-myhpmp locale
-
-# AI 코딩 도구를 재시작하면 추적이 시작됩니다
-```
-
-끝! Hook을 통해 EXP가 쌓이기 시작합니다. 상태 바는 Claude Code에서 사용 가능합니다.
-
 ## 명령어
 
 | 명령어 | 설명 |
@@ -89,12 +93,10 @@ myhpmp locale
 | `myhpmp setup` | Hook 자동 설정 (Claude Code) |
 | `myhpmp usage` | RPG 대시보드 상세 보기 |
 | `myhpmp sync` | 수동으로 클라우드 동기화 |
-| `myhpmp statusline` | 상태 바 켜기/끄기 토글 (Claude Code) |
-| `myhpmp statusline on` | 상태 바 켜기 |
-| `myhpmp statusline off` | 상태 바 끄기 |
+| `myhpmp statusline` | 상태 바 켜기/끄기 토글 |
 | `myhpmp locale` | 표시 언어 변경 (한국어/English) |
 | `myhpmp init` | 인증 설정 (크로스 디바이스 동기화) |
-| `myhpmp uninstall` | 모든 Hook, 상태 바 제거 및 로컬 데이터 삭제 (선택) |
+| `myhpmp uninstall` | 모든 Hook 제거 및 로컬 데이터 삭제 (선택) |
 
 ## 크로스 디바이스 동기화
 
@@ -106,8 +108,6 @@ myhpmp init
 
 **GitHub OAuth**와 **Google OAuth** 인증을 지원합니다.
 
-### 동기화 방식
-
 | 시점 | 동작 |
 |------|------|
 | 세션 시작 | 클라우드에서 최신 데이터 가져오기 |
@@ -115,7 +115,28 @@ myhpmp init
 | 세션 종료 | 최종 스탯 클라우드에 저장 |
 | `myhpmp sync` | 수동 즉시 동기화 |
 
-데이터는 `~/.myhpmp/data.json`에 로컬 저장되며 오프라인에서도 동작합니다. 클라우드 동기화에 실패하면 로컬 데이터가 보존되고, 다음 기회에 동기화됩니다. 로컬 EXP가 원격보다 낮으면(재설치 등) 항상 원격 데이터가 보존됩니다.
+데이터는 `~/.myhpmp/data.json`에 로컬 저장되며 완전한 오프라인 동작을 지원합니다. 로컬 데이터는 항상 보존됩니다.
+
+## 커스터마이징
+
+### 상태 바 순서
+
+`~/.myhpmp/config.json`에서 표시할 세그먼트와 순서를 설정:
+
+```json
+{
+  "statusLineOrder": ["title", "hp", "mp", "ctx", "streak", "project"]
+}
+```
+
+사용 가능: `title`, `hp`, `mp`, `ctx`, `streak`, `project`
+
+### 다국어
+
+```
+KO: 🔮 프롬프트 소서러 Lv.21 ★ | ❤️ 80% ⏱️4h34m | 💙 64% ⏱️5일 | 🧠 2% | 🔥5일 | 📂 ~/…/myhpmp-cli (main*)
+EN: 🔮 Prompt Sorcerer Lv.21 ★ | ❤️ 80% ⏱️4h34m | 💙 64% ⏱️5d | 🧠 2% | 🔥5d | 📂 ~/…/myhpmp-cli (main*)
+```
 
 ## 요구 사항
 
@@ -124,26 +145,7 @@ myhpmp init
 
 ## 지원 플랫폼
 
-- **Windows**
-- **macOS**
-- **Linux**
-
-## 다국어
-
-한국어와 영어를 지원합니다. `myhpmp locale`로 언어를 설정하거나, 시스템 로캘에서 자동 감지합니다.
-
-```
-KO: ⚔️ 토큰 익스플로러 Lv.9 ★★★ | ❤️ 43% ⏱️2h30m | 💙 76% | 🧠 25% | 🔥7일 | 📂 ~/…/code/my-project
-EN: ⚔️ Token Explorer Lv.9 ★★★ | ❤️ 43% ⏱️2h30m | 💙 76% | 🧠 25% | 🔥7d | 📂 ~/…/code/my-project
-```
-
-## 작동 방식
-
-1. **Hook** — Claude Code의 hook 시스템으로 토큰 사용량, 세션, 연속일수 추적
-2. **어댑터 패턴** — 프로바이더 어댑터가 도구별 데이터를 파싱
-3. **상태 바** — Claude Code가 세션 JSON을 상태 바 스크립트에 전달 → RPG HUD로 렌더링
-4. **로컬 저장소** — 모든 데이터가 `~/.myhpmp/data.json`에 저장 (오프라인 동작)
-5. **클라우드 동기화** — Supabase 연동, 자동 동기화. 서버사이드 EXP 검증으로 조작 방지
+- **Windows** / **macOS** / **Linux**
 
 ## 라이선스
 

@@ -4,37 +4,60 @@
 
 RPG-style gamified usage dashboard for Claude Code.
 
-Turn your Claude Code usage into a game — track your level, HP (session limit), MP (weekly limit), EXP, streaks, and earn titles as you code.
+Turn your Claude Code usage into a game — track your level, HP, MP, EXP, streaks, and earn titles as you code.
 
-## Status Line (Claude Code)
+<p align="center">
+  <img src="./assets/statusline-preview.svg" alt="Status Line Preview" width="100%"/>
+</p>
 
-Always visible at the bottom of Claude Code:
+## Quick Start
 
+```bash
+npm install -g @myhpmp/cli
 ```
-⚔️ Token Explorer Lv.9 ★★★ | ❤️ 43% ⏱️2h30m | 💙 76% | 🧠 25% | 🔥7d | 📂 ~/…/code/my-project
+
+### 1. Install hooks
+
+```bash
+myhpmp setup
 ```
 
-## Detail View
+This installs Claude Code hooks that automatically track your usage. A real-time status line appears at the bottom of Claude Code.
 
-Run `myhpmp usage` for the full dashboard:
+### 2. Set your language
 
+```bash
+myhpmp locale
 ```
-🎮 ⚔️ Token Explorer Lv.9 ★★★            🔥 Streak: 7d
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-❤️ HP  ████░░░░░░   43%  ⏱️ 2h30m
-💙 MP  ████████░░   76%
-🧠 CTX ███░░░░░░░   25%  (250K / 1.0M context)
-⭐ EXP ██████░░░░   62%  (186 / 300 → Lv.10)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📊 Total EXP: 2,886  |  Total Sessions: 47 sessions
+
+Supports Korean and English. Auto-detects from system locale if skipped.
+
+### 3. Restart Claude Code
+
+That's it. EXP tracking starts automatically on your next session.
+
+### 4. (Optional) Enable cloud sync
+
+```bash
+myhpmp init
 ```
+
+Sync stats across devices via GitHub or Google OAuth. Your RPG progress follows you everywhere.
+
+## Dashboard
+
+Run `myhpmp usage` for the full RPG dashboard:
+
+<p align="center">
+  <img src="./assets/usage-preview.svg" alt="Usage Dashboard Preview" width="640"/>
+</p>
 
 ## Stats
 
 | Stat | Description |
 |------|-------------|
-| **❤️ HP** | 5-hour session limit remaining (%) + reset timer |
-| **💙 MP** | 7-day weekly limit remaining (%) |
+| **❤️ HP** | 5-hour rate limit remaining (%) + reset timer |
+| **💙 MP** | 7-day weekly limit remaining (%) + reset timer |
 | **🧠 CTX** | Current context window usage (%) |
 | **🔥 Streak** | Consecutive days of usage |
 | **⭐ EXP** | Experience points toward next level |
@@ -52,7 +75,7 @@ Run `myhpmp usage` for the full dashboard:
 | 41-50 | 🐉 Context Overlord | 15,000 | 276,000 |
 | 50+ | ⚡ Synthetic Mind | 25,000 | ∞ |
 
-Early levels fly by. Late tiers require serious dedication — expect ~8 months of daily use to reach ⚡ Transcendent.
+Early levels fly by. Late tiers require serious dedication.
 
 ## EXP Sources
 
@@ -63,25 +86,6 @@ Early levels fly by. Late tiers require serious dedication — expect ~8 months 
 | Streak bonus | streak days × 5 EXP (cap: 30 days = 150 max) |
 | Weekly 70%+ usage | 100 EXP |
 
-EXP from all sessions is combined into a single total.
-
-## Quick Start
-
-```bash
-# Install globally
-npm install -g @myhpmp/cli
-
-# Auto-configure Claude Code hooks
-myhpmp setup
-
-# Set your display language
-myhpmp locale
-
-# Restart your AI coding tool to start tracking
-```
-
-That's it! EXP tracking starts via hooks. Status line is available for Claude Code.
-
 ## Commands
 
 | Command | Description |
@@ -89,12 +93,10 @@ That's it! EXP tracking starts via hooks. Status line is available for Claude Co
 | `myhpmp setup` | Auto-configure hooks (Claude Code) |
 | `myhpmp usage` | Show detailed RPG dashboard |
 | `myhpmp sync` | Manually sync stats to cloud |
-| `myhpmp statusline` | Toggle status line on/off (Claude Code) |
-| `myhpmp statusline on` | Enable status line |
-| `myhpmp statusline off` | Disable status line |
+| `myhpmp statusline` | Toggle status line on/off |
 | `myhpmp locale` | Change display language (한국어/English) |
 | `myhpmp init` | Set up authentication (cross-device sync) |
-| `myhpmp uninstall` | Remove all hooks, status line, and optionally local data |
+| `myhpmp uninstall` | Remove all hooks and optionally local data |
 
 ## Cross-Device Sync
 
@@ -104,18 +106,37 @@ Sync your stats (level, EXP, streaks) across multiple machines:
 myhpmp init
 ```
 
-Supports **GitHub OAuth** and **Google OAuth** authentication.
-
-### How sync works
+Supports **GitHub OAuth** and **Google OAuth**.
 
 | Timing | Behavior |
 |--------|----------|
-| Session start | Pull latest from cloud → update local |
+| Session start | Pull latest from cloud |
 | Every 5 minutes | Auto-sync during active use |
 | Session end | Push final stats to cloud |
 | `myhpmp sync` | Manual sync on demand |
 
-Data is stored locally at `~/.myhpmp/data.json` and works offline. Cloud sync is best-effort — if it fails, local data is preserved and synced on next opportunity. If local EXP is lower than remote (e.g. after reinstall), remote data is always preserved.
+Data is stored locally at `~/.myhpmp/data.json` and works fully offline. Cloud sync is best-effort — local data is always preserved.
+
+## Customization
+
+### Status line order
+
+Customize which segments appear and in what order via `~/.myhpmp/config.json`:
+
+```json
+{
+  "statusLineOrder": ["title", "hp", "mp", "ctx", "streak", "project"]
+}
+```
+
+Available segments: `title`, `hp`, `mp`, `ctx`, `streak`, `project`
+
+### i18n
+
+```
+KO: 🔮 프롬프트 소서러 Lv.21 ★ | ❤️ 80% ⏱️4h34m | 💙 64% ⏱️5일 | 🧠 2% | 🔥5일 | 📂 ~/…/myhpmp-cli (main*)
+EN: 🔮 Prompt Sorcerer Lv.21 ★ | ❤️ 80% ⏱️4h34m | 💙 64% ⏱️5d | 🧠 2% | 🔥5d | 📂 ~/…/myhpmp-cli (main*)
+```
 
 ## Requirements
 
@@ -124,26 +145,7 @@ Data is stored locally at `~/.myhpmp/data.json` and works offline. Cloud sync is
 
 ## Supported Platforms
 
-- **Windows**
-- **macOS**
-- **Linux**
-
-## i18n
-
-Supports Korean and English. Set your language with `myhpmp locale`, or it auto-detects from your system locale.
-
-```
-KO: ⚔️ 토큰 익스플로러 Lv.9 ★★★ | ❤️ 43% ⏱️2h30m | 💙 76% | 🧠 25% | 🔥7일 | 📂 ~/…/code/my-project
-EN: ⚔️ Token Explorer Lv.9 ★★★ | ❤️ 43% ⏱️2h30m | 💙 76% | 🧠 25% | 🔥7d | 📂 ~/…/code/my-project
-```
-
-## How It Works
-
-1. **Hooks** — Claude Code's hook system tracks token usage, sessions, and streaks
-2. **Adapter Pattern** — Provider adapters parse tool-specific data
-3. **Status Line** — Claude Code pipes session JSON to the status line script, rendered as RPG HUD
-4. **Local Store** — All data saved to `~/.myhpmp/data.json` (works offline)
-5. **Cloud Sync** — Supabase integration with auto-sync. Server-side EXP validation prevents manipulation
+- **Windows** / **macOS** / **Linux**
 
 ## License
 

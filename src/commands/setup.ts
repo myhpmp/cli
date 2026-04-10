@@ -111,10 +111,13 @@ async function main() {
 
   console.log('\n🎉 Setup complete!');
   if (selectedProviders.includes('claude')) {
-    console.log('   Restart Claude Code to see the status line.');
+    console.log('   ✅ Status line will appear at the bottom of Claude Code after restart.');
+    console.log('   ✅ EXP tracking starts automatically on your next session.');
   }
-  console.log('   Run "myhpmp usage" to see your stats.');
-  console.log('   Run "myhpmp init" to enable cloud sync & web dashboard (recommended)\n');
+  console.log('\n📝 Next steps:');
+  console.log('   1. Restart Claude Code');
+  console.log('   2. myhpmp usage     — Check your RPG dashboard');
+  console.log('   3. myhpmp init      — Enable cloud sync & web dashboard (recommended)\n');
 }
 
 main().catch((err) => {
