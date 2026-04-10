@@ -50,7 +50,7 @@ export function renderStatusLine(
       ? `❤️ ${data.hpPercent}% ⏱️${time}`
       : `❤️ ${data.hpPercent}%`,
     mp: data.weeklyResetDays > 0
-      ? `💙 ${data.mpPercent}% ${data.weeklyResetDays}/7${dayUnit}`
+      ? `💙 ${data.mpPercent}% ⏱️${data.weeklyResetDays}${dayUnit}`
       : `💙 ${data.mpPercent}%`,
     ctx: `🧠 ${data.ctxPercent}%`,
     streak: `🔥${data.streakDays}${dayUnit}`,
