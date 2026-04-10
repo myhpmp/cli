@@ -36,7 +36,7 @@ async function main() {
   if (stats.totalExp === 0 && stats.totalSessions === 0) {
     console.log('👋 Welcome to My HP/MP!\n');
     console.log('📝 First steps:');
-    console.log('  1) myhpmp setup   — Install hooks into Claude Code/Codex');
+    console.log('  1) myhpmp setup   — Install hooks into Claude Code');
     console.log('  2) Use your AI tool — EXP tracks automatically');
     console.log('  3) myhpmp init    — (Optional) Enable cloud sync\n');
   }

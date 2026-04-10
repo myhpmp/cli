@@ -2,23 +2,9 @@
 
 [한국어](./README.ko.md) | English
 
-RPG-style gamified usage dashboard for AI coding tools.
+RPG-style gamified usage dashboard for Claude Code.
 
-Turn your AI coding tool usage into a game — track your level, HP (session limit), MP (weekly limit), EXP, streaks, and earn titles as you code.
-
-## Supported Tools
-
-| Feature | Claude Code | Codex CLI |
-|---------|-------------|-----------|
-| Status line (real-time HUD) | O | X |
-| HP / MP (rate limit tracking) | O | X |
-| Context window tracking | O | X |
-| Real-time token tracking | O | X |
-| Session-end token tracking | O | O |
-| EXP / Level / Streak | O | O |
-| Cross-device sync | O | O |
-
-Claude Code provides the full experience. Codex CLI supports EXP tracking and leveling, but real-time status display is not available due to Codex CLI hook limitations.
+Turn your Claude Code usage into a game — track your level, HP (session limit), MP (weekly limit), EXP, streaks, and earn titles as you code.
 
 ## Status Line (Claude Code)
 
@@ -77,7 +63,7 @@ Early levels fly by. Late tiers require serious dedication — expect ~8 months 
 | Streak bonus | streak days × 5 EXP (cap: 30 days = 150 max) |
 | Weekly 70%+ usage | 100 EXP |
 
-EXP from all supported tools is combined into a single total. Use Claude and Codex together — it all adds up.
+EXP from all sessions is combined into a single total.
 
 ## Quick Start
 
@@ -85,7 +71,7 @@ EXP from all supported tools is combined into a single total. Use Claude and Cod
 # Install globally
 npm install -g @myhpmp/cli
 
-# Auto-configure (select Claude Code, Codex, or both)
+# Auto-configure Claude Code hooks
 myhpmp setup
 
 # Set your display language
@@ -100,7 +86,7 @@ That's it! EXP tracking starts via hooks. Status line is available for Claude Co
 
 | Command | Description |
 |---------|-------------|
-| `myhpmp setup` | Auto-configure hooks (Claude Code / Codex CLI) |
+| `myhpmp setup` | Auto-configure hooks (Claude Code) |
 | `myhpmp usage` | Show detailed RPG dashboard |
 | `myhpmp sync` | Manually sync stats to cloud |
 | `myhpmp statusline` | Toggle status line on/off (Claude Code) |
@@ -134,9 +120,7 @@ Data is stored locally at `~/.myhpmp/data.json` and works offline. Cloud sync is
 ## Requirements
 
 - Node.js >= 18
-- One or more supported AI coding tools:
-  - Claude Code (Pro/Max subscription)
-  - Codex CLI (OpenAI API key)
+- Claude Code (Pro/Max subscription)
 
 ## Supported Platforms
 
@@ -155,8 +139,8 @@ EN: ⚔️ Token Explorer Lv.9 ★★★ | ❤️ 43% ⏱️2h30m | 💙 76% | �
 
 ## How It Works
 
-1. **Hooks** — Each supported tool's hook system tracks token usage, sessions, and streaks
-2. **Adapter Pattern** — Claude Code and Codex CLI each have their own adapter for parsing tool-specific data
+1. **Hooks** — Claude Code's hook system tracks token usage, sessions, and streaks
+2. **Adapter Pattern** — Provider adapters parse tool-specific data
 3. **Status Line** — Claude Code pipes session JSON to the status line script, rendered as RPG HUD
 4. **Local Store** — All data saved to `~/.myhpmp/data.json` (works offline)
 5. **Cloud Sync** — Supabase integration with auto-sync. Server-side EXP validation prevents manipulation

@@ -113,15 +113,12 @@ async function main() {
   if (selectedProviders.includes('claude')) {
     console.log('   Restart Claude Code to see the status line.');
   }
-  if (selectedProviders.includes('codex')) {
-    console.log('   Restart Codex CLI to start tracking.');
-  }
   console.log('   Run "myhpmp usage" to see your stats.');
   console.log('   Run "myhpmp init" to enable cloud sync & web dashboard (recommended)\n');
 }
 
 main().catch((err) => {
   console.error('❌ Setup failed:', err.message);
-  console.error('   Check that your .claude or .codex directory exists and is writable.');
+  console.error('   Check that your .claude directory exists and is writable.');
   process.exit(1);
 });

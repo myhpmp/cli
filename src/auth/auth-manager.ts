@@ -1,12 +1,19 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
+export type StatusLineSegment = 'title' | 'hp' | 'mp' | 'ctx' | 'streak' | 'project';
+
+export const DEFAULT_STATUSLINE_ORDER: StatusLineSegment[] = [
+  'title', 'hp', 'mp', 'ctx', 'streak', 'project',
+];
+
 export interface AuthConfig {
   userId: string;
   accessToken: string;
   refreshToken: string;
   provider: 'github' | 'google';
   locale: string;
+  statusLineOrder?: StatusLineSegment[];
 }
 
 export class AuthManager {

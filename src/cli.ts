@@ -50,9 +50,9 @@ async function main() {
 
 function showHelp() {
   console.log('🎮 My HP/MP - Gamified Usage Dashboard\n');
-  console.log('Supported: Claude Code, Codex CLI\n');
+  console.log('Supported: Claude Code\n');
   console.log('Commands:');
-  console.log('  setup      — Configure hooks (Claude Code / Codex CLI)');
+  console.log('  setup      — Configure hooks (Claude Code)');
   console.log('  init       — Set up authentication (cross-device sync)');
   console.log('  usage      — Show detailed usage stats');
   console.log('  sync       — Manually sync stats to cloud');
