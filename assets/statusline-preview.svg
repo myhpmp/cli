@@ -1,8 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="960" height="120" viewBox="0 0 960 120">
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="140" viewBox="0 0 960 140">
   <defs>
     <style>
       @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&amp;display=swap');
-      .terminal-bg { fill: #1e1e2e; rx: 10; }
+      .terminal-bg { fill: #1e1e2e; }
       .titlebar { fill: #313244; }
       .dot-red { fill: #f38ba8; }
       .dot-yellow { fill: #f9e2af; }
@@ -14,7 +14,7 @@
   </defs>
 
   <!-- Window -->
-  <rect class="terminal-bg" width="960" height="120" rx="10"/>
+  <rect class="terminal-bg" width="960" height="140" rx="10"/>
 
   <!-- Title bar -->
   <rect class="titlebar" width="960" height="36" rx="10"/>
@@ -28,7 +28,12 @@
   <!-- Title -->
   <text class="title-text" x="480" y="22" text-anchor="middle">Claude Code</text>
 
-  <!-- Status line content -->
-  <text class="dim-text" x="20" y="65" font-size="11">Claude Code Status Line</text>
-  <text class="status-text" x="20" y="95">&#x1F52E; Prompt Sorcerer Lv.21 &#x2605; | &#x2764;&#xFE0F; 80% &#x23F1;&#xFE0F;4h34m | &#x1F499; 64% &#x23F1;&#xFE0F;5d | &#x1F9E0; 2% | &#x1F525;5d | &#x1F4C2; ~/&#x2026;/myhpmp-cli (main*)</text>
+  <!-- Status line label -->
+  <text class="dim-text" x="20" y="62" font-size="11">Claude Code Status Line</text>
+
+  <!-- Line 1: Project + git branch -->
+  <text class="status-text" x="20" y="88">&#x1F4C2; ~/&#x2026;/myhpmp-cli (main*)</text>
+
+  <!-- Line 2: RPG stats -->
+  <text class="status-text" x="20" y="118">&#x1F52E; Prompt Sorcerer Lv.21 &#x2605; | &#x2764;&#xFE0F; 80% &#x23F1;&#xFE0F;4h34m | &#x1F499; 64% &#x23F1;&#xFE0F;5d | &#x1F9E0; 2% | &#x1F525;5d</text>
 </svg>
