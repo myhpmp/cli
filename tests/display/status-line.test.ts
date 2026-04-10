@@ -22,7 +22,7 @@ describe('renderStatusLine', () => {
     expect(line).toContain('⚔️ 토큰 익스플로러 Lv.9 ★★★');
     expect(line).toContain('❤️ 89%');
     expect(line).toContain('⏱️3h30m');
-    expect(line).toContain('💙 80% 3/7일');
+    expect(line).toContain('💙 80% ⏱️3일');
     expect(line).toContain('🧠 6%');
     expect(line).toContain('🔥2일');
     expect(line).toContain('📂 my-project (main*)');
@@ -32,7 +32,7 @@ describe('renderStatusLine', () => {
     const data = { ...baseData, titleName: 'Token Explorer' };
     const line = renderStatusLine(data, 'en');
     expect(line).toContain('⚔️ Token Explorer Lv.9 ★★★');
-    expect(line).toContain('💙 80% 3/7d');
+    expect(line).toContain('💙 80% ⏱️3d');
     expect(line).toContain('🔥2d');
   });
 
@@ -40,7 +40,7 @@ describe('renderStatusLine', () => {
     const data = { ...baseData, weeklyResetDays: 0 };
     const line = renderStatusLine(data, 'ko');
     expect(line).toContain('💙 80%');
-    expect(line).not.toContain('/7');
+    expect(line).not.toMatch(/💙.*⏱️/);
   });
 
   it('hides git branch when null', () => {
