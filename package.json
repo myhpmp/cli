@@ -1,6 +1,6 @@
 {
   "name": "@myhpmp/cli",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "description": "RPG-style gamified usage dashboard for Claude Code",
   "type": "module",
   "main": "dist/index.js",
