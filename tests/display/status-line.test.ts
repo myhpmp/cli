@@ -10,9 +10,11 @@ describe('renderStatusLine', () => {
     hpPercent: 89,
     resetMinutes: 210,
     mpPercent: 80,
+    weeklyResetDays: 3,
     ctxPercent: 6,
     streakDays: 2,
     projectName: 'my-project',
+    gitBranch: 'main*' as string | null,
   };
 
   it('renders Korean status line', () => {
@@ -20,17 +22,42 @@ describe('renderStatusLine', () => {
     expect(line).toContain('⚔️ 토큰 익스플로러 Lv.9 ★★★');
     expect(line).toContain('❤️ 89%');
     expect(line).toContain('⏱️3h30m');
-    expect(line).toContain('💙 80%');
+    expect(line).toContain('💙 80% 3/7일');
     expect(line).toContain('🧠 6%');
     expect(line).toContain('🔥2일');
-    expect(line).toContain('📂 my-project');
+    expect(line).toContain('📂 my-project (main*)');
   });
 
   it('renders English status line', () => {
     const data = { ...baseData, titleName: 'Token Explorer' };
     const line = renderStatusLine(data, 'en');
     expect(line).toContain('⚔️ Token Explorer Lv.9 ★★★');
+    expect(line).toContain('💙 80% 3/7d');
     expect(line).toContain('🔥2d');
+  });
+
+  it('hides weekly reset days when 0', () => {
+    const data = { ...baseData, weeklyResetDays: 0 };
+    const line = renderStatusLine(data, 'ko');
+    expect(line).toContain('💙 80%');
+    expect(line).not.toContain('/7');
+  });
+
+  it('hides git branch when null', () => {
+    const data = { ...baseData, gitBranch: null };
+    const line = renderStatusLine(data, 'ko');
+    expect(line).toContain('📂 my-project');
+    expect(line).not.toContain('(');
+  });
+
+  it('respects custom segment order', () => {
+    const line = renderStatusLine(baseData, 'ko', ['project', 'hp']);
+    expect(line).toBe('📂 my-project (main*) | ❤️ 89% ⏱️3h30m');
+  });
+
+  it('filters invalid segment keys', () => {
+    const line = renderStatusLine(baseData, 'ko', ['hp', 'invalid' as never]);
+    expect(line).toBe('❤️ 89% ⏱️3h30m');
   });
 });
 
