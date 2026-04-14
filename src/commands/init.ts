@@ -108,8 +108,8 @@ async function main() {
     }
 
     console.log('   ✅ Synced');
-  } catch {
-    console.log('   ⚠️  Sync failed (will retry on next session)');
+  } catch (err) {
+    console.log('   ⚠️  Sync failed:', err instanceof Error ? err.message : String(err));
   }
 
   console.log(`\n✅ Authentication complete!`);
