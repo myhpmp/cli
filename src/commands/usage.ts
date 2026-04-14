@@ -5,10 +5,13 @@ import { renderDetailView } from '../display/detail-view.js';
 import { detectLocale } from '../i18n/index.js';
 import { AuthManager } from '../auth/auth-manager.js';
 import { fetchClaudeUsage, utilizationToPercent, resetsAtToMinutes } from '../data/claude-usage.js';
+import { listProviders, getProvider } from '../adapter/index.js';
 import os from 'node:os';
 import path from 'node:path';
+import fs from 'node:fs/promises';
 
 const DATA_DIR = path.join(os.homedir(), '.myhpmp');
+const PKG_DIST_DIR = path.resolve(import.meta.dirname, '..');
 
 async function main() {
   const authManager = new AuthManager(DATA_DIR);
@@ -64,6 +67,25 @@ async function main() {
   }, locale);
 
   console.log(output);
+
+  const ko = locale === 'ko';
+
+  const configuredProviders: string[] = [];
+  for (const name of listProviders()) {
+    try {
+      const provider = getProvider(name);
+      const config = provider.generateHookConfig(PKG_DIST_DIR);
+      await fs.access(config.settingsPath);
+      configuredProviders.push(name);
+    } catch {
+      // Provider config file doesn't exist — not configured
+    }
+  }
+
+  if (configuredProviders.length > 0) {
+    console.log(`\n🔗 ${ko ? '연결된 도구' : 'Connected tools'}: ${configuredProviders.join(', ')}`);
+  }
+  console.log(`💡 ${ko ? '상세 대시보드' : 'Interactive dashboard'}: myhpmp dashboard`);
 }
 
 main().catch(console.error);
