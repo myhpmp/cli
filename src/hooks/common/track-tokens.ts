@@ -29,11 +29,34 @@ function tokenStatePath(dataDir: string, provider: string): string {
 }
 
 export async function getTokenState(dataDir: string, provider: string): Promise<TokenState> {
+  const providerPath = tokenStatePath(dataDir, provider);
+
   try {
-    const raw = await fs.readFile(tokenStatePath(dataDir, provider), 'utf-8');
+    const raw = await fs.readFile(providerPath, 'utf-8');
     const data = JSON.parse(raw);
-    return { tokens: Number(data.tokens) || 0, pendingTokens: Number(data.pendingTokens) || 0 };
+    return {
+      tokens: Number(data.tokens) || 0,
+      pendingTokens: Number(data.pendingTokens) || 0,
+    };
   } catch {
+    // Migration: if provider-specific file doesn't exist but old file does, migrate it
+    if (provider === 'claude') {
+      const legacyPath = path.join(dataDir, 'last-tokens.json');
+      try {
+        const raw = await fs.readFile(legacyPath, 'utf-8');
+        const data = JSON.parse(raw);
+        const state: TokenState = {
+          tokens: Number(data.tokens) || 0,
+          pendingTokens: Number(data.pendingTokens) || 0,
+        };
+        // Write to new location and remove legacy file
+        await saveTokenState(dataDir, provider, state);
+        await fs.unlink(legacyPath).catch(() => {});
+        return state;
+      } catch {
+        // No legacy file either
+      }
+    }
     return { tokens: 0, pendingTokens: 0 };
   }
 }

@@ -34,6 +34,31 @@ describe('track-tokens', () => {
       const geminiState = await getTokenState(testDir, 'gemini');
       expect(geminiState.tokens).toBe(3000);
     });
+
+    it('migrates legacy last-tokens.json for claude provider', async () => {
+      const legacyPath = path.join(testDir, 'last-tokens.json');
+      fs.writeFileSync(legacyPath, JSON.stringify({ tokens: 9000, pendingTokens: 300 }));
+
+      const state = await getTokenState(testDir, 'claude');
+      expect(state.tokens).toBe(9000);
+      expect(state.pendingTokens).toBe(300);
+
+      // Legacy file should be removed
+      expect(fs.existsSync(legacyPath)).toBe(false);
+
+      // New file should exist
+      const newPath = path.join(testDir, 'last-tokens-claude.json');
+      expect(fs.existsSync(newPath)).toBe(true);
+    });
+
+    it('does not migrate legacy file for non-claude providers', async () => {
+      const legacyPath = path.join(testDir, 'last-tokens.json');
+      fs.writeFileSync(legacyPath, JSON.stringify({ tokens: 9000, pendingTokens: 300 }));
+
+      const state = await getTokenState(testDir, 'gemini');
+      expect(state.tokens).toBe(0);
+      expect(state.pendingTokens).toBe(0);
+    });
   });
 
   describe('trackTokens', () => {
