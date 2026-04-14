@@ -83,6 +83,17 @@ async function main() {
     const store = new LocalStore(DATA_DIR);
     const dbProvider = new SupabaseProvider(SUPABASE_URL, SUPABASE_ANON_KEY);
     await dbProvider.setSession(result.accessToken, result.refreshToken);
+
+    // Ensure user_stats row exists (upsert with local defaults if missing)
+    const existing = await dbProvider.loadUserStats(result.userId);
+    if (!existing) {
+      const local = await store.load();
+      await dbProvider.saveUserStats(result.userId, {
+        ...local,
+        updatedAt: new Date().toISOString(),
+      });
+    }
+
     const engine = new SyncEngine(store, dbProvider);
     await engine.sync(result.userId);
 
