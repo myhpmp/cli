@@ -44,8 +44,6 @@ async function main() {
       break;
     case 'dashboard':
     case 'dash':
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore — dashboard.ts will be created in a subsequent task
       await import('./commands/dashboard.js');
       break;
     default:

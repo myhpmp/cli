@@ -111,4 +111,16 @@ export class SupabaseProvider implements DbProvider {
     if (error) throw new Error(`exp_history insert failed: ${error.message}`);
   }
 
+  async getExpHistory(userId: string): Promise<ExpHistoryEntry[]> {
+    const { data, error } = await this.client
+      .from('exp_history')
+      .select('amount, reason, metadata, created_at')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(1000);
+
+    if (error || !data) return [];
+    return data as ExpHistoryEntry[];
+  }
+
 }
