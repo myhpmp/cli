@@ -13,11 +13,8 @@ export interface ProviderAdapter {
   /** Whether this provider supports a status line */
   readonly supportsStatusLine: boolean;
 
-  /** Extract token count from PostToolUse stdin JSON. Return 0 if not available. */
-  parseToolUseTokens(stdin: string): number;
-
-  /** Get total session tokens at session end (e.g. from JSONL transcript). Return 0 if not available. */
-  getSessionTokens(): Promise<number>;
+  /** Extract token count from a hook event. Return 0 if not available. */
+  parseHookTokens(hookEvent: string, stdin: string, transcriptContent?: string): Promise<number>;
 
   /** Generate hook configuration for this provider's settings file */
   generateHookConfig(distDir: string): ProviderHookConfig;

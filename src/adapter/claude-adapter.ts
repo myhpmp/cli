@@ -7,18 +7,20 @@ export class ClaudeAdapter implements ProviderAdapter {
   readonly configDir = path.join(os.homedir(), '.claude');
   readonly supportsStatusLine = true;
 
-  parseToolUseTokens(stdin: string): number {
-    try {
-      const data = JSON.parse(stdin);
-      return Number(data?.usage?.total_tokens ?? 0);
-    } catch {
-      return 0;
+  async parseHookTokens(_hookEvent: string, _stdin: string, transcriptContent?: string): Promise<number> {
+    if (!transcriptContent) return 0;
+    let total = 0;
+    const lines = transcriptContent.trimEnd().split('\n');
+    for (const line of lines) {
+      try {
+        const entry = JSON.parse(line);
+        const usage = entry?.message?.usage ?? entry?.usage;
+        if (usage?.input_tokens !== undefined && usage?.output_tokens !== undefined) {
+          total += (usage.input_tokens || 0) + (usage.output_tokens || 0);
+        }
+      } catch { /* skip malformed */ }
     }
-  }
-
-  async getSessionTokens(): Promise<number> {
-    // Claude tracks tokens per tool use via hooks, not at session end
-    return 0;
+    return total;
   }
 
   generateHookConfig(distDir: string): ProviderHookConfig {
