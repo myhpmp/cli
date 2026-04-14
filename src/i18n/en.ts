@@ -1,6 +1,5 @@
 export default {
   status: {
-    streak: 'Streak',
     totalExp: 'Total EXP',
     totalSessions: 'Total Sessions',
     resetIn: 'resets in',
@@ -19,7 +18,6 @@ export default {
   exp: {
     tokenUsage: 'Token Usage',
     sessionComplete: 'Session Complete',
-    streakBonus: 'Streak Bonus',
     weeklyGoal: 'Weekly Goal Achieved',
   },
 } as const;

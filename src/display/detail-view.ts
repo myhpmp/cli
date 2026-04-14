@@ -18,7 +18,6 @@ export interface DetailViewData {
   nextLevel: number;
   totalExp: number;
   totalSessions: number;
-  streakDays: number;
   syncActive: boolean;
 }
 
@@ -46,10 +45,9 @@ export function renderDetailView(
   const sep = '━'.repeat(43);
 
   const header = data.username ? `LV.${data.level} ${data.username}` : `LV.${data.level}`;
-  const streakLabel = `🔥 ${ko ? '연속' : 'Streak'}: ${data.streakDays}${dayUnit}`;
 
   const lines = [
-    `${header}                    ${streakLabel}`,
+    header,
     sep,
     `❤️ HP  ${progressBar(data.hpPercent)}  ${String(data.hpPercent).padStart(3)}%  ⏱️ ${time}`,
     `💙 MP  ${progressBar(data.mpPercent)}  ${String(data.mpPercent).padStart(3)}%`,

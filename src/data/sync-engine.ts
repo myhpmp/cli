@@ -38,7 +38,7 @@ export class SyncEngine {
     return remote;
   }
 
-  /** Push metadata only (streakDays, totalSessions, lastActiveDate) — NOT totalExp */
+  /** Push metadata only (totalSessions, lastActiveDate) — NOT totalExp */
   async pushMetadata(userId: string): Promise<void> {
     const local = await this.local.load();
     const remote = await this.remote.loadUserStats(userId);
@@ -47,7 +47,6 @@ export class SyncEngine {
     // Only update metadata fields, preserve server-computed totalExp
     await this.remote.saveUserStats(userId, {
       ...remote,
-      streakDays: Math.max(local.streakDays, remote.streakDays),
       totalSessions: Math.max(local.totalSessions, remote.totalSessions),
       lastActiveDate: local.lastActiveDate && remote.lastActiveDate
         ? local.lastActiveDate > remote.lastActiveDate ? local.lastActiveDate : remote.lastActiveDate

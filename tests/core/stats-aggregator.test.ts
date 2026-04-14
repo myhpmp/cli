@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { computeHP, computeMP, computeCTX, computeStreak, formatTime } from '../../src/core/stats-aggregator.js';
+import { computeHP, computeMP, computeCTX, formatTime } from '../../src/core/stats-aggregator.js';
 
 describe('computeHP', () => {
   it('computes percentage of remaining tokens', () => {
@@ -24,36 +24,6 @@ describe('computeMP', () => {
 describe('computeCTX', () => {
   it('computes context usage percentage', () => {
     expect(computeCTX(60000, 1000000)).toBe(6);
-  });
-});
-
-describe('computeStreak', () => {
-  function toLocalDateStr(date: Date): string {
-    const y = date.getFullYear();
-    const m = String(date.getMonth() + 1).padStart(2, '0');
-    const d = String(date.getDate()).padStart(2, '0');
-    return `${y}-${m}-${d}`;
-  }
-
-  it('returns streak + 1 if last active was yesterday', () => {
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-    expect(computeStreak(5, toLocalDateStr(yesterday))).toBe(6);
-  });
-
-  it('returns 1 if last active was 2+ days ago', () => {
-    const twoDaysAgo = new Date();
-    twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
-    expect(computeStreak(5, toLocalDateStr(twoDaysAgo))).toBe(1);
-  });
-
-  it('keeps streak if last active is today', () => {
-    const today = toLocalDateStr(new Date());
-    expect(computeStreak(5, today)).toBe(5);
-  });
-
-  it('returns 1 if no last active date', () => {
-    expect(computeStreak(0, null)).toBe(1);
   });
 });
 
