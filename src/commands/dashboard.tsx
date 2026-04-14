@@ -36,6 +36,7 @@ async function fetchProviderData(): Promise<ProviderData[]> {
   } catch {
     const refreshed = await provider.refreshSession(config.refreshToken);
     if (!refreshed) return [];
+    await provider.setSession(refreshed.accessToken, refreshed.refreshToken);
     await authManager.saveConfig({
       ...config,
       accessToken: refreshed.accessToken,
@@ -122,7 +123,7 @@ function Dashboard() {
     return (
       <Box flexDirection="column">
         <Text>No usage data found.</Text>
-        <Text dimColor>Run &quot;myhpmp init&quot; to enable cloud sync, then use your AI tools.</Text>
+        <Text dimColor>Run "myhpmp init" to enable cloud sync, then use your AI tools.</Text>
       </Box>
     );
   }
@@ -148,7 +149,9 @@ function Dashboard() {
   }
 
   const visibleRows = 15;
-  const displayRecords = currentRecords.slice(scrollOffset, scrollOffset + visibleRows);
+  const maxOffset = Math.max(0, currentRecords.length - visibleRows);
+  const clampedOffset = Math.min(scrollOffset, maxOffset);
+  const displayRecords = currentRecords.slice(clampedOffset, clampedOffset + visibleRows);
 
   return (
     <Box flexDirection="column">

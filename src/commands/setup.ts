@@ -96,7 +96,7 @@ async function main() {
   if (trimmed === String(allNum)) {
     selectedProviders = providers;
   } else {
-    const nums = trimmed.split(',').map(s => parseInt(s.trim()));
+    const nums = trimmed.split(',').map(s => parseInt(s.trim(), 10));
     selectedProviders = nums
       .filter(n => n >= 1 && n <= providers.length)
       .map(n => providers[n - 1]);
