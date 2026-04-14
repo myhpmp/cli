@@ -1,5 +1,6 @@
 import { LocalStore } from '../data/local-store.js';
 import { getLevelInfo } from '../core/level-system.js';
+import { computeStreak } from '../core/stats-aggregator.js';
 import { renderDetailView } from '../display/detail-view.js';
 import { detectLocale } from '../i18n/index.js';
 import { AuthManager } from '../auth/auth-manager.js';
@@ -58,7 +59,7 @@ async function main() {
     nextLevel: levelInfo.level + 1,
     totalExp: stats.totalExp,
     totalSessions: stats.totalSessions,
-    streakDays: stats.streakDays,
+    streakDays: computeStreak(stats.streakDays, stats.lastActiveDate),
     syncActive,
   }, locale);
 
