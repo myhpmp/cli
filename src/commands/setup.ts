@@ -81,24 +81,31 @@ async function main() {
   console.log('━'.repeat(30));
 
   // Select provider(s)
-  console.log('\nSelect AI coding tool to configure:\n');
+  console.log('\nSelect AI coding tools to configure (comma-separated):\n');
   providers.forEach((p, i) => console.log(`  ${i + 1}) ${p}`));
   console.log(`  ${providers.length + 1}) All\n`);
+  console.log('Example: 1,2 or 3 for All\n');
 
   const choice = await ask(rl, '> ');
   rl.close();
 
-  const choiceNum = parseInt(choice.trim());
+  const trimmed = choice.trim();
   let selectedProviders: string[];
 
-  if (choiceNum === providers.length + 1) {
+  const allNum = providers.length + 1;
+  if (trimmed === String(allNum)) {
     selectedProviders = providers;
-  } else if (choiceNum >= 1 && choiceNum <= providers.length) {
-    selectedProviders = [providers[choiceNum - 1]];
   } else {
-    console.error('❌ Invalid selection.');
-    process.exit(1);
-    return;
+    const nums = trimmed.split(',').map(s => parseInt(s.trim()));
+    selectedProviders = nums
+      .filter(n => n >= 1 && n <= providers.length)
+      .map(n => providers[n - 1]);
+
+    if (selectedProviders.length === 0) {
+      console.error('❌ Invalid selection.');
+      process.exit(1);
+      return;
+    }
   }
 
   // Step 1: Ensure runtime directory exists
@@ -110,12 +117,14 @@ async function main() {
   }
 
   console.log('\n🎉 Setup complete!');
+  for (const p of selectedProviders) {
+    console.log(`   ✅ ${p} hooks configured`);
+  }
   if (selectedProviders.includes('claude')) {
     console.log('   ✅ Status line will appear at the bottom of Claude Code after restart.');
-    console.log('   ✅ EXP tracking starts automatically on your next session.');
   }
   console.log('\n📝 Next steps:');
-  console.log('   1. Restart Claude Code');
+  console.log('   1. Restart your AI coding tools');
   console.log('   2. myhpmp usage     — Check your RPG dashboard');
   console.log('   3. myhpmp init      — Enable cloud sync & web dashboard (recommended)\n');
 }
