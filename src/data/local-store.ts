@@ -6,7 +6,6 @@ export interface UserStats {
   level: number;
   totalSessions: number;
   lastActiveDate: string | null;
-  weeklyExpBonusClaimed: boolean;
   username: string | null;
   updatedAt: string;
 }
@@ -16,7 +15,6 @@ const DEFAULT_STATS: UserStats = {
   level: 1,
   totalSessions: 0,
   lastActiveDate: null,
-  weeklyExpBonusClaimed: false,
   username: null,
   updatedAt: new Date().toISOString(),
 };
