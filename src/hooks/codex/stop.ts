@@ -1,5 +1,4 @@
-// src/hooks/claude/post-tool-use.ts
-import { ClaudeAdapter } from '../../adapter/claude-adapter.js';
+import { CodexAdapter } from '../../adapter/codex-adapter.js';
 import { trackTokens } from '../common/track-tokens.js';
 import fs from 'node:fs/promises';
 import os from 'node:os';
@@ -15,22 +14,28 @@ async function main() {
     if (input.length > MAX_INPUT_SIZE) return;
   }
 
-  const hookData = JSON.parse(input);
-  const transcriptPath = hookData?.transcript_path;
-  if (!transcriptPath) return;
-
-  let transcriptContent: string;
+  let transcriptPath: string | undefined;
   try {
-    transcriptContent = await fs.readFile(transcriptPath, 'utf-8');
+    const hookData = JSON.parse(input);
+    transcriptPath = hookData?.transcript_path;
   } catch {
     return;
   }
 
-  const adapter = new ClaudeAdapter();
-  const currentTotal = await adapter.parseHookTokens('PostToolUse', input, transcriptContent);
+  if (!transcriptPath) return;
+
+  let rolloutContent: string;
+  try {
+    rolloutContent = await fs.readFile(transcriptPath, 'utf-8');
+  } catch {
+    return;
+  }
+
+  const adapter = new CodexAdapter();
+  const currentTotal = await adapter.parseHookTokens('Stop', input, rolloutContent);
   if (currentTotal <= 0) return;
 
-  await trackTokens({ dataDir: DATA_DIR, provider: 'claude', currentTotal });
+  await trackTokens({ dataDir: DATA_DIR, provider: 'codex', currentTotal });
 }
 
 main().catch(() => {});

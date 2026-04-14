@@ -42,6 +42,10 @@ async function main() {
     case 'uninstall':
       await import('./commands/uninstall.js');
       break;
+    case 'dashboard':
+    case 'dash':
+      await import('./commands/dashboard.js');
+      break;
     default:
       showHelp();
       break;
@@ -50,17 +54,18 @@ async function main() {
 
 function showHelp() {
   console.log('🎮 My HP/MP - Gamified Usage Dashboard\n');
-  console.log('Supported: Claude Code\n');
+  console.log('Supported: Claude Code, Gemini CLI, Codex CLI\n');
   console.log('Commands:');
-  console.log('  setup      — Configure hooks (Claude Code)');
+  console.log('  setup      — Configure hooks (select AI tools)');
   console.log('  init       — Set up authentication (cross-device sync)');
   console.log('  usage      — Show detailed usage stats');
+  console.log('  dashboard  — Interactive TUI dashboard (provider breakdown)');
   console.log('  sync       — Manually sync stats to cloud');
   console.log('  statusline — Toggle status line on/off (Claude Code only)');
   console.log('  locale     — Change display language (한국어/English)');
   console.log('  uninstall  — Remove all hooks and settings');
   console.log('\nQuick start:');
-  console.log('  myhpmp setup    # Auto-configure everything');
+  console.log('  myhpmp setup    # Configure AI tool hooks');
   console.log('  myhpmp locale   # Set language');
   console.log('  myhpmp init     # Enable cloud sync & web dashboard (recommended)');
 }
