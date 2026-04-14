@@ -21,6 +21,10 @@ class MockDbProvider implements DbProvider {
   async insertExpHistory(userId: string, entry: ExpHistoryEntry): Promise<void> {
     this.expHistory.push({ userId, ...entry });
   }
+
+  async getExpHistory(_userId: string): Promise<ExpHistoryEntry[]> {
+    return [];
+  }
 }
 
 describe('SyncEngine', () => {
@@ -43,7 +47,7 @@ describe('SyncEngine', () => {
   it('pull updates local from remote', async () => {
     const stats: UserStats = {
       totalExp: 1000, level: 11, totalSessions: 20,
-      lastActiveDate: '2026-04-06', 
+      lastActiveDate: '2026-04-06', username: null,
       updatedAt: new Date().toISOString(),
     };
     await mockDb.saveUserStats('user1', stats);
@@ -56,35 +60,33 @@ describe('SyncEngine', () => {
   it('sync pulls server state as source of truth', async () => {
     const remote: UserStats = {
       totalExp: 800, level: 9, totalSessions: 15,
-      lastActiveDate: '2026-04-06', 
+      lastActiveDate: '2026-04-06', username: null,
       updatedAt: '2026-04-06T12:00:00Z',
     };
     await mockDb.saveUserStats('user1', remote);
 
-    // Local has inflated EXP (manipulation attempt)
     const local: UserStats = {
       totalExp: 99999, level: 50, totalSessions: 15,
-      lastActiveDate: '2026-04-06', 
+      lastActiveDate: '2026-04-06', username: null,
       updatedAt: '2026-04-07T12:00:00Z',
     };
     await localStore.save(local);
 
     const result = await engine.sync('user1');
-    // Server totalExp is truth (computed by DB trigger)
     expect(result.totalExp).toBe(800);
   });
 
   it('pushMetadata updates metadata but not totalExp', async () => {
     const remote: UserStats = {
       totalExp: 500, level: 6, totalSessions: 10,
-      lastActiveDate: '2026-04-05', 
+      lastActiveDate: '2026-04-05', username: null,
       updatedAt: '2026-04-05T12:00:00Z',
     };
     await mockDb.saveUserStats('user1', remote);
 
     const local: UserStats = {
       totalExp: 99999, level: 50, totalSessions: 12,
-      lastActiveDate: '2026-04-06', 
+      lastActiveDate: '2026-04-06', username: null,
       updatedAt: '2026-04-06T12:00:00Z',
     };
     await localStore.save(local);
@@ -92,10 +94,8 @@ describe('SyncEngine', () => {
     await engine.pushMetadata('user1');
 
     const updated = await mockDb.loadUserStats('user1');
-    // Metadata updated
     expect(updated?.totalSessions).toBe(12);
     expect(updated?.lastActiveDate).toBe('2026-04-06');
-    // totalExp preserved from remote (not overwritten by local)
     expect(updated?.totalExp).toBe(500);
   });
 

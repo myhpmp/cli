@@ -31,7 +31,7 @@ describe('LocalStore', () => {
       level: 6,
       totalSessions: 10,
       lastActiveDate: '2026-04-06',
-      
+      username: null,
       updatedAt: new Date().toISOString(),
     });
 
@@ -45,7 +45,7 @@ describe('LocalStore', () => {
     const nestedStore = new LocalStore(nested);
     await nestedStore.save({
       totalExp: 0, level: 1, totalSessions: 0,
-      lastActiveDate: null, weeklyExpBonusClaimed: false, updatedAt: new Date().toISOString(),
+      lastActiveDate: null, username: null, updatedAt: new Date().toISOString(),
     });
     expect(fs.existsSync(path.join(nested, 'data.json'))).toBe(true);
   });
