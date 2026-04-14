@@ -56,7 +56,6 @@ export class SupabaseProvider implements DbProvider {
       level,
       totalSessions,
       lastActiveDate: data.last_active_date ? String(data.last_active_date) : null,
-      weeklyExpBonusClaimed: Boolean(data.weekly_exp_bonus_claimed),
       username: data.username ? String(data.username) : null,
       updatedAt: data.updated_at ? String(data.updated_at) : new Date().toISOString(),
     };
@@ -71,7 +70,6 @@ export class SupabaseProvider implements DbProvider {
         level: stats.level,
         total_sessions: stats.totalSessions,
         last_active_date: stats.lastActiveDate,
-        weekly_exp_bonus_claimed: stats.weeklyExpBonusClaimed,
         updated_at: stats.updatedAt,
       });
 

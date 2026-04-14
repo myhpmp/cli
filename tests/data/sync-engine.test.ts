@@ -43,7 +43,7 @@ describe('SyncEngine', () => {
   it('pull updates local from remote', async () => {
     const stats: UserStats = {
       totalExp: 1000, level: 11, totalSessions: 20,
-      lastActiveDate: '2026-04-06', weeklyExpBonusClaimed: false,
+      lastActiveDate: '2026-04-06', 
       updatedAt: new Date().toISOString(),
     };
     await mockDb.saveUserStats('user1', stats);
@@ -56,7 +56,7 @@ describe('SyncEngine', () => {
   it('sync pulls server state as source of truth', async () => {
     const remote: UserStats = {
       totalExp: 800, level: 9, totalSessions: 15,
-      lastActiveDate: '2026-04-06', weeklyExpBonusClaimed: false,
+      lastActiveDate: '2026-04-06', 
       updatedAt: '2026-04-06T12:00:00Z',
     };
     await mockDb.saveUserStats('user1', remote);
@@ -64,7 +64,7 @@ describe('SyncEngine', () => {
     // Local has inflated EXP (manipulation attempt)
     const local: UserStats = {
       totalExp: 99999, level: 50, totalSessions: 15,
-      lastActiveDate: '2026-04-06', weeklyExpBonusClaimed: false,
+      lastActiveDate: '2026-04-06', 
       updatedAt: '2026-04-07T12:00:00Z',
     };
     await localStore.save(local);
@@ -77,14 +77,14 @@ describe('SyncEngine', () => {
   it('pushMetadata updates metadata but not totalExp', async () => {
     const remote: UserStats = {
       totalExp: 500, level: 6, totalSessions: 10,
-      lastActiveDate: '2026-04-05', weeklyExpBonusClaimed: false,
+      lastActiveDate: '2026-04-05', 
       updatedAt: '2026-04-05T12:00:00Z',
     };
     await mockDb.saveUserStats('user1', remote);
 
     const local: UserStats = {
       totalExp: 99999, level: 50, totalSessions: 12,
-      lastActiveDate: '2026-04-06', weeklyExpBonusClaimed: false,
+      lastActiveDate: '2026-04-06', 
       updatedAt: '2026-04-06T12:00:00Z',
     };
     await localStore.save(local);

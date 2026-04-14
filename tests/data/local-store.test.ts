@@ -31,7 +31,7 @@ describe('LocalStore', () => {
       level: 6,
       totalSessions: 10,
       lastActiveDate: '2026-04-06',
-      weeklyExpBonusClaimed: false,
+      
       updatedAt: new Date().toISOString(),
     });
 

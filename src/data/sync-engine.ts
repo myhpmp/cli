@@ -51,7 +51,6 @@ export class SyncEngine {
       lastActiveDate: local.lastActiveDate && remote.lastActiveDate
         ? local.lastActiveDate > remote.lastActiveDate ? local.lastActiveDate : remote.lastActiveDate
         : local.lastActiveDate || remote.lastActiveDate,
-      weeklyExpBonusClaimed: local.weeklyExpBonusClaimed || remote.weeklyExpBonusClaimed,
       updatedAt: new Date().toISOString(),
     });
   }
