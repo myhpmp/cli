@@ -119,15 +119,6 @@ function Dashboard() {
     return <Text>Loading...</Text>;
   }
 
-  if (providers.length === 0) {
-    return (
-      <Box flexDirection="column">
-        <Text>No usage data found.</Text>
-        <Text dimColor>Run "myhpmp init" to enable cloud sync, then use your AI tools.</Text>
-      </Box>
-    );
-  }
-
   const tabs = ['All', ...providers.map(p => p.name)];
 
   let currentRecords: ExpRecord[];
@@ -183,7 +174,7 @@ function Dashboard() {
       ))}
 
       {currentRecords.length === 0 && (
-        <Text dimColor>  No data for this provider</Text>
+        <Text dimColor>  No data yet. Use your AI tools to start tracking.</Text>
       )}
 
       <Box marginTop={1}>
