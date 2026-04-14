@@ -30,7 +30,7 @@ export class ClaudeAdapter implements ProviderAdapter {
       settingsPath: path.join(this.configDir, 'settings.json'),
       hooks: {
         PostToolUse: [{ matcher: '', hooks: [{ type: 'command', command: hook('claude/post-tool-use.js') }] }],
-        SessionStart: [{ matcher: '', hooks: [{ type: 'command', command: hook('common/session-start.js') }] }],
+        SessionStart: [{ matcher: '', hooks: [{ type: 'command', command: hook('common/session-start.js') + ' claude' }] }],
       },
       statusLine: {
         type: 'command',

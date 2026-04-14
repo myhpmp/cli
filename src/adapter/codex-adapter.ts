@@ -24,12 +24,14 @@ export class CodexAdapter implements ProviderAdapter {
   }
 
   generateHookConfig(distDir: string): ProviderHookConfig {
-    const hookCmd = `node "${path.join(distDir, 'hooks', 'codex', 'stop.js').replace(/\\/g, '/')}"`;
+    const hookCmd = (file: string, ...args: string[]) =>
+      `node "${path.join(distDir, 'hooks', file).replace(/\\/g, '/')}"${args.length ? ' ' + args.join(' ') : ''}`;
 
     return {
       settingsPath: path.join(this.configDir, 'hooks.json'),
       hooks: {
-        Stop: [{ command: hookCmd }],
+        Stop: [{ command: hookCmd('codex/stop.js') }],
+        SessionStart: [{ command: hookCmd('common/session-start.js', 'codex') }],
       },
     };
   }

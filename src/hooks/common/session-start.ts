@@ -10,7 +10,8 @@ import path from 'node:path';
 const DATA_DIR = path.join(os.homedir(), '.myhpmp');
 
 async function main() {
-  // Pull latest from remote first (in case another device updated)
+  const provider = process.argv[2] || 'claude';
+
   await autoSync();
 
   const store = new LocalStore(DATA_DIR);
@@ -31,10 +32,9 @@ async function main() {
   await store.save(stats);
 
   if (streakExp > 0) {
-    await logExp(streakExp, 'streak_bonus', { provider: 'claude' });
+    await logExp(streakExp, 'streak_bonus', { provider });
   }
 
-  // Push updated stats to remote
   await autoSync();
 }
 

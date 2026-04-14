@@ -17,12 +17,14 @@ export class GeminiAdapter implements ProviderAdapter {
   }
 
   generateHookConfig(distDir: string): ProviderHookConfig {
-    const hookCmd = `node "${path.join(distDir, 'hooks', 'gemini', 'after-model.js').replace(/\\/g, '/')}"`;
+    const hookCmd = (file: string, ...args: string[]) =>
+      `node "${path.join(distDir, 'hooks', file).replace(/\\/g, '/')}"${args.length ? ' ' + args.join(' ') : ''}`;
 
     return {
       settingsPath: path.join(this.configDir, 'settings.json'),
       hooks: {
-        AfterModel: [{ command: hookCmd }],
+        AfterModel: [{ command: hookCmd('gemini/after-model.js') }],
+        SessionStart: [{ command: hookCmd('common/session-start.js', 'gemini') }],
       },
     };
   }
