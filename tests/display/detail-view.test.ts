@@ -20,7 +20,6 @@ describe('renderDetailView', () => {
     nextLevel: 10,
     totalExp: 2886,
     totalSessions: 47,
-    streakDays: 2,
     syncActive: true,
   };
 
@@ -32,7 +31,6 @@ describe('renderDetailView', () => {
     expect(view).toContain('🧠 CTX');
     expect(view).toContain('⭐ EXP');
     expect(view).toContain('89%');
-    expect(view).toContain('🔥');
   });
 
   it('contains progress bar characters', () => {

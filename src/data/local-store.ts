@@ -5,7 +5,6 @@ export interface UserStats {
   totalExp: number;
   level: number;
   totalSessions: number;
-  streakDays: number;
   lastActiveDate: string | null;
   weeklyExpBonusClaimed: boolean;
   username: string | null;
@@ -16,7 +15,6 @@ const DEFAULT_STATS: UserStats = {
   totalExp: 0,
   level: 1,
   totalSessions: 0,
-  streakDays: 0,
   lastActiveDate: null,
   weeklyExpBonusClaimed: false,
   username: null,

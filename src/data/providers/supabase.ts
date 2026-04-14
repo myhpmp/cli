@@ -42,12 +42,11 @@ export class SupabaseProvider implements DbProvider {
     const totalExp = Number(data.total_exp) || 0;
     const level = Number(data.level) || 1;
     const totalSessions = Number(data.total_sessions) || 0;
-    const streakDays = Number(data.streak_days) || 0;
 
     if (
       !Number.isFinite(totalExp) || !Number.isFinite(level) ||
-      !Number.isFinite(totalSessions) || !Number.isFinite(streakDays) ||
-      totalExp < 0 || level < 1 || totalSessions < 0 || streakDays < 0
+      !Number.isFinite(totalSessions) ||
+      totalExp < 0 || level < 1 || totalSessions < 0
     ) {
       throw new Error('Invalid data from remote: out of bounds values detected');
     }
@@ -56,7 +55,6 @@ export class SupabaseProvider implements DbProvider {
       totalExp,
       level,
       totalSessions,
-      streakDays,
       lastActiveDate: data.last_active_date ? String(data.last_active_date) : null,
       weeklyExpBonusClaimed: Boolean(data.weekly_exp_bonus_claimed),
       username: data.username ? String(data.username) : null,
@@ -72,7 +70,6 @@ export class SupabaseProvider implements DbProvider {
         total_exp: stats.totalExp,
         level: stats.level,
         total_sessions: stats.totalSessions,
-        streak_days: stats.streakDays,
         last_active_date: stats.lastActiveDate,
         weekly_exp_bonus_claimed: stats.weeklyExpBonusClaimed,
         updated_at: stats.updatedAt,

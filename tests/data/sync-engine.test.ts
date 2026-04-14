@@ -42,7 +42,7 @@ describe('SyncEngine', () => {
 
   it('pull updates local from remote', async () => {
     const stats: UserStats = {
-      totalExp: 1000, level: 11, totalSessions: 20, streakDays: 7,
+      totalExp: 1000, level: 11, totalSessions: 20,
       lastActiveDate: '2026-04-06', weeklyExpBonusClaimed: false,
       updatedAt: new Date().toISOString(),
     };
@@ -55,7 +55,7 @@ describe('SyncEngine', () => {
 
   it('sync pulls server state as source of truth', async () => {
     const remote: UserStats = {
-      totalExp: 800, level: 9, totalSessions: 15, streakDays: 5,
+      totalExp: 800, level: 9, totalSessions: 15,
       lastActiveDate: '2026-04-06', weeklyExpBonusClaimed: false,
       updatedAt: '2026-04-06T12:00:00Z',
     };
@@ -63,7 +63,7 @@ describe('SyncEngine', () => {
 
     // Local has inflated EXP (manipulation attempt)
     const local: UserStats = {
-      totalExp: 99999, level: 50, totalSessions: 15, streakDays: 5,
+      totalExp: 99999, level: 50, totalSessions: 15,
       lastActiveDate: '2026-04-06', weeklyExpBonusClaimed: false,
       updatedAt: '2026-04-07T12:00:00Z',
     };
@@ -76,14 +76,14 @@ describe('SyncEngine', () => {
 
   it('pushMetadata updates metadata but not totalExp', async () => {
     const remote: UserStats = {
-      totalExp: 500, level: 6, totalSessions: 10, streakDays: 3,
+      totalExp: 500, level: 6, totalSessions: 10,
       lastActiveDate: '2026-04-05', weeklyExpBonusClaimed: false,
       updatedAt: '2026-04-05T12:00:00Z',
     };
     await mockDb.saveUserStats('user1', remote);
 
     const local: UserStats = {
-      totalExp: 99999, level: 50, totalSessions: 12, streakDays: 5,
+      totalExp: 99999, level: 50, totalSessions: 12,
       lastActiveDate: '2026-04-06', weeklyExpBonusClaimed: false,
       updatedAt: '2026-04-06T12:00:00Z',
     };
@@ -94,7 +94,6 @@ describe('SyncEngine', () => {
     const updated = await mockDb.loadUserStats('user1');
     // Metadata updated
     expect(updated?.totalSessions).toBe(12);
-    expect(updated?.streakDays).toBe(5);
     expect(updated?.lastActiveDate).toBe('2026-04-06');
     // totalExp preserved from remote (not overwritten by local)
     expect(updated?.totalExp).toBe(500);

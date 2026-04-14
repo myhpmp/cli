@@ -13,7 +13,6 @@ describe('renderStatusLine', () => {
     mpPercent: 80,
     weeklyResetDays: 3,
     ctxPercent: 6,
-    streakDays: 2,
     projectName: 'my-project',
     gitBranch: 'main*' as string | null,
   };
@@ -27,14 +26,12 @@ describe('renderStatusLine', () => {
     expect(second).toContain('⏱️3h30m');
     expect(second).toContain('💙 80% ⏱️3일');
     expect(second).toContain('🧠 6%');
-    expect(second).toContain('🔥2일');
   });
 
   it('renders English status line', () => {
     const line = renderStatusLine(baseData, 'en');
     expect(line).toContain('LV.9 Swift-Coder42');
     expect(line).toContain('💙 80% ⏱️3d');
-    expect(line).toContain('🔥2d');
   });
 
   it('hides weekly reset days when 0', () => {

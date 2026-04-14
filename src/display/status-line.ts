@@ -28,7 +28,6 @@ export interface StatusLineData {
   mpPercent: number;
   weeklyResetDays: number;
   ctxPercent: number;
-  streakDays: number;
   projectName: string;
   gitBranch: string | null;
 }
@@ -51,7 +50,6 @@ export function renderStatusLine(
       ? `💙 ${data.mpPercent}% ⏱️${data.weeklyResetDays}${dayUnit}`
       : `💙 ${data.mpPercent}%`,
     ctx: `🧠 ${data.ctxPercent}%`,
-    streak: `🔥${data.streakDays}${dayUnit}`,
     project: data.gitBranch
       ? `📂 \x1b[1;96m${data.projectName}\x1b[0m (\x1b[1;93m${data.gitBranch}\x1b[0m)`
       : `📂 \x1b[1;96m${data.projectName}\x1b[0m`,

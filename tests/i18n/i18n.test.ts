@@ -2,14 +2,14 @@ import { describe, it, expect } from 'vitest';
 import { createI18n } from '../../src/i18n/index.js';
 
 describe('i18n', () => {
-  it('returns streak label in Korean', () => {
+  it('returns totalExp label in Korean', () => {
     const i18n = createI18n('ko');
-    expect(i18n.t('status.streak')).toBe('연속');
+    expect(i18n.t('status.totalExp')).toBe('총 누적 EXP');
   });
 
-  it('returns streak label in English', () => {
+  it('returns totalExp label in English', () => {
     const i18n = createI18n('en');
-    expect(i18n.t('status.streak')).toBe('Streak');
+    expect(i18n.t('status.totalExp')).toBe('Total EXP');
   });
 
   it('falls back to en for unknown locale', () => {

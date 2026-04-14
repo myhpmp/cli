@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { calcTokenExp, calcStreakBonus } from '../../src/core/exp-calculator.js';
+import { calcTokenExp } from '../../src/core/exp-calculator.js';
 
 describe('calcTokenExp', () => {
   it('returns 0 for 0 tokens', () => {
@@ -17,20 +17,6 @@ describe('calcTokenExp', () => {
   it('floors partial thousands', () => {
     expect(calcTokenExp(999)).toBe(0);
     expect(calcTokenExp(1500)).toBe(1);
-  });
-});
-
-describe('calcStreakBonus', () => {
-  it('returns streakDays * 5 up to cap', () => {
-    expect(calcStreakBonus(0)).toBe(0);
-    expect(calcStreakBonus(1)).toBe(5);
-    expect(calcStreakBonus(7)).toBe(35);
-    expect(calcStreakBonus(30)).toBe(150);
-  });
-
-  it('caps at 30 days', () => {
-    expect(calcStreakBonus(31)).toBe(150);
-    expect(calcStreakBonus(100)).toBe(150);
   });
 });
 

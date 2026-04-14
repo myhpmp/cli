@@ -1,6 +1,5 @@
 export default {
   status: {
-    streak: '연속',
     totalExp: '총 누적 EXP',
     totalSessions: '총 세션',
     resetIn: '후 초기화',
@@ -19,7 +18,6 @@ export default {
   exp: {
     tokenUsage: '토큰 사용',
     sessionComplete: '세션 완료',
-    streakBonus: '연속 사용 보너스',
     weeklyGoal: '주간 목표 달성',
   },
 } as const;
