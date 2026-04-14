@@ -22,7 +22,6 @@ export class SyncEngine {
         });
       } catch {
         // Rate limit or constraint violation — discard silently
-        // (duplicate streak_bonus, daily cap, etc.)
       }
     }
     await saveQueue([]);
