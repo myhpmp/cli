@@ -23,7 +23,7 @@ RPG-style gamified usage dashboard for Claude Code.
 
 ```
 src/
-├── adapter/           # Provider adapters (Claude)
+├── adapter/           # Provider adapters (Claude, Gemini, Codex)
 │   ├── provider.ts    # ProviderAdapter interface
 │   ├── claude-adapter.ts
 │   └── index.ts       # Factory + registry
@@ -34,8 +34,10 @@ src/
 │   └── providers/     # DB interface + Supabase implementation
 ├── display/           # Status line + detail view rendering
 ├── hooks/             # Hook entry points
-│   ├── common/        # Shared hooks (session-start)
-│   └── claude/        # Claude-specific (post-tool-use, session-end)
+│   ├── common/        # Shared hooks (session-start, track-tokens)
+│   ├── claude/        # Claude-specific (post-tool-use, status-line-updater)
+│   ├── gemini/        # Gemini CLI (after-model)
+│   └── codex/         # Codex CLI (stop)
 ├── i18n/              # CLI-only translations (status labels, units)
 ├── cli.ts             # CLI entry point
 ├── config.ts          # Supabase config loader
@@ -118,5 +120,6 @@ myhpmp init       — Set up authentication (cross-device sync)
 myhpmp usage      — Show detailed usage stats
 myhpmp sync       — Manually sync stats to cloud
 myhpmp statusline — Toggle status line on/off (Claude Code only)
+myhpmp dashboard  — Interactive TUI dashboard (provider breakdown)
 myhpmp locale     — Change display language (한국어/English)
 ```
