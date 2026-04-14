@@ -17,6 +17,7 @@
 import { LocalStore } from './data/local-store.js';
 import { getLevelInfo } from './core/level-system.js';
 import { renderStatusLine, formatProjectPath } from './display/status-line.js';
+import { computeStreak } from './core/stats-aggregator.js';
 import { detectLocale } from './i18n/index.js';
 import { AuthManager } from './auth/auth-manager.js';
 import { fetchClaudeUsage, utilizationToPercent, resetsAtToMinutes } from './data/claude-usage.js';
@@ -141,7 +142,7 @@ async function main() {
     mpPercent,
     weeklyResetDays,
     ctxPercent,
-    streakDays: stats.streakDays,
+    streakDays: computeStreak(stats.streakDays, stats.lastActiveDate),
     projectName: formatProjectPath(process.cwd(), os.homedir()),
     gitBranch,
   }, locale, statusLineOrder);
