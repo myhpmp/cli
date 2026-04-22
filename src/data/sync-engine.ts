@@ -1,7 +1,8 @@
 import { LocalStore, UserStats } from './local-store.js';
 import { getLevelInfo } from '../core/level-system.js';
 import type { DbProvider } from './providers/db-interface.js';
-import { loadQueue, saveQueue } from './pending-exp.js';
+import { loadQueue, saveQueue, PendingExpEntry } from './pending-exp.js';
+import { logError } from './logger.js';
 
 export class SyncEngine {
   constructor(
@@ -9,22 +10,26 @@ export class SyncEngine {
     private remote: DbProvider,
   ) {}
 
-  /** Flush pending exp queue to remote exp_history */
+  /** Flush pending exp queue to remote exp_history. Keeps failed entries for retry. */
   async flushPendingExp(userId: string): Promise<void> {
     const queue = await loadQueue();
     if (queue.length === 0) return;
 
+    const remaining: PendingExpEntry[] = [];
     for (const entry of queue) {
       try {
         await this.remote.insertExpHistory(userId, {
           amount: entry.amount,
           reason: entry.reason,
+          metadata: entry.metadata,
         });
-      } catch {
-        // Rate limit or constraint violation — discard silently
+      } catch (err) {
+        // Keep entry for next retry rather than silently losing data
+        remaining.push(entry);
+        await logError('flushPendingExp', err);
       }
     }
-    await saveQueue([]);
+    await saveQueue(remaining);
   }
 
   /** Pull remote stats to local (server is always the source of truth) */
@@ -44,8 +49,10 @@ export class SyncEngine {
     if (!remote) return;
 
     // Only update metadata fields, preserve server-computed totalExp
+    // Recompute level from totalExp (DB trigger only updates totalExp, not level)
     await this.remote.saveUserStats(userId, {
       ...remote,
+      level: getLevelInfo(remote.totalExp).level,
       totalSessions: Math.max(local.totalSessions, remote.totalSessions),
       lastActiveDate: local.lastActiveDate && remote.lastActiveDate
         ? local.lastActiveDate > remote.lastActiveDate ? local.lastActiveDate : remote.lastActiveDate
