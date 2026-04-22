@@ -7,6 +7,7 @@ import fs from 'node:fs/promises';
 import { LocalStore } from './local-store.js';
 import { SyncEngine } from './sync-engine.js';
 import { AuthManager } from '../auth/auth-manager.js';
+import { logError } from './logger.js';
 import os from 'node:os';
 import path from 'node:path';
 
@@ -20,11 +21,10 @@ async function shouldSync(): Promise<boolean> {
     const { timestamp } = JSON.parse(raw);
     if (typeof timestamp !== 'number' || !Number.isFinite(timestamp)) return true;
     const elapsed = Date.now() - timestamp;
-    // If elapsed is negative (clock went backward), force sync
     if (elapsed < 0) return true;
     return elapsed >= SYNC_INTERVAL_MS;
   } catch {
-    return true; // No record = should sync
+    return true;
   }
 }
 
@@ -41,6 +41,7 @@ export async function autoSync(): Promise<void> {
     const authManager = new AuthManager(DATA_DIR);
     if (!(await authManager.isAuthenticated())) return;
 
+    // Always reload config fresh — another hook may have just refreshed tokens
     const config = await authManager.loadConfig();
     const store = new LocalStore(DATA_DIR);
     const { SUPABASE_URL, SUPABASE_ANON_KEY } = await import('../config.js');
@@ -49,26 +50,37 @@ export async function autoSync(): Promise<void> {
 
     try {
       await provider.setSession(config.accessToken, config.refreshToken);
-    } catch {
-      // Token expired — attempt refresh
-      const refreshed = await provider.refreshSession(config.refreshToken);
-      if (refreshed) {
+    } catch (err) {
+      await logError('autoSync:setSession', err);
+      // Reload config — another concurrent hook may have already refreshed
+      const fresh = await authManager.loadConfig();
+      if (fresh.accessToken !== config.accessToken) {
+        try {
+          await provider.setSession(fresh.accessToken, fresh.refreshToken);
+        } catch (err2) {
+          await logError('autoSync:setSession retry', err2);
+          return;
+        }
+      } else {
+        const refreshed = await provider.refreshSession(config.refreshToken);
+        if (!refreshed) {
+          await logError('autoSync:refresh', new Error('Refresh returned null'));
+          return;
+        }
+        const latest = await authManager.loadConfig();
         await authManager.saveConfig({
-          ...config,
+          ...latest,
           accessToken: refreshed.accessToken,
           refreshToken: refreshed.refreshToken,
         });
-      } else {
-        return; // Cannot recover — skip sync silently
       }
     }
 
     const engine = new SyncEngine(store, provider);
-
     await engine.sync(config.userId);
     await markSynced();
-  } catch {
-    // Silent fail — sync is best-effort
+  } catch (err) {
+    await logError('autoSync', err);
   }
 }
 

@@ -13,6 +13,7 @@ export interface PendingExpEntry {
   amount: number;
   reason: string;
   timestamp: string;
+  metadata?: Record<string, unknown>;
 }
 
 export async function loadQueue(): Promise<PendingExpEntry[]> {
@@ -26,6 +27,13 @@ export async function loadQueue(): Promise<PendingExpEntry[]> {
 
 const MAX_QUEUE_SIZE = 1000;
 
+async function writeQueueAtomic(queue: PendingExpEntry[]): Promise<void> {
+  await fs.mkdir(DATA_DIR, { recursive: true });
+  const tmpPath = `${QUEUE_PATH}.tmp`;
+  await fs.writeFile(tmpPath, JSON.stringify(queue), 'utf-8');
+  await fs.rename(tmpPath, QUEUE_PATH);
+}
+
 export async function enqueue(entry: PendingExpEntry): Promise<void> {
   const queue = await loadQueue();
   if (queue.length >= MAX_QUEUE_SIZE) {
@@ -35,8 +43,7 @@ export async function enqueue(entry: PendingExpEntry): Promise<void> {
     }
   }
   queue.push(entry);
-  await fs.mkdir(DATA_DIR, { recursive: true });
-  await fs.writeFile(QUEUE_PATH, JSON.stringify(queue), 'utf-8');
+  await writeQueueAtomic(queue);
 }
 
 export async function saveQueue(queue: PendingExpEntry[]): Promise<void> {
@@ -48,6 +55,5 @@ export async function saveQueue(queue: PendingExpEntry[]): Promise<void> {
     }
     return;
   }
-  await fs.mkdir(DATA_DIR, { recursive: true });
-  await fs.writeFile(QUEUE_PATH, JSON.stringify(queue), 'utf-8');
+  await writeQueueAtomic(queue);
 }
